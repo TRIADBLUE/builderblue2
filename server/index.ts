@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -43,16 +44,6 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", (_req, res) => {
     res.sendFile(path.join(clientDist, "index.html"));
   });
-} else {
-  // In development, Vite handles the frontend
-  // Import and register Vite dev middleware
-  const { createServer: createViteServer } = await import("vite");
-  const vite = await createViteServer({
-    server: { middlewareMode: true },
-    root: path.resolve(__dirname, "../client"),
-    appType: "spa",
-  });
-  app.use(vite.middlewares);
 }
 
 // ─── Start ───────────────────────────────────────────────────────────────────
