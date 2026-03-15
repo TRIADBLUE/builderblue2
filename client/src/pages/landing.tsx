@@ -3,7 +3,7 @@ import { Nav } from "../components/layout/nav";
 
 export default function Landing() {
   return (
-    <div className="min-h-screen" style={{ background: "var(--triad-black)" }}>
+    <div className="min-h-screen" style={{ background: "var(--cream)" }}>
       <Nav />
 
       {/* Hero */}
@@ -16,7 +16,7 @@ export default function Landing() {
         />
         <h1
           className="text-5xl font-bold tracking-tight sm:text-6xl"
-          style={{ color: "var(--cream)" }}
+          style={{ color: "var(--triad-black)" }}
         >
           Start building with{" "}
           <span style={{ color: "var(--pure-blue)" }}>Builder</span>
@@ -25,7 +25,7 @@ export default function Landing() {
         </h1>
         <p
           className="mx-auto mt-6 max-w-2xl text-lg"
-          style={{ color: "var(--cream)", opacity: 0.6, lineHeight: 1.7 }}
+          style={{ color: "var(--steel-blue)", opacity: 0.8, lineHeight: 1.7 }}
         >
           The AI-powered IDE where Architect designs and Builder codes — side by side on a shared stage.
           Ship production apps with vibe coding that actually works.
@@ -50,7 +50,7 @@ export default function Landing() {
               className="rounded-md px-8 py-3 text-base font-medium transition-all"
               style={{
                 background: "transparent",
-                color: "var(--cream)",
+                color: "var(--steel-blue)",
                 border: "1px solid var(--steel-blue)",
                 cursor: "pointer",
               }}
@@ -66,11 +66,11 @@ export default function Landing() {
         <div
           className="overflow-hidden rounded-xl"
           style={{
-            border: "1px solid rgba(233, 236, 240, 0.1)",
+            border: "2px solid var(--steel-blue)",
             boxShadow: "0 0 60px rgba(166, 124, 75, 0.15), 0 0 120px rgba(166, 124, 75, 0.05)",
           }}
         >
-          <div className="flex" style={{ height: "360px" }}>
+          <div className="relative flex" style={{ height: "360px" }}>
             {/* Architect pane */}
             <div
               className="flex flex-col p-4"
@@ -117,6 +117,24 @@ export default function Landing() {
               </div>
             </div>
 
+            {/* Left angled divider */}
+            <svg
+              style={{
+                position: "absolute",
+                left: "30%",
+                top: 0,
+                width: "20px",
+                height: "100%",
+                zIndex: 20,
+                marginLeft: "-10px",
+                filter: "drop-shadow(0 0 6px rgba(166, 124, 75, 0.3))",
+              }}
+              preserveAspectRatio="none"
+              viewBox="0 0 20 360"
+            >
+              <polygon points="6,0 14,0 8,360 0,360" fill="#C4A06A" />
+            </svg>
+
             {/* Runway */}
             <div
               className="flex flex-col p-4 runway"
@@ -124,6 +142,11 @@ export default function Landing() {
                 width: "40%",
                 background: "var(--tan)",
                 zIndex: 10,
+                boxShadow: "0 -6px 24px rgba(166, 124, 75, 0.35), 0 4px 20px rgba(166, 124, 75, 0.25)",
+                position: "relative",
+                marginTop: "-4px",
+                marginBottom: "-4px",
+                borderRadius: "4px",
               }}
             >
               <span
@@ -181,6 +204,24 @@ export default function Landing() {
               </div>
             </div>
 
+            {/* Right angled divider */}
+            <svg
+              style={{
+                position: "absolute",
+                left: "70%",
+                top: 0,
+                width: "20px",
+                height: "100%",
+                zIndex: 20,
+                marginLeft: "-10px",
+                filter: "drop-shadow(0 0 6px rgba(166, 124, 75, 0.3))",
+              }}
+              preserveAspectRatio="none"
+              viewBox="0 0 20 360"
+            >
+              <polygon points="12,0 20,0 14,360 6,360" fill="#C4A06A" />
+            </svg>
+
             {/* Builder pane */}
             <div
               className="flex flex-col p-4"
@@ -233,8 +274,8 @@ export default function Landing() {
       <div
         className="border-t py-20"
         style={{
-          borderColor: "rgba(233, 236, 240, 0.1)",
-          background: "var(--triad-black)",
+          borderColor: "var(--steel-blue)",
+          background: "var(--cream)",
         }}
       >
         <div className="mx-auto max-w-5xl px-4">
@@ -253,16 +294,16 @@ export default function Landing() {
                 desc: "Buy compute blocks once, use them whenever. No monthly burn. No wasted sessions.",
               },
             ].map((feature) => (
-              <div key={feature.title} className="rounded-lg p-6" style={{ border: "1px solid rgba(233, 236, 240, 0.1)" }}>
+              <div key={feature.title} className="rounded-lg p-6" style={{ border: "1px solid var(--steel-blue)" }}>
                 <h3
                   className="mb-2 text-base font-bold"
-                  style={{ color: "var(--cream)" }}
+                  style={{ color: "var(--triad-black)" }}
                 >
                   {feature.title}
                 </h3>
                 <p
                   className="text-sm"
-                  style={{ color: "var(--cream)", opacity: 0.5, lineHeight: 1.6 }}
+                  style={{ color: "var(--steel-blue)", opacity: 0.7, lineHeight: 1.6 }}
                 >
                   {feature.desc}
                 </p>
@@ -275,15 +316,15 @@ export default function Landing() {
       {/* Footer */}
       <div
         className="border-t py-8 text-center"
-        style={{ borderColor: "rgba(233, 236, 240, 0.1)" }}
+        style={{ borderColor: "var(--steel-blue)", opacity: 1 }}
       >
         <img
           src="/builderblue2_url.png"
           alt="BuilderBlue²"
           className="mx-auto mb-3"
-          style={{ height: "20px", opacity: 0.4 }}
+          style={{ height: "20px", opacity: 0.5 }}
         />
-        <p style={{ fontFamily: "var(--font-builder)", fontSize: "12px", color: "var(--cream)", opacity: 0.3 }}>
+        <p style={{ fontFamily: "var(--font-builder)", fontSize: "12px", color: "var(--steel-blue)", opacity: 0.5 }}>
           A TRIADBLUE platform
         </p>
       </div>
