@@ -128,7 +128,7 @@ export function BuilderPane({
       >
         <span
           style={{
-            fontFamily: "var(--font-builder)",
+            fontFamily: "var(--font-label)",
             fontWeight: 600,
             fontSize: "13px",
             color: "var(--triad-black)",

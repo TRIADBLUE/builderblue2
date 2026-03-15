@@ -78,7 +78,7 @@ export function ArchitectPane({
       >
         <span
           style={{
-            fontFamily: "var(--font-architect)",
+            fontFamily: "var(--font-label)",
             fontWeight: "bold",
             fontSize: "13px",
             color: "var(--triad-black)",

@@ -29,7 +29,7 @@ export function Nav() {
                 <Link
                   href="/dashboard"
                   className="text-sm transition-colors"
-                  style={{ color: "var(--triad-black)", opacity: 0.7, fontFamily: "var(--font-builder)" }}
+                  style={{ color: "var(--triad-black)", opacity: 0.7, fontFamily: "var(--font-label)" }}
                 >
                   Dashboard
                 </Link>
@@ -40,7 +40,7 @@ export function Nav() {
           <div className="flex items-center gap-3">
             {isAuthenticated ? (
               <>
-                <span className="text-sm" style={{ color: "var(--triad-black)", opacity: 0.5 }}>
+                <span className="text-sm" style={{ color: "var(--triad-black)", opacity: 0.5, fontFamily: "var(--font-content)" }}>
                   {user?.email}
                 </span>
                 <button
@@ -51,6 +51,7 @@ export function Nav() {
                     background: "transparent",
                     border: "1px solid var(--steel-blue)",
                     cursor: "pointer",
+                    fontFamily: "var(--font-label)",
                   }}
                 >
                   Log out
@@ -66,7 +67,7 @@ export function Nav() {
                       background: "transparent",
                       border: "none",
                       cursor: "pointer",
-                      fontFamily: "var(--font-builder)",
+                      fontFamily: "var(--font-label)",
                     }}
                   >
                     Log in
@@ -80,7 +81,7 @@ export function Nav() {
                       background: "var(--pure-blue)",
                       border: "none",
                       cursor: "pointer",
-                      fontFamily: "var(--font-builder)",
+                      fontFamily: "var(--font-label)",
                     }}
                   >
                     Get started

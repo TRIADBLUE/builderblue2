@@ -15,8 +15,8 @@ export default function Landing() {
           style={{ height: "120px" }}
         />
         <h1
-          className="flex flex-wrap items-center justify-center gap-4 text-5xl font-bold tracking-tight sm:text-6xl"
-          style={{ color: "var(--triad-black)", fontFamily: "var(--font-builder)" }}
+          className="flex flex-wrap items-center justify-center gap-4"
+          style={{ color: "var(--triad-black)", fontFamily: "var(--font-heading)", fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: "bold", letterSpacing: "-0.01em" }}
         >
           Start building with{" "}
           <img
@@ -27,7 +27,7 @@ export default function Landing() {
         </h1>
         <p
           className="mx-auto mt-6 max-w-2xl text-lg"
-          style={{ color: "var(--steel-blue)", opacity: 0.8, lineHeight: 1.7, fontFamily: "var(--font-builder)" }}
+          style={{ color: "var(--steel-blue)", opacity: 0.8, lineHeight: 1.7, fontFamily: "var(--font-content)" }}
         >
           The AI-powered IDE where Architect designs and Builder codes — side by side on a shared stage.
           Ship production apps with vibe coding that actually works.
@@ -42,7 +42,7 @@ export default function Landing() {
                 color: "var(--cream)",
                 border: "none",
                 cursor: "pointer",
-                fontFamily: "var(--font-builder)",
+                fontFamily: "var(--font-label)",
               }}
             >
               Start building free
@@ -56,7 +56,7 @@ export default function Landing() {
                 color: "var(--steel-blue)",
                 border: "1px solid var(--steel-blue)",
                 cursor: "pointer",
-                fontFamily: "var(--font-builder)",
+                fontFamily: "var(--font-label)",
               }}
             >
               Sign in
@@ -88,7 +88,7 @@ export default function Landing() {
                 style={{
                   color: "var(--triad-black)",
                   letterSpacing: "0.08em",
-                  fontFamily: "var(--font-architect)",
+                  fontFamily: "var(--font-label)",
                 }}
               >
                 Architect
@@ -97,7 +97,7 @@ export default function Landing() {
                 className="rounded-lg p-3 mb-2"
                 style={{
                   background: "var(--steel-blue)",
-                  fontFamily: "var(--font-architect)",
+                  fontFamily: "var(--font-heading)",
                   fontSize: "12px",
                   color: "var(--cream)",
                   borderRadius: "12px 12px 2px 12px",
@@ -109,7 +109,7 @@ export default function Landing() {
                 className="rounded-lg p-3"
                 style={{
                   background: "white",
-                  fontFamily: "var(--font-architect)",
+                  fontFamily: "var(--font-heading)",
                   fontSize: "12px",
                   color: "var(--triad-black)",
                   borderRadius: "12px 12px 12px 2px",
@@ -158,7 +158,7 @@ export default function Landing() {
                 style={{
                   color: "var(--cream)",
                   letterSpacing: "0.08em",
-                  fontFamily: "var(--font-runway)",
+                  fontFamily: "var(--font-label)",
                 }}
               >
                 Staging Runway
@@ -178,7 +178,7 @@ export default function Landing() {
                   </span>
                   <span
                     className="rounded px-1.5 py-0.5"
-                    style={{ fontFamily: "var(--font-runway)", fontSize: "9px", background: "var(--steel-blue)", color: "var(--cream)" }}
+                    style={{ fontFamily: "var(--font-label)", fontSize: "9px", background: "var(--steel-blue)", color: "var(--cream)" }}
                   >
                     builder
                   </span>
@@ -201,7 +201,7 @@ export default function Landing() {
                   <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--cream)" }}>
                     src/components/Hero.tsx
                   </span>
-                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#008060", textTransform: "uppercase" }}>
+                  <span style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#008060", textTransform: "uppercase" }}>
                     approved
                   </span>
                 </div>
@@ -239,7 +239,7 @@ export default function Landing() {
                 style={{
                   color: "var(--triad-black)",
                   letterSpacing: "0.08em",
-                  fontFamily: "var(--font-builder)",
+                  fontFamily: "var(--font-label)",
                 }}
               >
                 Builder
@@ -248,7 +248,7 @@ export default function Landing() {
                 className="rounded-lg p-3 mb-2"
                 style={{
                   background: "white",
-                  fontFamily: "var(--font-builder)",
+                  fontFamily: "var(--font-content)",
                   fontSize: "12px",
                   color: "var(--triad-black)",
                   borderRadius: "12px 12px 12px 2px",
@@ -264,7 +264,7 @@ export default function Landing() {
                 </div>
                 <span
                   className="rounded px-1 py-0.5"
-                  style={{ fontSize: "9px", background: "var(--steel-blue)", color: "var(--cream)" }}
+                  style={{ fontSize: "9px", background: "var(--steel-blue)", color: "var(--cream)", fontFamily: "var(--font-label)" }}
                 >
                   Staged →
                 </span>
@@ -301,13 +301,13 @@ export default function Landing() {
               <div key={feature.title} className="rounded-lg p-6" style={{ border: "1px solid var(--steel-blue)" }}>
                 <h3
                   className="mb-2 text-base font-bold"
-                  style={{ color: "var(--triad-black)", fontFamily: "var(--font-builder)" }}
+                  style={{ color: "var(--triad-black)", fontFamily: "var(--font-heading)" }}
                 >
                   {feature.title}
                 </h3>
                 <p
                   className="text-sm"
-                  style={{ color: "var(--steel-blue)", opacity: 0.7, lineHeight: 1.6, fontFamily: "var(--font-builder)" }}
+                  style={{ color: "var(--steel-blue)", opacity: 0.7, lineHeight: 1.6, fontFamily: "var(--font-content)" }}
                 >
                   {feature.desc}
                 </p>
@@ -328,7 +328,7 @@ export default function Landing() {
           className="mx-auto mb-3"
           style={{ height: "20px", opacity: 0.5 }}
         />
-        <p style={{ fontFamily: "var(--font-builder)", fontSize: "12px", color: "var(--steel-blue)", opacity: 0.5 }}>
+        <p style={{ fontFamily: "var(--font-content)", fontSize: "12px", color: "var(--steel-blue)", opacity: 0.5 }}>
           A TRIADBLUE platform
         </p>
       </div>
