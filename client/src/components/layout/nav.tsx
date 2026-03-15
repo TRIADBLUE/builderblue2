@@ -20,7 +20,7 @@ export function Nav() {
               <img
                 src="/builderblue2_url.png"
                 alt="BuilderBlue²"
-                className="h-8"
+                style={{ height: "36px" }}
               />
             </Link>
 
@@ -29,7 +29,7 @@ export function Nav() {
                 <Link
                   href="/dashboard"
                   className="text-sm transition-colors"
-                  style={{ color: "var(--triad-black)", opacity: 0.7 }}
+                  style={{ color: "var(--triad-black)", opacity: 0.7, fontFamily: "var(--font-builder)" }}
                 >
                   Dashboard
                 </Link>
@@ -66,6 +66,7 @@ export function Nav() {
                       background: "transparent",
                       border: "none",
                       cursor: "pointer",
+                      fontFamily: "var(--font-builder)",
                     }}
                   >
                     Log in
@@ -79,6 +80,7 @@ export function Nav() {
                       background: "var(--pure-blue)",
                       border: "none",
                       cursor: "pointer",
+                      fontFamily: "var(--font-builder)",
                     }}
                   >
                     Get started

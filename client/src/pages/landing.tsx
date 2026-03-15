@@ -12,22 +12,22 @@ export default function Landing() {
           src="/builderblue2_logo.png"
           alt="BuilderBlue²"
           className="mx-auto mb-8"
-          style={{ height: "80px" }}
+          style={{ height: "120px" }}
         />
         <h1
-          className="flex items-center justify-center gap-4 text-5xl font-bold tracking-tight sm:text-6xl"
-          style={{ color: "var(--triad-black)" }}
+          className="flex flex-wrap items-center justify-center gap-4 text-5xl font-bold tracking-tight sm:text-6xl"
+          style={{ color: "var(--triad-black)", fontFamily: "var(--font-builder)" }}
         >
           Start building with{" "}
           <img
             src="/builderblue2_text.png"
             alt="BuilderBlue².com"
-            style={{ height: "1.1em", verticalAlign: "middle" }}
+            style={{ height: "1.15em", verticalAlign: "middle" }}
           />
         </h1>
         <p
           className="mx-auto mt-6 max-w-2xl text-lg"
-          style={{ color: "var(--steel-blue)", opacity: 0.8, lineHeight: 1.7 }}
+          style={{ color: "var(--steel-blue)", opacity: 0.8, lineHeight: 1.7, fontFamily: "var(--font-builder)" }}
         >
           The AI-powered IDE where Architect designs and Builder codes — side by side on a shared stage.
           Ship production apps with vibe coding that actually works.
@@ -42,6 +42,7 @@ export default function Landing() {
                 color: "var(--cream)",
                 border: "none",
                 cursor: "pointer",
+                fontFamily: "var(--font-builder)",
               }}
             >
               Start building free
@@ -55,6 +56,7 @@ export default function Landing() {
                 color: "var(--steel-blue)",
                 border: "1px solid var(--steel-blue)",
                 cursor: "pointer",
+                fontFamily: "var(--font-builder)",
               }}
             >
               Sign in
@@ -299,13 +301,13 @@ export default function Landing() {
               <div key={feature.title} className="rounded-lg p-6" style={{ border: "1px solid var(--steel-blue)" }}>
                 <h3
                   className="mb-2 text-base font-bold"
-                  style={{ color: "var(--triad-black)" }}
+                  style={{ color: "var(--triad-black)", fontFamily: "var(--font-builder)" }}
                 >
                   {feature.title}
                 </h3>
                 <p
                   className="text-sm"
-                  style={{ color: "var(--steel-blue)", opacity: 0.7, lineHeight: 1.6 }}
+                  style={{ color: "var(--steel-blue)", opacity: 0.7, lineHeight: 1.6, fontFamily: "var(--font-builder)" }}
                 >
                   {feature.desc}
                 </p>
