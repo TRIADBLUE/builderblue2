@@ -5,6 +5,8 @@ import {
   timestamp,
   boolean,
   integer,
+  jsonb,
+  numeric,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
@@ -125,4 +127,136 @@ export const computeBlocks = pgTable("compute_blocks", {
   swipesblueTransactionId: text("swipesblue_transaction_id"),
   purchasedAt: timestamp("purchased_at").defaultNow().notNull(),
   neverExpires: boolean("never_expires").default(true),
+});
+
+// ─── Project Files ──────────────────────────────────────────────────────────
+
+export const projectFiles = pgTable("project_files", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  path: text("path").notNull(),
+  content: text("content").notNull(),
+  language: text("language").notNull(),
+  lastModifiedBy: text("last_modified_by").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Conversations ──────────────────────────────────────────────────────────
+
+export const conversations = pgTable("conversations", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  role: text("role").notNull(),
+  provider: text("provider").notNull(),
+  model: text("model").notNull(),
+  messages: jsonb("messages").notNull().default(sql`'[]'::jsonb`),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Staged Changes ────────────────────────────────────────────────────────
+
+export const stagedChanges = pgTable("staged_changes", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  conversationId: uuid("conversation_id").references(() => conversations.id),
+  filePath: text("file_path").notNull(),
+  originalContent: text("original_content"),
+  proposedContent: text("proposed_content").notNull(),
+  diff: text("diff").notNull(),
+  status: text("status").notNull().default("pending"),
+  proposedBy: text("proposed_by").notNull(),
+  reviewedBy: uuid("reviewed_by").references(() => users.id),
+  committedAt: timestamp("committed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Deployments ────────────────────────────────────────────────────────────
+
+export const deployments = pgTable("deployments", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  target: text("target").notNull(),
+  status: text("status").notNull().default("pending"),
+  buildLog: text("build_log"),
+  deployedUrl: text("deployed_url"),
+  deployedAt: timestamp("deployed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Project Secrets ────────────────────────────────────────────────────────
+
+export const projectSecrets = pgTable("project_secrets", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  key: text("key").notNull(),
+  encryptedValue: text("encrypted_value").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── AI Usage ───────────────────────────────────────────────────────────────
+
+export const aiUsage = pgTable("ai_usage", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  projectId: uuid("project_id").references(() => projects.id),
+  conversationId: uuid("conversation_id").references(() => conversations.id),
+  provider: text("provider").notNull(),
+  model: text("model").notNull(),
+  inputTokens: integer("input_tokens").notNull().default(0),
+  outputTokens: integer("output_tokens").notNull().default(0),
+  costUsd: numeric("cost_usd", { precision: 10, scale: 6 }).notNull().default("0"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// ─── Billing Cycles ─────────────────────────────────────────────────────────
+
+export const billingCycles = pgTable("billing_cycles", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  subscriptionId: uuid("subscription_id")
+    .notNull()
+    .references(() => subscriptions.id, { onDelete: "cascade" }),
+  amount: integer("amount").notNull(),
+  status: text("status").notNull(),
+  attemptCount: integer("attempt_count").default(0),
+  nextAttemptAt: timestamp("next_attempt_at"),
+  paidAt: timestamp("paid_at"),
+  failedAt: timestamp("failed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });

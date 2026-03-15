@@ -7,6 +7,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import billingRoutes from "./routes/billing.js";
+import projectRoutes from "./routes/projects.js";
+import conversationRoutes from "./routes/conversations.js";
+import stagingRoutes from "./routes/staging.js";
+import ideRoutes from "./routes/ide.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -29,6 +33,10 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/billing", billingRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/conversations", conversationRoutes);
+app.use("/api/staging", stagingRoutes);
+app.use("/api/ide", ideRoutes);
 
 // ─── Health Check ────────────────────────────────────────────────────────────
 

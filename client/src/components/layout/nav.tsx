@@ -6,26 +6,30 @@ export function Nav() {
   const { user, isAuthenticated, logout } = useAuth();
 
   return (
-    <nav className="border-b border-gray-200 bg-white">
+    <nav
+      className="border-b"
+      style={{
+        background: "var(--triad-black)",
+        borderColor: "rgba(233, 236, 240, 0.1)",
+      }}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center">
               <img
-                src="/builderblue2_logo.png"
+                src="/builderblue2_url.png"
                 alt="BuilderBlue²"
-                className="h-8 w-8"
+                className="h-8"
               />
-              <span className="text-lg font-bold text-gray-900">
-                BuilderBlue²
-              </span>
             </Link>
 
             {isAuthenticated && (
               <div className="hidden sm:flex items-center gap-4">
                 <Link
                   href="/dashboard"
-                  className="text-sm text-gray-600 hover:text-gray-900"
+                  className="text-sm transition-colors"
+                  style={{ color: "var(--cream)", opacity: 0.7 }}
                 >
                   Dashboard
                 </Link>
@@ -36,20 +40,49 @@ export function Nav() {
           <div className="flex items-center gap-3">
             {isAuthenticated ? (
               <>
-                <span className="text-sm text-gray-500">{user?.email}</span>
-                <Button variant="ghost" size="sm" onClick={logout}>
+                <span className="text-sm" style={{ color: "var(--cream)", opacity: 0.5 }}>
+                  {user?.email}
+                </span>
+                <button
+                  onClick={logout}
+                  className="rounded px-3 py-1.5 text-sm transition-colors"
+                  style={{
+                    color: "var(--cream)",
+                    background: "transparent",
+                    border: "1px solid rgba(233, 236, 240, 0.2)",
+                    cursor: "pointer",
+                  }}
+                >
                   Log out
-                </Button>
+                </button>
               </>
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" size="sm">
+                  <button
+                    className="rounded px-3 py-1.5 text-sm transition-colors"
+                    style={{
+                      color: "var(--cream)",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
                     Log in
-                  </Button>
+                  </button>
                 </Link>
                 <Link href="/register">
-                  <Button size="sm">Get started</Button>
+                  <button
+                    className="rounded px-4 py-1.5 text-sm font-semibold transition-colors"
+                    style={{
+                      color: "var(--cream)",
+                      background: "var(--pure-blue)",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Get started
+                  </button>
                 </Link>
               </>
             )}

@@ -1,1 +1,195 @@
 @import "tailwindcss";
+
+/* ─── Google Fonts ────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+/* ─── QTEraType placeholder — replace @font-face src when real font arrives ─ */
+@font-face {
+  font-family: 'QTEraType';
+  src: url('/fonts/QTEraType.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'QTEraType';
+  src: url('/fonts/QTEraType-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── CSS Custom Properties — LOCKED PALETTE ─────────────────────────────── */
+:root {
+  --cream: #E9ECF0;
+  --tan: #A67C4B;
+  --triad-black: #09080E;
+  --steel-blue: #1F5882;
+  --deep-blue: #14287D;
+  --ruby-red: #82323C;
+  --pure-blue: #0000FF;
+  --yellow: #FFFF00;
+
+  /* Derived */
+  --runway-glow: rgba(169, 124, 75, 0.4);
+  --runway-glow-outer: rgba(169, 124, 75, 0.15);
+  --runway-border: rgba(233, 236, 240, 0.3);
+  --card-border: rgba(233, 236, 240, 0.2);
+
+  /* Fonts */
+  --font-architect: 'QTEraType', 'Georgia', serif;
+  --font-runway: 'Ubuntu Mono', monospace;
+  --font-builder: 'DM Sans', sans-serif;
+}
+
+/* ─── Global resets ──────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ─── Scrollbar styling ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(31, 88, 130, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(31, 88, 130, 0.5);
+}
+
+/* ─── IDE Pane transitions ───────────────────────────────────────────────── */
+.ide-pane {
+  transition: width 400ms ease-in-out, opacity 400ms ease-in-out, filter 400ms ease-in-out;
+}
+
+.ide-pane-inactive {
+  opacity: 0.45;
+  filter: saturate(0.7);
+}
+
+.ide-pane-active {
+  opacity: 1;
+  filter: saturate(1);
+}
+
+/* ─── Runway glow ────────────────────────────────────────────────────────── */
+.runway {
+  box-shadow: 0 0 40px var(--runway-glow), 0 0 80px var(--runway-glow-outer);
+  border-top: 2px solid var(--runway-border);
+  border-bottom: 2px solid var(--runway-border);
+}
+
+/* ─── Staged card entry animation ────────────────────────────────────────── */
+@keyframes card-enter {
+  from {
+    transform: translateY(60px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes card-glow {
+  0% { box-shadow: 0 0 0 rgba(166, 124, 75, 0); }
+  50% { box-shadow: 0 0 20px rgba(233, 236, 240, 0.4); }
+  100% { box-shadow: 0 0 0 rgba(166, 124, 75, 0); }
+}
+
+@keyframes card-approve {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@keyframes card-reject {
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+
+.staged-card-enter {
+  animation: card-enter 350ms cubic-bezier(0.22, 1, 0.36, 1) forwards,
+             card-glow 600ms ease-in-out 350ms forwards;
+}
+
+.staged-card-approved {
+  animation: card-approve 200ms ease-out forwards;
+}
+
+.staged-card-rejected {
+  animation: card-reject 250ms ease-in forwards;
+}
+
+/* ─── Streaming cursor ───────────────────────────────────────────────────── */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.streaming-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  animation: blink 1s infinite;
+  vertical-align: text-bottom;
+  margin-left: 1px;
+}
+
+.streaming-cursor-architect {
+  background-color: var(--steel-blue);
+}
+
+.streaming-cursor-builder {
+  background-color: var(--deep-blue);
+}
+
+/* ─── Hand-off flash ─────────────────────────────────────────────────────── */
+@keyframes pane-flash {
+  0% { border-color: transparent; }
+  50% { border-color: var(--steel-blue); }
+  100% { border-color: transparent; }
+}
+
+.pane-flash {
+  animation: pane-flash 300ms ease-out;
+}
+
+/* ─── Compute warning slide ──────────────────────────────────────────────── */
+@keyframes slide-down {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+.compute-warning-enter {
+  animation: slide-down 300ms ease-out forwards;
+}
+
+/* ─── Upgrade toast slide ────────────────────────────────────────────────── */
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.toast-enter {
+  animation: slide-in-right 300ms ease-out forwards;
+}

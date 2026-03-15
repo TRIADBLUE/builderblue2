@@ -113,6 +113,136 @@ export interface ComputeBlock {
   neverExpires: boolean;
 }
 
+// ─── Project Files ───────────────────────────────────────────────────────────
+
+export type FileModifiedBy = "user" | "architect" | "builder";
+
+export interface ProjectFile {
+  id: string;
+  projectId: string;
+  path: string;
+  content: string;
+  language: string;
+  lastModifiedBy: FileModifiedBy;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── Conversations ──────────────────────────────────────────────────────────
+
+export type ConversationRole = "architect" | "builder";
+export type AIProvider = "claude" | "deepseek" | "gemini" | "kimi";
+
+export interface ConversationMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: string;
+}
+
+export interface Conversation {
+  id: string;
+  projectId: string;
+  userId: string;
+  role: ConversationRole;
+  provider: AIProvider;
+  model: string;
+  messages: ConversationMessage[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── Staged Changes ────────────────────────────────────────────────────────
+
+export type StagedChangeStatus = "pending" | "approved" | "rejected" | "committed";
+export type ProposedBy = "architect" | "builder" | "user";
+
+export interface StagedChange {
+  id: string;
+  projectId: string;
+  conversationId: string | null;
+  filePath: string;
+  originalContent: string | null;
+  proposedContent: string;
+  diff: string;
+  status: StagedChangeStatus;
+  proposedBy: ProposedBy;
+  reviewedBy: string | null;
+  committedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── Deployments ────────────────────────────────────────────────────────────
+
+export type DeployTarget = "hostsblue" | "export" | "kamatera";
+export type DeployStatus = "pending" | "building" | "deployed" | "failed";
+
+export interface Deployment {
+  id: string;
+  projectId: string;
+  userId: string;
+  target: DeployTarget;
+  status: DeployStatus;
+  buildLog: string | null;
+  deployedUrl: string | null;
+  deployedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── Project Secrets ────────────────────────────────────────────────────────
+
+export interface ProjectSecret {
+  id: string;
+  projectId: string;
+  key: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ─── AI Usage ───────────────────────────────────────────────────────────────
+
+export interface AIUsageRecord {
+  id: string;
+  userId: string;
+  projectId: string | null;
+  conversationId: string | null;
+  provider: string;
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+  costUsd: string;
+  createdAt: string;
+}
+
+// ─── Billing Cycles ─────────────────────────────────────────────────────────
+
+export type BillingCycleStatus = "pending" | "paid" | "failed" | "void";
+
+export interface BillingCycle {
+  id: string;
+  subscriptionId: string;
+  amount: number;
+  status: BillingCycleStatus;
+  attemptCount: number;
+  nextAttemptAt: string | null;
+  paidAt: string | null;
+  failedAt: string | null;
+  createdAt: string;
+}
+
+// ─── IDE ─────────────────────────────────────────────────────────────────────
+
+export type ActivePane = "architect" | "builder" | null;
+export type CenterTab = "staging" | "files" | "terminal" | "secrets" | "database" | "preview" | "git" | "services";
+
+export interface ComputeStatus {
+  sessionsUsed: number;
+  sessionsAllowed: number;
+  percentage: number;
+  level: "normal" | "warning" | "critical" | "depleted";
+}
+
 // ─── API ─────────────────────────────────────────────────────────────────────
 
 export interface ApiError {
