@@ -164,7 +164,7 @@ export function IDEShell({
   const builderMessages = (builderConvo.conversation?.messages ?? []) as ConversationMessage[];
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col ide-layout">
       {/* Top Nav */}
       <TopNav
         projectName={projectName}

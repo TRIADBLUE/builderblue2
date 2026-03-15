@@ -1,6 +1,5 @@
 import { Link } from "wouter";
 import { useAuth } from "../../hooks/useAuth";
-import { Button } from "../ui/button";
 
 export function Nav() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -9,8 +8,9 @@ export function Nav() {
     <nav
       className="border-b"
       style={{
-        background: "var(--triad-black)",
-        borderColor: "rgba(233, 236, 240, 0.1)",
+        background: "var(--cream)",
+        borderColor: "var(--steel-blue)",
+        borderBottomWidth: "2px",
       }}
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -29,7 +29,7 @@ export function Nav() {
                 <Link
                   href="/dashboard"
                   className="text-sm transition-colors"
-                  style={{ color: "var(--cream)", opacity: 0.7 }}
+                  style={{ color: "var(--triad-black)", opacity: 0.7 }}
                 >
                   Dashboard
                 </Link>
@@ -40,16 +40,16 @@ export function Nav() {
           <div className="flex items-center gap-3">
             {isAuthenticated ? (
               <>
-                <span className="text-sm" style={{ color: "var(--cream)", opacity: 0.5 }}>
+                <span className="text-sm" style={{ color: "var(--triad-black)", opacity: 0.5 }}>
                   {user?.email}
                 </span>
                 <button
                   onClick={logout}
                   className="rounded px-3 py-1.5 text-sm transition-colors"
                   style={{
-                    color: "var(--cream)",
+                    color: "var(--triad-black)",
                     background: "transparent",
-                    border: "1px solid rgba(233, 236, 240, 0.2)",
+                    border: "1px solid var(--steel-blue)",
                     cursor: "pointer",
                   }}
                 >
@@ -62,7 +62,7 @@ export function Nav() {
                   <button
                     className="rounded px-3 py-1.5 text-sm transition-colors"
                     style={{
-                      color: "var(--cream)",
+                      color: "var(--triad-black)",
                       background: "transparent",
                       border: "none",
                       cursor: "pointer",

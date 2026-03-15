@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ─── Google Fonts ────────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 /* ─── QTEraType placeholder — replace @font-face src when real font arrives ─ */
 @font-face {
@@ -39,8 +39,8 @@
 
   /* Fonts */
   --font-architect: 'QTEraType', 'Georgia', serif;
-  --font-runway: 'Ubuntu Mono', monospace;
-  --font-builder: 'DM Sans', sans-serif;
+  --font-runway: 'Source Code Pro', monospace;
+  --font-builder: 'Source Sans 3', 'Google Sans', sans-serif;
 }
 
 /* ─── Global resets ──────────────────────────────────────────────────────── */
@@ -52,7 +52,12 @@ html, body, #root {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+/* Only lock overflow on IDE pages, not landing/auth */
+.ide-layout {
   overflow: hidden;
+  height: 100%;
 }
 
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */

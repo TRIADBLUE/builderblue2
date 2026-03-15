@@ -15,13 +15,15 @@ export default function Landing() {
           style={{ height: "80px" }}
         />
         <h1
-          className="text-5xl font-bold tracking-tight sm:text-6xl"
+          className="flex items-center justify-center gap-4 text-5xl font-bold tracking-tight sm:text-6xl"
           style={{ color: "var(--triad-black)" }}
         >
           Start building with{" "}
-          <span style={{ color: "var(--pure-blue)" }}>Builder</span>
-          <span style={{ color: "var(--pure-blue)" }}>Blue</span>
-          <span style={{ color: "var(--yellow)", fontSize: "0.6em", verticalAlign: "super" }}>²</span>
+          <img
+            src="/builderblue2_text.png"
+            alt="BuilderBlue².com"
+            style={{ height: "1.1em", verticalAlign: "middle" }}
+          />
         </h1>
         <p
           className="mx-auto mt-6 max-w-2xl text-lg"
