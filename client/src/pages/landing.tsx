@@ -18,7 +18,8 @@ export default function Landing() {
           className="text-5xl font-bold tracking-tight sm:text-6xl"
           style={{ color: "var(--cream)" }}
         >
-          Build with{" "}
+          Start building with{" "}
+          <span style={{ color: "var(--pure-blue)" }}>Builder</span>
           <span style={{ color: "var(--pure-blue)" }}>Blue</span>
           <span style={{ color: "var(--yellow)", fontSize: "0.6em", verticalAlign: "super" }}>²</span>
         </h1>
