@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ─── Google Fonts ────────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=M+PLUS+Rounded+1c:wght@400;500;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=M+PLUS+Rounded+1c:wght@400;500;700&family=SN+Pro:wght@400;500;700&family=Datatype:wght@400;700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 /* ─── Archerus Grotesque — buttons (replace src when real font arrives) ───── */
 @font-face {
@@ -16,32 +16,6 @@
   font-family: 'Archerus Grotesque';
   src: url('/fonts/ArcherusGrotesque-SemiBold.otf') format('opentype');
   font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* ─── SN Pro — staging/runway (replace src when real font arrives) ───────── */
-@font-face {
-  font-family: 'SN Pro';
-  src: url('/fonts/SNPro-Regular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SN Pro';
-  src: url('/fonts/SNPro-Bold.otf') format('opentype');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* ─── Datatype — builder (replace src when real font arrives) ────────────── */
-@font-face {
-  font-family: 'Datatype';
-  src: url('/fonts/Datatype.otf') format('opentype');
-  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
@@ -90,9 +64,9 @@
   /* M PLUS Rounded 1c: Architect pane output */
   --font-architect: 'M PLUS Rounded 1c', sans-serif;
   /* SN Pro: Staging/runway output */
-  --font-runway: 'SN Pro', 'Source Code Pro', monospace;
+  --font-runway: 'SN Pro', monospace;
   /* Datatype: Builder pane output */
-  --font-builder: 'Datatype', 'Source Sans 3', monospace;
+  --font-builder: 'Datatype', monospace;
   /* Content/body text */
   --font-content: 'Source Sans 3', sans-serif;
 }
