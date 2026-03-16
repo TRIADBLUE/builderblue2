@@ -40,9 +40,8 @@ export default function Landing() {
         <h1 className="flex flex-wrap items-baseline justify-center" style={{ fontFamily: "var(--font-heading)", fontWeight: "bold" }}>
           <span style={{ color: "var(--triad-black)", whiteSpace: "nowrap" }}>
             <span style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>S</span>
-            <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>TART BUILDING WITH</span>
+            <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>TART BUILDING WITH&nbsp;</span>
           </span>
-          <span style={{ display: "inline-block", width: "0.3em" }} />
           {/* BuilderBlue².com — rendered as real text */}
           <span style={{ position: "relative", display: "inline-block" }}>
             {/* Reflection copy underneath — all #808080 with upward shadow */}
