@@ -13,7 +13,7 @@ function BrandText({ size }: { size: string }) {
   const small = `calc(${size} * 0.8)`;
   const sup = `calc(${size} * 0.5)`;
   return (
-    <span style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", whiteSpace: "nowrap", letterSpacing: "0.03em" }}>
+    <span style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", whiteSpace: "nowrap", letterSpacing: "0.06em" }}>
       <span style={{ fontSize: full, color: "#09080E" }}>B</span>
       <span style={{ fontSize: small, color: "#09080E" }}>UILDER</span>
       <span style={{ fontSize: full, color: "#0000FF" }}>B</span>
