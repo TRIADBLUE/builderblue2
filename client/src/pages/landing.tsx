@@ -1,6 +1,29 @@
 import { Link } from "wouter";
 import { Nav } from "../components/layout/nav";
 
+/**
+ * BuilderBlue².com rendered in QTEraType with exact brand specs:
+ * - First letter of each word (B, B) at full size
+ * - Remaining letters are uppercase but 20% smaller
+ * - "Builder" + ".com" in #09080E, "Blue" in #0000FF
+ * - ² is superscript
+ */
+function BrandText({ size }: { size: string }) {
+  const full = size;
+  const small = `calc(${size} * 0.8)`;
+  const sup = `calc(${size} * 0.5)`;
+  return (
+    <span style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", whiteSpace: "nowrap" }}>
+      <span style={{ fontSize: full, color: "#09080E" }}>B</span>
+      <span style={{ fontSize: small, color: "#09080E" }}>UILDER</span>
+      <span style={{ fontSize: full, color: "#0000FF" }}>B</span>
+      <span style={{ fontSize: small, color: "#0000FF" }}>LUE</span>
+      <sup style={{ fontSize: sup, color: "#09080E", verticalAlign: "super", lineHeight: 0 }}>2</sup>
+      <span style={{ fontSize: small, color: "#09080E" }}>.COM</span>
+    </span>
+  );
+}
+
 export default function Landing() {
   return (
     <div className="min-h-screen" style={{ background: "var(--cream)" }}>
@@ -14,18 +37,34 @@ export default function Landing() {
           className="mx-auto mb-8"
           style={{ height: "120px" }}
         />
-        <h1
-          className="flex flex-wrap items-center justify-center gap-3"
-          style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", letterSpacing: "-0.01em" }}
-        >
+        <h1 className="flex flex-wrap items-baseline justify-center" style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", gap: "0.3em" }}>
           <span style={{ color: "var(--triad-black)", fontSize: "clamp(1.4rem, 3.5vw, 2.45rem)" }}>
             Start building with
           </span>
-          <img
-            src="/builderblue2_text.png"
-            alt="BuilderBlue².com"
-            style={{ height: "clamp(1.4rem, 3.5vw, 2.45rem)" }}
-          />
+          {/* BuilderBlue².com — rendered as real text */}
+          <span style={{ position: "relative", display: "inline-block" }}>
+            {/* Reflection copy underneath — all #808080 with upward shadow */}
+            <span
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                textShadow: "0px -25px 100px #808080",
+                zIndex: 0,
+                userSelect: "none",
+                pointerEvents: "none",
+                filter: "brightness(0) invert(0.5)",
+                opacity: 0.6,
+              }}
+            >
+              <BrandText size="clamp(2rem, 5vw, 3.5rem)" />
+            </span>
+            {/* Primary text */}
+            <span style={{ position: "relative", zIndex: 1, textShadow: "0px 25px 100px #808080" }}>
+              <BrandText size="clamp(2rem, 5vw, 3.5rem)" />
+            </span>
+          </span>
         </h1>
         <p
           className="mx-auto mt-6 max-w-2xl text-lg"
