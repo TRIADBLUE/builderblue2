@@ -13,7 +13,7 @@ function BrandText({ size }: { size: string }) {
   const small = `calc(${size} * 0.8)`;
   const sup = `calc(${size} * 0.5)`;
   return (
-    <span style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", whiteSpace: "nowrap" }}>
+    <span style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", whiteSpace: "nowrap", letterSpacing: "0.03em" }}>
       <span style={{ fontSize: full, color: "#09080E" }}>B</span>
       <span style={{ fontSize: small, color: "#09080E" }}>UILDER</span>
       <span style={{ fontSize: full, color: "#0000FF" }}>B</span>
@@ -37,10 +37,12 @@ export default function Landing() {
           className="mx-auto mb-8"
           style={{ height: "120px" }}
         />
-        <h1 className="flex flex-wrap items-baseline justify-center" style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", gap: "0.3em" }}>
-          <span style={{ color: "var(--triad-black)", fontSize: "clamp(1.4rem, 3.5vw, 2.45rem)" }}>
-            Start building with
+        <h1 className="flex flex-wrap items-baseline justify-center" style={{ fontFamily: "var(--font-heading)", fontWeight: "bold" }}>
+          <span style={{ color: "var(--triad-black)", whiteSpace: "nowrap" }}>
+            <span style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>S</span>
+            <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>TART BUILDING WITH</span>
           </span>
+          <span style={{ display: "inline-block", width: "0.3em" }} />
           {/* BuilderBlue².com — rendered as real text */}
           <span style={{ position: "relative", display: "inline-block" }}>
             {/* Reflection copy underneath — all #808080 with upward shadow */}
@@ -77,13 +79,14 @@ export default function Landing() {
         <div className="mt-10 flex items-center justify-center gap-4">
           <Link href="/register">
             <button
-              className="rounded-md px-8 py-3 text-base font-bold transition-all hover:scale-105"
+              className="rounded-md px-8 py-3 text-base transition-all hover:scale-105"
               style={{
                 background: "var(--pure-blue)",
                 color: "var(--cream)",
                 border: "none",
                 cursor: "pointer",
                 fontFamily: "var(--font-label)",
+                fontWeight: 600,
               }}
             >
               Start building free
@@ -91,13 +94,14 @@ export default function Landing() {
           </Link>
           <Link href="/login">
             <button
-              className="rounded-md px-8 py-3 text-base font-medium transition-all"
+              className="rounded-md px-8 py-3 text-base transition-all"
               style={{
                 background: "transparent",
                 color: "var(--steel-blue)",
                 border: "1px solid var(--steel-blue)",
                 cursor: "pointer",
                 fontFamily: "var(--font-label)",
+                fontWeight: 600,
               }}
             >
               Sign in

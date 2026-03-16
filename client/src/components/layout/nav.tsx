@@ -29,7 +29,7 @@ export function Nav() {
                 <Link
                   href="/dashboard"
                   className="text-sm transition-colors"
-                  style={{ color: "var(--triad-black)", opacity: 0.7, fontFamily: "var(--font-label)" }}
+                  style={{ color: "var(--triad-black)", opacity: 0.7, fontFamily: "var(--font-label)", fontWeight: 600 }}
                 >
                   Dashboard
                 </Link>
@@ -52,6 +52,7 @@ export function Nav() {
                     border: "1px solid var(--steel-blue)",
                     cursor: "pointer",
                     fontFamily: "var(--font-label)",
+                    fontWeight: 600,
                   }}
                 >
                   Log out
@@ -68,6 +69,7 @@ export function Nav() {
                       border: "none",
                       cursor: "pointer",
                       fontFamily: "var(--font-label)",
+                      fontWeight: 600,
                     }}
                   >
                     Log in
@@ -75,13 +77,14 @@ export function Nav() {
                 </Link>
                 <Link href="/register">
                   <button
-                    className="rounded px-4 py-1.5 text-sm font-semibold transition-colors"
+                    className="rounded px-4 py-1.5 text-sm transition-colors"
                     style={{
                       color: "var(--cream)",
                       background: "var(--pure-blue)",
                       border: "none",
                       cursor: "pointer",
                       fontFamily: "var(--font-label)",
+                      fontWeight: 600,
                     }}
                   >
                     Get started
