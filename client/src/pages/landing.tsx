@@ -15,7 +15,7 @@ export default function Landing() {
           style={{ height: "120px" }}
         />
         <h1
-          className="flex flex-col items-center justify-center gap-2"
+          className="flex flex-wrap items-center justify-center gap-3"
           style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", letterSpacing: "-0.01em" }}
         >
           <span style={{ color: "var(--triad-black)", fontSize: "clamp(1.4rem, 3.5vw, 2.45rem)" }}>
@@ -24,7 +24,7 @@ export default function Landing() {
           <img
             src="/builderblue2_text.png"
             alt="BuilderBlue².com"
-            style={{ height: "clamp(2rem, 5vw, 3.5rem)" }}
+            style={{ height: "clamp(1.4rem, 3.5vw, 2.45rem)" }}
           />
         </h1>
         <p
