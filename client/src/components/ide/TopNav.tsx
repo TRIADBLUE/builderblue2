@@ -44,7 +44,7 @@ export function TopNav({
       {/* Left — brand */}
       <div className="flex items-center">
         <img
-          src="/builderblue2_url.png"
+          src="/builderblue2_header.png"
           alt="BuilderBlue²"
           className="h-7"
           style={{ height: "28px" }}

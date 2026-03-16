@@ -323,7 +323,7 @@ export default function Landing() {
         style={{ borderColor: "var(--steel-blue)", opacity: 1 }}
       >
         <img
-          src="/builderblue2_url.png"
+          src="/builderblue2_header.png"
           alt="BuilderBlue²"
           className="mx-auto mb-3"
           style={{ height: "20px", opacity: 0.5 }}

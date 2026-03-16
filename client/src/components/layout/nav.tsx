@@ -18,7 +18,7 @@ export function Nav() {
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center">
               <img
-                src="/builderblue2_url.png"
+                src="/builderblue2_header.png"
                 alt="BuilderBlue²"
                 style={{ height: "36px" }}
               />
