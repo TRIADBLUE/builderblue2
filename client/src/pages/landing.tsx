@@ -81,11 +81,11 @@ export default function Landing() {
             <button
               className="rounded-md px-8 py-3 text-base transition-all hover:scale-105"
               style={{
-                background: "var(--pure-blue)",
+                background: "var(--deep-blue)",
                 color: "var(--cream)",
                 border: "none",
                 cursor: "pointer",
-                fontFamily: "var(--font-label)",
+                fontFamily: "var(--font-button)",
                 fontWeight: 600,
               }}
             >
@@ -97,10 +97,10 @@ export default function Landing() {
               className="rounded-md px-8 py-3 text-base transition-all"
               style={{
                 background: "transparent",
-                color: "var(--steel-blue)",
-                border: "1px solid var(--steel-blue)",
+                color: "var(--deep-blue)",
+                border: "1px solid var(--deep-blue)",
                 cursor: "pointer",
-                fontFamily: "var(--font-label)",
+                fontFamily: "var(--font-button)",
                 fontWeight: 600,
               }}
             >
@@ -120,7 +120,7 @@ export default function Landing() {
           }}
         >
           <div className="flex" style={{ height: "360px" }}>
-            {/* Architect pane */}
+            {/* Architect pane — cream bg, M PLUS Rounded 1c, deep-blue text, transparent bubbles w/ deep-blue outline */}
             <div
               className="flex flex-col p-4"
               style={{
@@ -131,7 +131,7 @@ export default function Landing() {
               <span
                 className="mb-3 text-xs font-bold uppercase"
                 style={{
-                  color: "var(--triad-black)",
+                  color: "var(--deep-blue)",
                   letterSpacing: "0.08em",
                   fontFamily: "var(--font-label)",
                 }}
@@ -141,10 +141,11 @@ export default function Landing() {
               <div
                 className="rounded-lg p-3 mb-2"
                 style={{
-                  background: "var(--steel-blue)",
-                  fontFamily: "var(--font-heading)",
+                  background: "transparent",
+                  fontFamily: "var(--font-architect)",
                   fontSize: "12px",
-                  color: "var(--cream)",
+                  color: "var(--deep-blue)",
+                  border: "1px solid var(--deep-blue)",
                   borderRadius: "12px 12px 2px 12px",
                 }}
               >
@@ -153,10 +154,11 @@ export default function Landing() {
               <div
                 className="rounded-lg p-3"
                 style={{
-                  background: "white",
-                  fontFamily: "var(--font-heading)",
+                  background: "transparent",
+                  fontFamily: "var(--font-architect)",
                   fontSize: "12px",
-                  color: "var(--triad-black)",
+                  color: "var(--deep-blue)",
+                  border: "1px solid var(--deep-blue)",
                   borderRadius: "12px 12px 12px 2px",
                   lineHeight: 1.5,
                 }}
@@ -176,7 +178,7 @@ export default function Landing() {
               }}
             />
 
-            {/* Runway */}
+            {/* Runway — tan bg, SN Pro, triad-black text, transparent bubbles w/ triad-black outline */}
             <div
               className="flex flex-col p-4 runway"
               style={{
@@ -188,7 +190,7 @@ export default function Landing() {
               <span
                 className="mb-3 text-xs font-bold uppercase"
                 style={{
-                  color: "var(--cream)",
+                  color: "var(--triad-black)",
                   letterSpacing: "0.08em",
                   fontFamily: "var(--font-label)",
                 }}
@@ -199,41 +201,41 @@ export default function Landing() {
               <div
                 className="rounded-md mb-2"
                 style={{
-                  background: "var(--triad-black)",
-                  border: "1px solid rgba(233, 236, 240, 0.2)",
-                  borderLeft: "3px solid var(--steel-blue)",
+                  background: "transparent",
+                  border: "1px solid var(--triad-black)",
+                  borderLeft: "3px solid var(--triad-black)",
                 }}
               >
                 <div className="flex items-center justify-between px-3 py-2">
-                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--cream)" }}>
+                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--triad-black)" }}>
                     src/pages/landing.tsx
                   </span>
                   <span
                     className="rounded px-1.5 py-0.5"
-                    style={{ fontFamily: "var(--font-label)", fontSize: "9px", background: "var(--steel-blue)", color: "var(--cream)" }}
+                    style={{ fontFamily: "var(--font-label)", fontSize: "9px", background: "var(--triad-black)", color: "var(--cream)" }}
                   >
                     builder
                   </span>
                 </div>
                 <div className="px-3 pb-2" style={{ fontFamily: "var(--font-runway)", fontSize: "10px" }}>
-                  <div style={{ color: "#008060" }}>+ export default function Landing() {"{"}</div>
-                  <div style={{ color: "#008060" }}>+   return &lt;HeroSection /&gt;</div>
-                  <div style={{ color: "var(--cream)", opacity: 0.5 }}>  ...</div>
+                  <div style={{ color: "var(--triad-black)" }}>+ export default function Landing() {"{"}</div>
+                  <div style={{ color: "var(--triad-black)" }}>+   return &lt;HeroSection /&gt;</div>
+                  <div style={{ color: "var(--triad-black)", opacity: 0.5 }}>  ...</div>
                 </div>
               </div>
               <div
                 className="rounded-md"
                 style={{
-                  background: "var(--triad-black)",
-                  border: "1px solid rgba(233, 236, 240, 0.2)",
-                  borderLeft: "3px solid #008060",
+                  background: "transparent",
+                  border: "1px solid var(--triad-black)",
+                  borderLeft: "3px solid var(--triad-black)",
                 }}
               >
                 <div className="flex items-center justify-between px-3 py-2">
-                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--cream)" }}>
+                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--triad-black)" }}>
                     src/components/Hero.tsx
                   </span>
-                  <span style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#008060", textTransform: "uppercase" }}>
+                  <span style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "var(--triad-black)", textTransform: "uppercase" }}>
                     approved
                   </span>
                 </div>
@@ -250,7 +252,7 @@ export default function Landing() {
               }}
             />
 
-            {/* Builder pane */}
+            {/* Builder pane — cream bg, Datatype, triad-black text, transparent bubbles w/ steel-blue outline */}
             <div
               className="flex flex-col p-4"
               style={{
@@ -271,10 +273,11 @@ export default function Landing() {
               <div
                 className="rounded-lg p-3 mb-2"
                 style={{
-                  background: "white",
-                  fontFamily: "var(--font-content)",
+                  background: "transparent",
+                  fontFamily: "var(--font-builder)",
                   fontSize: "12px",
                   color: "var(--triad-black)",
+                  border: "1px solid var(--steel-blue)",
                   borderRadius: "12px 12px 12px 2px",
                   lineHeight: 1.5,
                 }}

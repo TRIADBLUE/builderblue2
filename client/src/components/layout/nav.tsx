@@ -29,7 +29,7 @@ export function Nav() {
                 <Link
                   href="/dashboard"
                   className="text-sm transition-colors"
-                  style={{ color: "var(--triad-black)", opacity: 0.7, fontFamily: "var(--font-label)", fontWeight: 600 }}
+                  style={{ color: "var(--triad-black)", opacity: 0.7, fontFamily: "var(--font-button)", fontWeight: 600 }}
                 >
                   Dashboard
                 </Link>
@@ -47,11 +47,11 @@ export function Nav() {
                   onClick={logout}
                   className="rounded px-3 py-1.5 text-sm transition-colors"
                   style={{
-                    color: "var(--triad-black)",
+                    color: "var(--deep-blue)",
                     background: "transparent",
-                    border: "1px solid var(--steel-blue)",
+                    border: "1px solid var(--deep-blue)",
                     cursor: "pointer",
-                    fontFamily: "var(--font-label)",
+                    fontFamily: "var(--font-button)",
                     fontWeight: 600,
                   }}
                 >
@@ -64,11 +64,11 @@ export function Nav() {
                   <button
                     className="rounded px-3 py-1.5 text-sm transition-colors"
                     style={{
-                      color: "var(--triad-black)",
+                      color: "var(--deep-blue)",
                       background: "transparent",
                       border: "none",
                       cursor: "pointer",
-                      fontFamily: "var(--font-label)",
+                      fontFamily: "var(--font-button)",
                       fontWeight: 600,
                     }}
                   >
@@ -80,10 +80,10 @@ export function Nav() {
                     className="rounded px-4 py-1.5 text-sm transition-colors"
                     style={{
                       color: "var(--cream)",
-                      background: "var(--pure-blue)",
+                      background: "var(--deep-blue)",
                       border: "none",
                       cursor: "pointer",
-                      fontFamily: "var(--font-label)",
+                      fontFamily: "var(--font-button)",
                       fontWeight: 600,
                     }}
                   >
