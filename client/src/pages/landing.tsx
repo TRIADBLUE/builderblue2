@@ -37,35 +37,16 @@ export default function Landing() {
           className="mx-auto mb-8"
           style={{ height: "120px" }}
         />
-        <h1 className="flex flex-wrap items-baseline justify-center" style={{ fontFamily: "var(--font-heading)", fontWeight: "bold" }}>
+        <h1 className="flex flex-wrap items-center justify-center gap-3" style={{ fontFamily: "var(--font-heading)", fontWeight: "bold" }}>
           <span style={{ color: "var(--triad-black)", whiteSpace: "nowrap" }}>
             <span style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>S</span>
-            <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>TART BUILDING WITH&nbsp;</span>
+            <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>TART BUILDING WITH</span>
           </span>
-          {/* BuilderBlue².com — rendered as real text */}
-          <span style={{ position: "relative", display: "inline-block" }}>
-            {/* Reflection copy underneath — all #808080 with upward shadow */}
-            <span
-              aria-hidden="true"
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                textShadow: "0px -25px 100px #808080",
-                zIndex: 0,
-                userSelect: "none",
-                pointerEvents: "none",
-                filter: "brightness(0) invert(0.5)",
-                opacity: 0.6,
-              }}
-            >
-              <BrandText size="clamp(2rem, 5vw, 3.5rem)" />
-            </span>
-            {/* Primary text */}
-            <span style={{ position: "relative", zIndex: 1, textShadow: "0px 25px 100px #808080" }}>
-              <BrandText size="clamp(2rem, 5vw, 3.5rem)" />
-            </span>
-          </span>
+          <img
+            src="/builderblue2_text.png"
+            alt="BuilderBlue².com"
+            style={{ height: "clamp(2rem, 5vw, 3.5rem)", display: "inline-block" }}
+          />
         </h1>
         <p
           className="mx-auto mt-6 max-w-2xl text-lg"
