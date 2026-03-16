@@ -74,12 +74,12 @@ export default function Landing() {
             boxShadow: "0 0 60px rgba(166, 124, 75, 0.15), 0 0 120px rgba(166, 124, 75, 0.05)",
           }}
         >
-          <div className="relative flex" style={{ height: "360px" }}>
+          <div className="flex" style={{ height: "360px" }}>
             {/* Architect pane */}
             <div
               className="flex flex-col p-4"
               style={{
-                width: "30%",
+                flex: "1 1 0%",
                 background: "var(--cream)",
               }}
             >
@@ -121,36 +121,23 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* Left angled divider */}
-            <svg
+            {/* Left runway strip */}
+            <div
               style={{
-                position: "absolute",
-                left: "30%",
-                top: 0,
-                width: "20px",
-                height: "100%",
-                zIndex: 20,
-                marginLeft: "-10px",
-                filter: "drop-shadow(0 0 6px rgba(166, 124, 75, 0.3))",
+                width: "8px",
+                flexShrink: 0,
+                background: "#C4A06A",
+                boxShadow: "0 0 12px rgba(166, 124, 75, 0.4)",
               }}
-              preserveAspectRatio="none"
-              viewBox="0 0 20 360"
-            >
-              <polygon points="6,0 14,0 8,360 0,360" fill="#C4A06A" />
-            </svg>
+            />
 
             {/* Runway */}
             <div
               className="flex flex-col p-4 runway"
               style={{
-                width: "40%",
+                flex: "1.4 1 0%",
                 background: "var(--tan)",
-                zIndex: 10,
                 boxShadow: "0 -6px 24px rgba(166, 124, 75, 0.35), 0 4px 20px rgba(166, 124, 75, 0.25)",
-                position: "relative",
-                marginTop: "-4px",
-                marginBottom: "-4px",
-                borderRadius: "4px",
               }}
             >
               <span
@@ -208,29 +195,21 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* Right angled divider */}
-            <svg
+            {/* Right runway strip */}
+            <div
               style={{
-                position: "absolute",
-                left: "70%",
-                top: 0,
-                width: "20px",
-                height: "100%",
-                zIndex: 20,
-                marginLeft: "-10px",
-                filter: "drop-shadow(0 0 6px rgba(166, 124, 75, 0.3))",
+                width: "8px",
+                flexShrink: 0,
+                background: "#C4A06A",
+                boxShadow: "0 0 12px rgba(166, 124, 75, 0.4)",
               }}
-              preserveAspectRatio="none"
-              viewBox="0 0 20 360"
-            >
-              <polygon points="12,0 20,0 14,360 6,360" fill="#C4A06A" />
-            </svg>
+            />
 
             {/* Builder pane */}
             <div
               className="flex flex-col p-4"
               style={{
-                width: "30%",
+                flex: "1 1 0%",
                 background: "var(--cream)",
               }}
             >
