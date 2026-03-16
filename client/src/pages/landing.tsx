@@ -15,14 +15,16 @@ export default function Landing() {
           style={{ height: "120px" }}
         />
         <h1
-          className="flex flex-wrap items-center justify-center gap-4"
-          style={{ color: "var(--triad-black)", fontFamily: "var(--font-heading)", fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: "bold", letterSpacing: "-0.01em" }}
+          className="flex flex-col items-center justify-center gap-2"
+          style={{ fontFamily: "var(--font-heading)", fontWeight: "bold", letterSpacing: "-0.01em" }}
         >
-          Start building with{" "}
+          <span style={{ color: "var(--triad-black)", fontSize: "clamp(1.4rem, 3.5vw, 2.45rem)" }}>
+            Start building with
+          </span>
           <img
             src="/builderblue2_text.png"
             alt="BuilderBlue².com"
-            style={{ height: "0.95em" }}
+            style={{ height: "clamp(2rem, 5vw, 3.5rem)" }}
           />
         </h1>
         <p
