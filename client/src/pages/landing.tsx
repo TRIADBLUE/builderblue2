@@ -42,11 +42,7 @@ export default function Landing() {
             <span style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>S</span>
             <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>TART BUILDING WITH</span>
           </span>
-          <img
-            src="/builderblue2_text.png"
-            alt="BuilderBlue².com"
-            style={{ height: "clamp(2rem, 5vw, 3.5rem)", display: "inline-block" }}
-          />
+          <BrandText size="clamp(2rem, 5vw, 3.5rem)" />
         </h1>
         <p
           className="mx-auto mt-6 max-w-2xl text-lg"
