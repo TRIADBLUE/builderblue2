@@ -223,6 +223,7 @@ export function IDEShell({
             onApproveAll={() => staging.approveAll(projectId)}
             onCommit={handleCommit}
             onSaveAsProposal={handleSaveAsProposal}
+            onRetryReview={staging.retryReview}
           />
         </div>
 

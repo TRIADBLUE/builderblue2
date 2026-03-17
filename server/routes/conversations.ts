@@ -12,6 +12,7 @@ import { authenticate } from "../middleware/authenticate.js";
 import {
   streamCompletion,
   detectCodeBlocks,
+  reviewStagedCode,
 } from "../services/ai-service.js";
 import { generateDiff } from "../services/diff-service.js";
 import type { ConversationMessage, AIProvider } from "../../shared/types.js";
@@ -216,12 +217,43 @@ router.post("/:id/message", async (req, res) => {
                   originalContent: original,
                   proposedContent: block.content,
                   diff,
-                  status: "pending",
+                  status: "pending_review",
                   proposedBy: "builder",
+                  architectReview: "reviewing",
                 })
                 .returning();
 
               stagedIds.push(staged.id);
+
+              // Fire architect review async — don't block the stream
+              reviewStagedCode(
+                block.filePath,
+                original,
+                block.content,
+                diff,
+                { userId: req.user!.userId, projectId: convo.projectId }
+              ).then(async (result) => {
+                await db
+                  .update(stagedChanges)
+                  .set({
+                    architectReview: result.approved ? "approved" : "rejected",
+                    architectReviewNote: result.note,
+                    status: result.approved ? "pending" : "rejected",
+                    updatedAt: new Date(),
+                  })
+                  .where(eq(stagedChanges.id, staged.id));
+              }).catch((err) => {
+                console.error("Architect review failed:", err);
+                // Auto-approve on failure
+                db.update(stagedChanges)
+                  .set({
+                    architectReview: "approved",
+                    architectReviewNote: "Auto-approved (review error)",
+                    status: "pending",
+                    updatedAt: new Date(),
+                  })
+                  .where(eq(stagedChanges.id, staged.id));
+              });
             }
 
             if (stagedIds.length > 0) {

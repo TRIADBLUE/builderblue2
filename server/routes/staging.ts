@@ -9,6 +9,7 @@ import {
 } from "../../shared/schema.js";
 import { authenticate } from "../middleware/authenticate.js";
 import { generateDiff } from "../services/diff-service.js";
+import { reviewStagedCode } from "../services/ai-service.js";
 
 const router = Router();
 router.use(authenticate);
@@ -24,6 +25,61 @@ const createSchema = z.object({
 const updateSchema = z.object({
   status: z.enum(["approved", "rejected"]),
 });
+
+// ─── Architect auto-review (fire and forget) ───────────────────────────────
+
+async function triggerArchitectReview(
+  stagedId: string,
+  filePath: string,
+  originalContent: string | null,
+  proposedContent: string,
+  diff: string,
+  userId: string,
+  projectId: string
+): Promise<void> {
+  try {
+    // Mark as reviewing
+    await db
+      .update(stagedChanges)
+      .set({ architectReview: "reviewing", updatedAt: new Date() })
+      .where(eq(stagedChanges.id, stagedId));
+
+    const result = await reviewStagedCode(
+      filePath,
+      originalContent,
+      proposedContent,
+      diff,
+      { userId, projectId }
+    );
+
+    // Update with review result
+    await db
+      .update(stagedChanges)
+      .set({
+        architectReview: result.approved ? "approved" : "rejected",
+        architectReviewNote: result.note,
+        status: result.approved ? "pending" : "rejected",
+        updatedAt: new Date(),
+      })
+      .where(eq(stagedChanges.id, stagedId));
+
+    console.log(
+      `Architect review: ${filePath} → ${result.approved ? "APPROVED" : "REJECTED"}: ${result.note}`
+    );
+  } catch (error) {
+    console.error("Architect review failed:", error);
+    // Auto-approve on failure to not block workflow
+    await db
+      .update(stagedChanges)
+      .set({
+        architectReview: "approved",
+        architectReviewNote: "Auto-approved (review error)",
+        status: "pending",
+        updatedAt: new Date(),
+      })
+      .where(eq(stagedChanges.id, stagedId));
+  }
+}
 
 // GET /api/staging/:projectId — list staged changes
 router.get("/:projectId", async (req, res) => {
@@ -49,7 +105,7 @@ router.get("/:projectId", async (req, res) => {
   }
 });
 
-// POST /api/staging — create staged change
+// POST /api/staging — create staged change (triggers Architect review)
 router.post("/", async (req, res) => {
   try {
     const parsed = createSchema.safeParse(req.body);
@@ -101,10 +157,22 @@ router.post("/", async (req, res) => {
         originalContent: original,
         proposedContent: parsed.data.proposedContent,
         diff,
-        status: "pending",
+        status: "pending_review",
         proposedBy: parsed.data.proposedBy,
+        architectReview: "reviewing",
       })
       .returning();
+
+    // Fire architect review asynchronously — don't block the response
+    triggerArchitectReview(
+      staged.id,
+      parsed.data.filePath,
+      original,
+      parsed.data.proposedContent,
+      diff,
+      req.user!.userId,
+      parsed.data.projectId
+    );
 
     res.status(201).json(staged);
   } catch (error) {
@@ -113,12 +181,34 @@ router.post("/", async (req, res) => {
   }
 });
 
-// PATCH /api/staging/:id — approve or reject
+// PATCH /api/staging/:id — user approve or reject (only after architect approval)
 router.patch("/:id", async (req, res) => {
   try {
     const parsed = updateSchema.safeParse(req.body);
     if (!parsed.success) {
       res.status(400).json({ message: parsed.error.errors[0].message });
+      return;
+    }
+
+    // Check current state
+    const [current] = await db
+      .select()
+      .from(stagedChanges)
+      .where(eq(stagedChanges.id, req.params.id));
+
+    if (!current) {
+      res.status(404).json({ message: "Staged change not found" });
+      return;
+    }
+
+    // Block user approval if architect hasn't approved yet
+    if (
+      parsed.data.status === "approved" &&
+      current.architectReview !== "approved"
+    ) {
+      res.status(403).json({
+        message: "Cannot approve — Architect review is still pending",
+      });
       return;
     }
 
@@ -132,14 +222,51 @@ router.patch("/:id", async (req, res) => {
       .where(eq(stagedChanges.id, req.params.id))
       .returning();
 
-    if (!updated) {
+    res.json(updated);
+  } catch (error) {
+    console.error("Update staged change error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// POST /api/staging/:id/retry-review — retry architect review
+router.post("/:id/retry-review", async (req, res) => {
+  try {
+    const [current] = await db
+      .select()
+      .from(stagedChanges)
+      .where(eq(stagedChanges.id, req.params.id));
+
+    if (!current) {
       res.status(404).json({ message: "Staged change not found" });
       return;
     }
 
-    res.json(updated);
+    // Reset to reviewing
+    await db
+      .update(stagedChanges)
+      .set({
+        architectReview: "reviewing",
+        architectReviewNote: null,
+        status: "pending_review",
+        updatedAt: new Date(),
+      })
+      .where(eq(stagedChanges.id, req.params.id));
+
+    // Re-trigger review
+    triggerArchitectReview(
+      current.id,
+      current.filePath,
+      current.originalContent,
+      current.proposedContent,
+      current.diff,
+      req.user!.userId,
+      current.projectId
+    );
+
+    res.json({ message: "Architect review re-triggered" });
   } catch (error) {
-    console.error("Update staged change error:", error);
+    console.error("Retry review error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });

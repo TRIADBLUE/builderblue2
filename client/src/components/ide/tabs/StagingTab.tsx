@@ -9,6 +9,7 @@ interface StagingTabProps {
   onReject: (id: string) => void;
   onApproveAll: () => void;
   onCommit: (message: string) => void;
+  onRetryReview?: (id: string) => void;
 }
 
 export function StagingTab({
@@ -18,13 +19,27 @@ export function StagingTab({
   onReject,
   onApproveAll,
   onCommit,
+  onRetryReview,
 }: StagingTabProps) {
   const [commitMessage, setCommitMessage] = useState("");
 
-  const pendingCount = changes.filter((c) => c.status === "pending").length;
+  const reviewingCount = changes.filter(
+    (c) => c.status === "pending_review" || c.architectReview === "reviewing"
+  ).length;
+  const pendingCount = changes.filter(
+    (c) => c.status === "pending" && c.architectReview === "approved"
+  ).length;
+  const rejectedByArchitectCount = changes.filter(
+    (c) => c.architectReview === "rejected" && c.status !== "committed"
+  ).length;
   const approvedCount = changes.filter((c) => c.status === "approved").length;
+
   const activeChanges = changes.filter(
-    (c) => c.status === "pending" || c.status === "approved"
+    (c) =>
+      c.status === "pending_review" ||
+      c.status === "pending" ||
+      c.status === "approved" ||
+      (c.status === "rejected" && c.architectReview === "rejected")
   );
   const committedChanges = changes
     .filter((c) => c.status === "committed")
@@ -34,16 +49,43 @@ export function StagingTab({
     <div className="flex h-full flex-col overflow-hidden">
       {/* Controls */}
       <div className="flex items-center justify-between px-4 py-2">
-        <span
-          style={{
-            fontFamily: "var(--font-runway)",
-            fontSize: "12px",
-            color: "var(--cream)",
-            opacity: 0.6,
-          }}
-        >
-          {pendingCount} pending · {approvedCount} approved
-        </span>
+        <div className="flex items-center gap-3">
+          {reviewingCount > 0 && (
+            <span
+              className="flex items-center gap-1"
+              style={{
+                fontFamily: "var(--font-runway)",
+                fontSize: "11px",
+                color: "#D4A843",
+              }}
+            >
+              <div
+                className="animate-spin rounded-full"
+                style={{
+                  width: "10px",
+                  height: "10px",
+                  border: "1.5px solid rgba(212, 168, 67, 0.3)",
+                  borderTop: "1.5px solid #D4A843",
+                }}
+              />
+              {reviewingCount} reviewing
+            </span>
+          )}
+          <span
+            style={{
+              fontFamily: "var(--font-runway)",
+              fontSize: "12px",
+              color: "var(--cream)",
+              opacity: 0.6,
+            }}
+          >
+            {pendingCount > 0 && `${pendingCount} ready`}
+            {pendingCount > 0 && approvedCount > 0 && " \u00B7 "}
+            {approvedCount > 0 && `${approvedCount} approved`}
+            {rejectedByArchitectCount > 0 &&
+              ` \u00B7 ${rejectedByArchitectCount} flagged`}
+          </span>
+        </div>
         {pendingCount > 0 && (
           <button
             onClick={onApproveAll}
@@ -83,6 +125,7 @@ export function StagingTab({
             change={change}
             onApprove={onApprove}
             onReject={onReject}
+            onRetryReview={onRetryReview}
             isNew={newIds.has(change.id)}
           />
         ))}

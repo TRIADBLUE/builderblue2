@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { api } from "../lib/api";
 import type { StagedChange } from "@shared/types";
 
@@ -12,11 +12,40 @@ interface UseStagingReturn {
   commitChanges: (projectId: string) => Promise<{ files: string[] }>;
   addChange: (change: StagedChange) => void;
   refreshById: (id: string) => Promise<void>;
+  retryReview: (id: string) => Promise<void>;
 }
 
 export function useStaging(): UseStagingReturn {
   const [changes, setChanges] = useState<StagedChange[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Poll for architect review completion
+  const pollTimers = useRef<Map<string, NodeJS.Timeout>>(new Map());
+
+  const startPollingForReview = useCallback((id: string, projectId: string) => {
+    // Don't double-poll
+    if (pollTimers.current.has(id)) return;
+
+    const timer = setInterval(async () => {
+      try {
+        // Reload all changes to get updated review status
+        const data = await api.fetch<StagedChange[]>(`/api/staging/${projectId}`);
+        setChanges(data);
+
+        // Check if this specific change is done reviewing
+        const change = data.find((c) => c.id === id);
+        if (change && change.architectReview !== "reviewing") {
+          clearInterval(timer);
+          pollTimers.current.delete(id);
+        }
+      } catch {
+        clearInterval(timer);
+        pollTimers.current.delete(id);
+      }
+    }, 2000); // Poll every 2 seconds
+
+    pollTimers.current.set(id, timer);
+  }, []);
 
   const loadChanges = useCallback(
     async (projectId: string, status?: string) => {
@@ -27,11 +56,16 @@ export function useStaging(): UseStagingReturn {
           : `/api/staging/${projectId}`;
         const data = await api.fetch<StagedChange[]>(url);
         setChanges(data);
+
+        // Start polling for any changes still under review
+        data
+          .filter((c) => c.architectReview === "reviewing")
+          .forEach((c) => startPollingForReview(c.id, projectId));
       } finally {
         setIsLoading(false);
       }
     },
-    []
+    [startPollingForReview]
   );
 
   const approveChange = useCallback(async (id: string) => {
@@ -60,9 +94,12 @@ export function useStaging(): UseStagingReturn {
 
   const approveAll = useCallback(
     async (projectId: string) => {
-      const pending = changes.filter((c) => c.status === "pending");
+      // Only approve changes that the architect has approved
+      const readyForApproval = changes.filter(
+        (c) => c.status === "pending" && c.architectReview === "approved"
+      );
       await Promise.all(
-        pending.map((c) =>
+        readyForApproval.map((c) =>
           api.fetch(`/api/staging/${c.id}`, {
             method: "PATCH",
             body: { status: "approved" },
@@ -71,7 +108,9 @@ export function useStaging(): UseStagingReturn {
       );
       setChanges((prev) =>
         prev.map((c) =>
-          c.status === "pending" ? { ...c, status: "approved" as const } : c
+          c.status === "pending" && c.architectReview === "approved"
+            ? { ...c, status: "approved" as const }
+            : c
         )
       );
     },
@@ -96,9 +135,16 @@ export function useStaging(): UseStagingReturn {
     []
   );
 
-  const addChange = useCallback((change: StagedChange) => {
-    setChanges((prev) => [...prev, change]);
-  }, []);
+  const addChange = useCallback(
+    (change: StagedChange) => {
+      setChanges((prev) => [...prev, change]);
+      // Start polling if it's under review
+      if (change.architectReview === "reviewing") {
+        startPollingForReview(change.id, change.projectId);
+      }
+    },
+    [startPollingForReview]
+  );
 
   const refreshById = useCallback(async (id: string) => {
     try {
@@ -113,6 +159,30 @@ export function useStaging(): UseStagingReturn {
     }
   }, []);
 
+  const retryReview = useCallback(async (id: string) => {
+    await api.fetch(`/api/staging/${id}/retry-review`, {
+      method: "POST",
+    });
+    // Update local state to show reviewing
+    setChanges((prev) =>
+      prev.map((c) =>
+        c.id === id
+          ? {
+              ...c,
+              architectReview: "reviewing" as const,
+              architectReviewNote: null,
+              status: "pending_review" as const,
+            }
+          : c
+      )
+    );
+    // Start polling for result
+    const change = changes.find((c) => c.id === id);
+    if (change) {
+      startPollingForReview(id, change.projectId);
+    }
+  }, [changes, startPollingForReview]);
+
   return {
     changes,
     isLoading,
@@ -123,5 +193,6 @@ export function useStaging(): UseStagingReturn {
     commitChanges,
     addChange,
     refreshById,
+    retryReview,
   };
 }

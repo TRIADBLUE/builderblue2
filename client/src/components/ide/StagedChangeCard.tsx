@@ -5,6 +5,7 @@ interface StagedChangeCardProps {
   change: StagedChange;
   onApprove: (id: string) => void;
   onReject: (id: string) => void;
+  onRetryReview?: (id: string) => void;
   isNew?: boolean;
 }
 
@@ -12,6 +13,7 @@ export function StagedChangeCard({
   change,
   onApprove,
   onReject,
+  onRetryReview,
   isNew = false,
 }: StagedChangeCardProps) {
   const [expanded, setExpanded] = useState(false);
@@ -19,12 +21,21 @@ export function StagedChangeCard({
     isNew ? "enter" : ""
   );
 
+  const isArchitectReviewing = change.architectReview === "reviewing";
+  const isArchitectApproved = change.architectReview === "approved";
+  const isArchitectRejected = change.architectReview === "rejected";
+  const canUserApprove = isArchitectApproved && change.status === "pending";
+
   const borderColor =
     change.status === "approved"
       ? "#008060"
-      : change.status === "rejected"
+      : change.status === "rejected" || isArchitectRejected
         ? "var(--ruby-red)"
-        : "var(--steel-blue)";
+        : isArchitectReviewing
+          ? "#D4A843"
+          : canUserApprove
+            ? "var(--steel-blue)"
+            : "var(--steel-blue)";
 
   const handleApprove = () => {
     setAnimState("approved");
@@ -73,34 +84,112 @@ export function StagedChangeCard({
           </span>
         </div>
 
-        {change.status === "pending" && (
-          <div className="flex gap-1">
-            <button
-              onClick={handleApprove}
-              className="rounded px-2 py-0.5 text-xs font-medium transition-colors"
+        {/* Architect reviewing spinner */}
+        {isArchitectReviewing && (
+          <div className="flex items-center gap-1.5">
+            <div
+              className="animate-spin rounded-full"
+              style={{
+                width: "12px",
+                height: "12px",
+                border: "2px solid rgba(212, 168, 67, 0.3)",
+                borderTop: "2px solid #D4A843",
+              }}
+            />
+            <span
               style={{
                 fontFamily: "var(--font-runway)",
-                background: "#008060",
-                color: "var(--cream)",
+                fontSize: "10px",
+                color: "#D4A843",
+                textTransform: "uppercase",
               }}
             >
-              Approve
-            </button>
-            <button
-              onClick={handleReject}
-              className="rounded px-2 py-0.5 text-xs font-medium transition-colors"
-              style={{
-                fontFamily: "var(--font-runway)",
-                background: "var(--ruby-red)",
-                color: "var(--cream)",
-              }}
-            >
-              Reject
-            </button>
+              Architect reviewing
+            </span>
           </div>
         )}
 
-        {change.status !== "pending" && (
+        {/* Architect approved — user can now approve/reject */}
+        {canUserApprove && (
+          <div className="flex items-center gap-2">
+            <span
+              className="rounded px-1.5 py-0.5"
+              style={{
+                fontFamily: "var(--font-runway)",
+                fontSize: "9px",
+                color: "#008060",
+                background: "rgba(0, 128, 96, 0.15)",
+                border: "1px solid rgba(0, 128, 96, 0.3)",
+              }}
+            >
+              Architect Approved
+            </span>
+            <div className="flex gap-1">
+              <button
+                onClick={handleApprove}
+                className="rounded px-2 py-0.5 text-xs font-medium transition-colors"
+                style={{
+                  fontFamily: "var(--font-runway)",
+                  background: "#008060",
+                  color: "var(--cream)",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Approve
+              </button>
+              <button
+                onClick={handleReject}
+                className="rounded px-2 py-0.5 text-xs font-medium transition-colors"
+                style={{
+                  fontFamily: "var(--font-runway)",
+                  background: "var(--ruby-red)",
+                  color: "var(--cream)",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Architect rejected */}
+        {isArchitectRejected && change.status !== "committed" && (
+          <div className="flex items-center gap-2">
+            <span
+              className="rounded px-1.5 py-0.5"
+              style={{
+                fontFamily: "var(--font-runway)",
+                fontSize: "9px",
+                color: "var(--ruby-red)",
+                background: "rgba(200, 50, 50, 0.15)",
+                border: "1px solid rgba(200, 50, 50, 0.3)",
+              }}
+            >
+              Architect Rejected
+            </span>
+            {onRetryReview && (
+              <button
+                onClick={() => onRetryReview(change.id)}
+                className="rounded px-2 py-0.5 text-xs transition-colors"
+                style={{
+                  fontFamily: "var(--font-runway)",
+                  background: "transparent",
+                  color: "var(--steel-blue)",
+                  border: "1px solid var(--steel-blue)",
+                  cursor: "pointer",
+                }}
+              >
+                Retry
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Already approved/committed by user */}
+        {(change.status === "approved" || change.status === "committed") && (
           <span
             style={{
               fontFamily: "var(--font-runway)",
@@ -108,9 +197,7 @@ export function StagedChangeCard({
               color:
                 change.status === "approved"
                   ? "#008060"
-                  : change.status === "committed"
-                    ? "var(--steel-blue)"
-                    : "var(--ruby-red)",
+                  : "var(--steel-blue)",
               textTransform: "uppercase",
             }}
           >
@@ -118,6 +205,31 @@ export function StagedChangeCard({
           </span>
         )}
       </div>
+
+      {/* Architect review note */}
+      {change.architectReviewNote && (
+        <div
+          className="mx-3 mb-2 rounded px-2 py-1"
+          style={{
+            background: isArchitectRejected
+              ? "rgba(200, 50, 50, 0.08)"
+              : "rgba(0, 128, 96, 0.08)",
+            borderLeft: `2px solid ${isArchitectRejected ? "var(--ruby-red)" : "#008060"}`,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "var(--font-runway)",
+              fontSize: "11px",
+              color: "var(--cream)",
+              opacity: 0.8,
+            }}
+          >
+            <strong style={{ opacity: 0.6 }}>Architect:</strong>{" "}
+            {change.architectReviewNote}
+          </span>
+        </div>
+      )}
 
       {/* Diff preview */}
       <div

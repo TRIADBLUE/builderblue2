@@ -22,6 +22,7 @@ interface CenterPanelProps {
   onApproveAll: () => void;
   onCommit: (message: string) => void;
   onSaveAsProposal: (filePath: string, content: string) => void;
+  onRetryReview?: (id: string) => void;
 }
 
 const TABS: { key: CenterTab; label: string }[] = [
@@ -48,6 +49,7 @@ export function CenterPanel({
   onApproveAll,
   onCommit,
   onSaveAsProposal,
+  onRetryReview,
 }: CenterPanelProps) {
   const [activeTab, setActiveTab] = useState<CenterTab>("staging");
 
@@ -100,6 +102,7 @@ export function CenterPanel({
             onReject={onRejectChange}
             onApproveAll={onApproveAll}
             onCommit={onCommit}
+            onRetryReview={onRetryReview}
           />
         )}
         {activeTab === "files" && (

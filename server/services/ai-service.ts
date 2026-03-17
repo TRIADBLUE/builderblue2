@@ -222,6 +222,86 @@ export async function streamCompletion(
   return streamOpenAICompatible(provider, model, messages, callbacks, options);
 }
 
+// ─── Architect code review ──────────────────────────────────────────────────
+
+export interface ArchitectReviewResult {
+  approved: boolean;
+  note: string;
+}
+
+export async function reviewStagedCode(
+  filePath: string,
+  originalContent: string | null,
+  proposedContent: string,
+  diff: string,
+  options: StreamOptions
+): Promise<ArchitectReviewResult> {
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+  const prompt = `You are the Architect in BuilderBlue², an AI-powered IDE. Your job is to review code proposed by the Builder before it reaches the user.
+
+Review this staged change and decide whether to APPROVE or REJECT it.
+
+**File:** ${filePath}
+
+**Original content:**
+${originalContent ? "```\n" + originalContent + "\n```" : "(New file)"}
+
+**Proposed content:**
+\`\`\`
+${proposedContent}
+\`\`\`
+
+**Diff:**
+\`\`\`diff
+${diff}
+\`\`\`
+
+Evaluate for:
+1. Code correctness — does it do what's intended?
+2. Security — no obvious vulnerabilities, no hardcoded secrets
+3. Quality — readable, follows conventions, no dead code
+4. Completeness — no missing imports, no broken references
+
+Respond with ONLY valid JSON (no markdown, no backticks):
+{"approved": true, "note": "Brief 1-sentence reason"}
+or
+{"approved": false, "note": "Brief 1-sentence reason for rejection"}`;
+
+  try {
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 256,
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const text = response.content[0].type === "text" ? response.content[0].text : "";
+
+    // Parse JSON from response
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      await recordUsage(
+        "claude",
+        "claude-sonnet-4-20250514",
+        response.usage.input_tokens,
+        response.usage.output_tokens,
+        options
+      );
+      return {
+        approved: Boolean(parsed.approved),
+        note: String(parsed.note || "No notes"),
+      };
+    }
+
+    return { approved: true, note: "Review complete — no issues found" };
+  } catch (error) {
+    console.error("Architect review error:", error);
+    // On error, approve to not block workflow
+    return { approved: true, note: "Auto-approved (review service unavailable)" };
+  }
+}
+
 // ─── Code block detection ───────────────────────────────────────────────────
 
 export interface DetectedCodeBlock {

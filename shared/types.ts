@@ -153,7 +153,8 @@ export interface Conversation {
 
 // ─── Staged Changes ────────────────────────────────────────────────────────
 
-export type StagedChangeStatus = "pending" | "approved" | "rejected" | "committed";
+export type StagedChangeStatus = "pending_review" | "pending" | "approved" | "rejected" | "committed";
+export type ArchitectReviewStatus = "reviewing" | "approved" | "rejected" | null;
 export type ProposedBy = "architect" | "builder" | "user";
 
 export interface StagedChange {
@@ -166,6 +167,8 @@ export interface StagedChange {
   diff: string;
   status: StagedChangeStatus;
   proposedBy: ProposedBy;
+  architectReview: ArchitectReviewStatus;
+  architectReviewNote: string | null;
   reviewedBy: string | null;
   committedAt: string | null;
   createdAt: string;
