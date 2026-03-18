@@ -38,9 +38,15 @@ export default function Landing() {
           style={{ height: "120px" }}
         />
         <h1 className="flex flex-wrap items-center justify-center gap-3" style={{ fontFamily: "var(--font-heading)", fontWeight: "bold" }}>
-          <span style={{ color: "var(--triad-black)", whiteSpace: "nowrap" }}>
+          <span style={{ color: "var(--triad-black)", whiteSpace: "nowrap", fontFamily: "var(--font-heading)", fontWeight: "bold", letterSpacing: "0.06em" }}>
             <span style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>S</span>
-            <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>TART BUILDING WITH</span>
+            <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>TART</span>
+            {" "}
+            <span style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>B</span>
+            <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>UILDING</span>
+            {" "}
+            <span style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>W</span>
+            <span style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)" }}>ITH</span>
           </span>
           <BrandText size="clamp(2rem, 5vw, 3.5rem)" />
         </h1>
