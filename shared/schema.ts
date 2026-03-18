@@ -262,3 +262,22 @@ export const billingCycles = pgTable("billing_cycles", {
   failedAt: timestamp("failed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+// ─── Project Collaborators ─────────────────────────────────────────────────
+
+export const projectCollaborators = pgTable("project_collaborators", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  userId: uuid("user_id")
+    .references(() => users.id, { onDelete: "cascade" }),
+  role: text("role").notNull().default("editor"),
+  invitedBy: uuid("invited_by").references(() => users.id),
+  invitedEmail: text("invited_email").notNull(),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
