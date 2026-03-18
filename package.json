@@ -18,6 +18,8 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
     "@neondatabase/serverless": "^0.10.4",
+    "@types/adm-zip": "^0.5.8",
+    "adm-zip": "^0.5.16",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
