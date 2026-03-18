@@ -1,9 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useLocation } from "wouter";
 import { AppShell } from "../../components/layout/app-shell";
 import { useAuth } from "../../hooks/useAuth";
 import { api } from "../../lib/api";
 import type { Project } from "@shared/types";
+
+type SortKey = "name" | "created" | "updated";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -14,6 +16,35 @@ export default function Dashboard() {
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectDesc, setNewProjectDesc] = useState("");
   const [isCreating, setIsCreating] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<SortKey>("updated");
+
+  // Filter and sort projects
+  const filteredProjects = useMemo(() => {
+    let result = projects;
+    // Search filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          (p.description?.toLowerCase().includes(q) ?? false)
+      );
+    }
+    // Sort
+    result = [...result].sort((a, b) => {
+      switch (sortBy) {
+        case "name":
+          return a.name.localeCompare(b.name);
+        case "created":
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case "updated":
+        default:
+          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      }
+    });
+    return result;
+  }, [projects, searchQuery, sortBy]);
 
   // Load projects
   useEffect(() => {
@@ -197,8 +228,59 @@ export default function Dashboard() {
           </div>
         )}
 
+        {/* Search & Sort bar */}
+        {projects.length > 0 && (
+          <div className="mt-6 flex items-center gap-3">
+            <div className="relative flex-1">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search projects..."
+                className="w-full rounded-md border px-3 py-2 pl-9 text-sm outline-none"
+                style={{
+                  borderColor: "rgba(74, 144, 217, 0.3)",
+                  color: "var(--triad-black)",
+                  fontFamily: "var(--font-content)",
+                  background: "white",
+                }}
+              />
+              <svg
+                className="absolute left-3 top-2.5"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--steel-blue)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </div>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortKey)}
+              className="rounded-md border px-3 py-2 text-sm outline-none"
+              style={{
+                borderColor: "rgba(74, 144, 217, 0.3)",
+                color: "var(--triad-black)",
+                fontFamily: "var(--font-content)",
+                background: "white",
+                cursor: "pointer",
+              }}
+            >
+              <option value="updated">Last updated</option>
+              <option value="created">Newest first</option>
+              <option value="name">Name A-Z</option>
+            </select>
+          </div>
+        )}
+
         {/* Projects list */}
-        <div className="mt-8">
+        <div className="mt-4">
           {isLoading ? (
             <div className="py-12 text-center">
               <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600" />
@@ -234,7 +316,15 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.map((project) => (
+              {filteredProjects.length === 0 && searchQuery ? (
+                <div
+                  className="col-span-full py-8 text-center"
+                  style={{ color: "var(--steel-blue)", fontFamily: "var(--font-content)", fontSize: "14px" }}
+                >
+                  No projects matching "{searchQuery}"
+                </div>
+              ) : null}
+              {filteredProjects.map((project) => (
                 <div
                   key={project.id}
                   className="group rounded-lg p-5 transition-all hover:shadow-md"
