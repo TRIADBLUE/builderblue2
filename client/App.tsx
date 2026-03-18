@@ -6,6 +6,7 @@ import Register from "./src/pages/register";
 import MagicLinkVerify from "./src/pages/magic-link-verify";
 import Dashboard from "./src/pages/dashboard/index";
 import IDEPage from "./src/pages/ide/index";
+import ProjectSettings from "./src/pages/project-settings/index";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/register" component={Register} />
         <Route path="/auth/magic-link/verify" component={MagicLinkVerify} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/project/:id/settings" component={ProjectSettings} />
         <Route path="/ide/:id" component={IDEPage} />
         <Route>
           <div className="flex items-center justify-center min-h-screen">
