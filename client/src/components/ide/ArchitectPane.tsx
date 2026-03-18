@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import type { ConversationMessage, AIProvider, ActivePane } from "@shared/types";
+import { ThinkingIndicator } from "./ThinkingIndicator";
 
 interface ArchitectPaneProps {
   isActive: boolean;
@@ -151,6 +152,10 @@ export function ArchitectPane({
             </div>
           </div>
         ))}
+
+        {isStreaming && !streamedText && (
+          <ThinkingIndicator role="architect" isActive={true} />
+        )}
 
         {isStreaming && streamedText && (
           <div className="mr-auto max-w-[85%]">

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { StagedChange } from "@shared/types";
+import { ThinkingIndicator } from "./ThinkingIndicator";
 
 interface StagedChangeCardProps {
   change: StagedChange;
@@ -86,27 +87,7 @@ export function StagedChangeCard({
 
         {/* Architect reviewing spinner */}
         {isArchitectReviewing && (
-          <div className="flex items-center gap-1.5">
-            <div
-              className="animate-spin rounded-full"
-              style={{
-                width: "12px",
-                height: "12px",
-                border: "2px solid rgba(212, 168, 67, 0.3)",
-                borderTop: "2px solid #D4A843",
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "var(--font-runway)",
-                fontSize: "10px",
-                color: "#D4A843",
-                textTransform: "uppercase",
-              }}
-            >
-              Architect reviewing
-            </span>
-          </div>
+          <ThinkingIndicator role="reviewer" isActive={true} context={change.filePath} />
         )}
 
         {/* Architect approved — user can now approve/reject */}

@@ -80,18 +80,28 @@ export function IDEShell({
   const widths = getWidths();
 
   // Hand-off handlers
+  // Handoff animation state
+  const [handoffDirection, setHandoffDirection] = useState<"to-builder" | "to-architect" | null>(null);
+
   const handleHandToBuilder = useCallback((content: string) => {
-    setBuilderInput(content);
-    setActivePane("builder");
-    setFlashPane("builder");
-    setTimeout(() => setFlashPane(null), 300);
+    setHandoffDirection("to-builder");
+    setTimeout(() => {
+      setBuilderInput(content);
+      setActivePane("builder");
+      setFlashPane("builder");
+      setHandoffDirection(null);
+      setTimeout(() => setFlashPane(null), 400);
+    }, 500);
   }, []);
 
   const handleHandToArchitect = useCallback((content: string) => {
-    // Put content into architect — for now, show it as context
-    setActivePane("architect");
-    setFlashPane("architect");
-    setTimeout(() => setFlashPane(null), 300);
+    setHandoffDirection("to-architect");
+    setTimeout(() => {
+      setActivePane("architect");
+      setFlashPane("architect");
+      setHandoffDirection(null);
+      setTimeout(() => setFlashPane(null), 400);
+    }, 500);
   }, []);
 
   // Message handlers
@@ -256,6 +266,39 @@ export function IDEShell({
           />
         </div>
       </div>
+
+      {/* Handoff animation overlay */}
+      {handoffDirection && (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: handoffDirection === "to-builder" ? "30%" : "70%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 100,
+            pointerEvents: "none",
+          }}
+        >
+          <div
+            className={handoffDirection === "to-builder" ? "handoff-enter" : "handoff-enter"}
+            style={{
+              background: "var(--deep-blue)",
+              color: "var(--cream)",
+              padding: "8px 20px",
+              borderRadius: "20px",
+              fontFamily: "var(--font-label)",
+              fontSize: "13px",
+              fontWeight: 600,
+              boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {handoffDirection === "to-builder"
+              ? "📋 Handing plan to Builder →"
+              : "← 🔍 Sending to Architect for review"}
+          </div>
+        </div>
+      )}
 
       {/* Depleted modal */}
       {computeStatus.level === "depleted" && (
