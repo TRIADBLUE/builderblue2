@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useLocation } from "wouter";
 import { AppShell } from "../../components/layout/app-shell";
 import { useAuth } from "../../hooks/useAuth";
@@ -6,6 +6,14 @@ import { api } from "../../lib/api";
 import type { Project } from "@shared/types";
 
 type SortKey = "name" | "created" | "updated";
+type CreateMode = "blank" | "template" | "github" | "upload";
+
+interface Template {
+  id: string;
+  name: string;
+  description: string;
+  fileCount: number;
+}
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -13,16 +21,28 @@ export default function Dashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showNewProject, setShowNewProject] = useState(false);
+  const [createMode, setCreateMode] = useState<CreateMode>("blank");
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectDesc, setNewProjectDesc] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortKey>("updated");
+  const [error, setError] = useState("");
+
+  // GitHub import
+  const [githubUrl, setGithubUrl] = useState("");
+
+  // ZIP upload
+  const [zipFile, setZipFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Templates
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState("");
 
   // Filter and sort projects
   const filteredProjects = useMemo(() => {
     let result = projects;
-    // Search filter
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -31,7 +51,6 @@ export default function Dashboard() {
           (p.description?.toLowerCase().includes(q) ?? false)
       );
     }
-    // Sort
     result = [...result].sort((a, b) => {
       switch (sortBy) {
         case "name":
@@ -61,10 +80,32 @@ export default function Dashboard() {
     load();
   }, []);
 
-  // Create project
-  const handleCreate = useCallback(async () => {
+  // Load templates when template mode selected
+  useEffect(() => {
+    if (createMode === "template" && templates.length === 0) {
+      api.fetch<Template[]>("/api/projects/templates/list")
+        .then(setTemplates)
+        .catch(() => {});
+    }
+  }, [createMode, templates.length]);
+
+  // Reset form
+  const resetForm = useCallback(() => {
+    setShowNewProject(false);
+    setCreateMode("blank");
+    setNewProjectName("");
+    setNewProjectDesc("");
+    setGithubUrl("");
+    setZipFile(null);
+    setSelectedTemplate("");
+    setError("");
+  }, []);
+
+  // Create blank project
+  const handleCreateBlank = useCallback(async () => {
     if (!newProjectName.trim()) return;
     setIsCreating(true);
+    setError("");
     try {
       const project = await api.fetch<Project>("/api/projects", {
         method: "POST",
@@ -73,14 +114,97 @@ export default function Dashboard() {
           description: newProjectDesc.trim() || null,
         },
       });
-      // Navigate directly to the IDE
       setLocation(`/ide/${project.id}`);
-    } catch (error) {
-      console.error("Create project error:", error);
+    } catch (err: any) {
+      setError(err?.message ?? "Failed to create project");
     } finally {
       setIsCreating(false);
     }
   }, [newProjectName, newProjectDesc, setLocation]);
+
+  // Create from template
+  const handleCreateFromTemplate = useCallback(async () => {
+    if (!newProjectName.trim() || !selectedTemplate) return;
+    setIsCreating(true);
+    setError("");
+    try {
+      const project = await api.fetch<Project>("/api/projects/from-template", {
+        method: "POST",
+        body: {
+          name: newProjectName.trim(),
+          description: newProjectDesc.trim() || null,
+          templateId: selectedTemplate,
+        },
+      });
+      setLocation(`/ide/${project.id}`);
+    } catch (err: any) {
+      setError(err?.message ?? "Failed to create from template");
+    } finally {
+      setIsCreating(false);
+    }
+  }, [newProjectName, newProjectDesc, selectedTemplate, setLocation]);
+
+  // Import from GitHub
+  const handleImportGithub = useCallback(async () => {
+    if (!githubUrl.trim()) return;
+    setIsCreating(true);
+    setError("");
+    try {
+      const project = await api.fetch<Project>("/api/projects/import/github", {
+        method: "POST",
+        body: {
+          repoUrl: githubUrl.trim(),
+          name: newProjectName.trim() || undefined,
+          description: newProjectDesc.trim() || null,
+        },
+      });
+      setLocation(`/ide/${project.id}`);
+    } catch (err: any) {
+      setError(err?.message ?? "Failed to import from GitHub");
+    } finally {
+      setIsCreating(false);
+    }
+  }, [githubUrl, newProjectName, newProjectDesc, setLocation]);
+
+  // Upload ZIP
+  const handleUploadZip = useCallback(async () => {
+    if (!zipFile) return;
+    setIsCreating(true);
+    setError("");
+    try {
+      const buffer = await zipFile.arrayBuffer();
+      const base64 = btoa(
+        new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), "")
+      );
+      const project = await api.fetch<Project>("/api/projects/import/upload", {
+        method: "POST",
+        body: {
+          zipBase64: base64,
+          name: newProjectName.trim() || zipFile.name.replace(/\.zip$/i, ""),
+          description: newProjectDesc.trim() || null,
+        },
+      });
+      setLocation(`/ide/${project.id}`);
+    } catch (err: any) {
+      setError(err?.message ?? "Failed to upload project");
+    } finally {
+      setIsCreating(false);
+    }
+  }, [zipFile, newProjectName, newProjectDesc, setLocation]);
+
+  // Handle create based on mode
+  const handleCreate = useCallback(() => {
+    switch (createMode) {
+      case "blank":
+        return handleCreateBlank();
+      case "template":
+        return handleCreateFromTemplate();
+      case "github":
+        return handleImportGithub();
+      case "upload":
+        return handleUploadZip();
+    }
+  }, [createMode, handleCreateBlank, handleCreateFromTemplate, handleImportGithub, handleUploadZip]);
 
   // Archive project
   const handleArchive = useCallback(async (id: string) => {
@@ -91,6 +215,37 @@ export default function Dashboard() {
       // ignore
     }
   }, []);
+
+  const tabStyle = (active: boolean) => ({
+    fontFamily: "var(--font-button)" as const,
+    fontSize: "12px",
+    padding: "6px 14px",
+    borderRadius: "6px",
+    border: "none",
+    cursor: "pointer" as const,
+    background: active ? "var(--deep-blue)" : "transparent",
+    color: active ? "var(--cream)" : "var(--steel-blue)",
+    transition: "all 0.15s",
+  });
+
+  const inputStyle = {
+    width: "100%",
+    borderRadius: "6px",
+    border: "1px solid var(--steel-blue)",
+    padding: "8px 12px",
+    fontSize: "14px",
+    color: "var(--triad-black)",
+    fontFamily: "var(--font-content)",
+    outline: "none",
+  };
+
+  const labelStyle = {
+    fontFamily: "var(--font-content)",
+    fontSize: "13px",
+    color: "var(--steel-blue)",
+    display: "block" as const,
+    marginBottom: "4px",
+  };
 
   return (
     <AppShell>
@@ -141,78 +296,163 @@ export default function Dashboard() {
             >
               Create a New Project
             </h2>
+
+            {/* Mode tabs */}
+            <div className="mb-5 flex gap-2" style={{ borderBottom: "1px solid rgba(74,144,217,0.15)", paddingBottom: "10px" }}>
+              <button style={tabStyle(createMode === "blank")} onClick={() => setCreateMode("blank")}>Blank</button>
+              <button style={tabStyle(createMode === "template")} onClick={() => setCreateMode("template")}>Template</button>
+              <button style={tabStyle(createMode === "github")} onClick={() => setCreateMode("github")}>Import from GitHub</button>
+              <button style={tabStyle(createMode === "upload")} onClick={() => setCreateMode("upload")}>Upload ZIP</button>
+            </div>
+
+            {/* GitHub URL field */}
+            {createMode === "github" && (
+              <div className="mb-3">
+                <label style={labelStyle}>GitHub Repository URL</label>
+                <input
+                  type="text"
+                  value={githubUrl}
+                  onChange={(e) => setGithubUrl(e.target.value)}
+                  placeholder="https://github.com/username/repo"
+                  autoFocus
+                  style={inputStyle}
+                  onKeyDown={(e) => { if (e.key === "Enter") handleCreate(); }}
+                />
+              </div>
+            )}
+
+            {/* ZIP upload field */}
+            {createMode === "upload" && (
+              <div className="mb-3">
+                <label style={labelStyle}>Project ZIP File</label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".zip"
+                  onChange={(e) => setZipFile(e.target.files?.[0] ?? null)}
+                  style={{ display: "none" }}
+                />
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center justify-center rounded-lg border-2 border-dashed p-6 transition-all hover:border-solid"
+                  style={{
+                    borderColor: zipFile ? "var(--deep-blue)" : "var(--steel-blue)",
+                    cursor: "pointer",
+                    background: zipFile ? "rgba(26, 61, 143, 0.03)" : "transparent",
+                  }}
+                >
+                  <span style={{ fontFamily: "var(--font-content)", fontSize: "14px", color: zipFile ? "var(--deep-blue)" : "var(--steel-blue)" }}>
+                    {zipFile ? `Selected: ${zipFile.name}` : "Click to select a .zip file or drag & drop"}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Template selector */}
+            {createMode === "template" && (
+              <div className="mb-3">
+                <label style={labelStyle}>Choose a Template</label>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {templates.map((t) => (
+                    <div
+                      key={t.id}
+                      onClick={() => setSelectedTemplate(t.id)}
+                      className="rounded-lg p-3 transition-all"
+                      style={{
+                        border: selectedTemplate === t.id ? "2px solid var(--deep-blue)" : "1px solid rgba(74,144,217,0.2)",
+                        background: selectedTemplate === t.id ? "rgba(26, 61, 143, 0.03)" : "white",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <div style={{ fontFamily: "var(--font-heading)", fontSize: "13px", fontWeight: "bold", color: "var(--triad-black)" }}>
+                        {t.name}
+                      </div>
+                      <div style={{ fontFamily: "var(--font-content)", fontSize: "11px", color: "var(--steel-blue)", marginTop: "2px" }}>
+                        {t.description}
+                      </div>
+                      <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)", opacity: 0.5, marginTop: "4px" }}>
+                        {t.fileCount} files
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Name & Description (always shown) */}
             <div className="mb-3">
-              <label
-                className="mb-1 block text-sm"
-                style={{ color: "var(--steel-blue)", fontFamily: "var(--font-content)" }}
-              >
-                Project Name
+              <label style={labelStyle}>
+                Project Name{createMode === "github" ? " (optional — defaults to repo name)" : ""}
               </label>
               <input
                 type="text"
                 value={newProjectName}
                 onChange={(e) => setNewProjectName(e.target.value)}
-                placeholder="My Awesome App"
-                autoFocus
-                className="w-full rounded-md border px-3 py-2 text-sm outline-none"
-                style={{
-                  borderColor: "var(--steel-blue)",
-                  color: "var(--triad-black)",
-                  fontFamily: "var(--font-content)",
-                }}
+                placeholder={createMode === "github" ? "Leave blank to use repo name" : "My Awesome App"}
+                autoFocus={createMode === "blank"}
+                style={inputStyle}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleCreate();
-                  if (e.key === "Escape") setShowNewProject(false);
+                  if (e.key === "Escape") resetForm();
                 }}
               />
             </div>
             <div className="mb-4">
-              <label
-                className="mb-1 block text-sm"
-                style={{ color: "var(--steel-blue)", fontFamily: "var(--font-content)" }}
-              >
-                Description (optional)
-              </label>
+              <label style={labelStyle}>Description (optional)</label>
               <input
                 type="text"
                 value={newProjectDesc}
                 onChange={(e) => setNewProjectDesc(e.target.value)}
                 placeholder="A brief description of what you're building"
-                className="w-full rounded-md border px-3 py-2 text-sm outline-none"
-                style={{
-                  borderColor: "var(--steel-blue)",
-                  color: "var(--triad-black)",
-                  fontFamily: "var(--font-content)",
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleCreate();
-                }}
+                style={inputStyle}
+                onKeyDown={(e) => { if (e.key === "Enter") handleCreate(); }}
               />
             </div>
+
+            {/* Error message */}
+            {error && (
+              <div
+                className="mb-3 rounded-md px-3 py-2"
+                style={{ background: "rgba(200,50,50,0.08)", color: "var(--ruby-red)", fontFamily: "var(--font-content)", fontSize: "13px" }}
+              >
+                {error}
+              </div>
+            )}
+
+            {/* Actions */}
             <div className="flex gap-2">
               <button
                 onClick={handleCreate}
-                disabled={!newProjectName.trim() || isCreating}
+                disabled={isCreating || (
+                  createMode === "blank" && !newProjectName.trim() ||
+                  createMode === "template" && (!newProjectName.trim() || !selectedTemplate) ||
+                  createMode === "github" && !githubUrl.trim() ||
+                  createMode === "upload" && !zipFile
+                )}
                 className="rounded-md px-5 py-2 text-sm font-semibold transition-all"
                 style={{
-                  background: !newProjectName.trim()
-                    ? "var(--steel-blue)"
-                    : "var(--deep-blue)",
+                  background: "var(--deep-blue)",
                   color: "var(--cream)",
                   border: "none",
-                  cursor: !newProjectName.trim() ? "not-allowed" : "pointer",
-                  opacity: !newProjectName.trim() ? 0.5 : 1,
+                  cursor: isCreating ? "wait" : "pointer",
+                  opacity: isCreating ? 0.7 : 1,
                   fontFamily: "var(--font-button)",
                 }}
               >
-                {isCreating ? "Creating..." : "Create & Open IDE"}
+                {isCreating
+                  ? createMode === "github"
+                    ? "Importing..."
+                    : createMode === "upload"
+                    ? "Uploading..."
+                    : "Creating..."
+                  : createMode === "github"
+                  ? "Import & Open IDE"
+                  : createMode === "upload"
+                  ? "Upload & Open IDE"
+                  : "Create & Open IDE"}
               </button>
               <button
-                onClick={() => {
-                  setShowNewProject(false);
-                  setNewProjectName("");
-                  setNewProjectDesc("");
-                }}
+                onClick={resetForm}
                 className="rounded-md px-4 py-2 text-sm transition-all"
                 style={{
                   background: "transparent",
