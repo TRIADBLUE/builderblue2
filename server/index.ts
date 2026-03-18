@@ -16,6 +16,7 @@ import conversationRoutes from "./routes/conversations.js";
 import stagingRoutes from "./routes/staging.js";
 import ideRoutes from "./routes/ide.js";
 import collaboratorRoutes from "./routes/collaborators.js";
+import folderRoutes from "./routes/folders.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -43,6 +44,7 @@ app.use("/api/conversations", conversationRoutes);
 app.use("/api/staging", stagingRoutes);
 app.use("/api/ide", ideRoutes);
 app.use("/api/collaborators", collaboratorRoutes);
+app.use("/api/folders", folderRoutes);
 
 // ─── Health Check ────────────────────────────────────────────────────────────
 

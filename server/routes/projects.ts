@@ -16,6 +16,10 @@ const createSchema = z.object({
 const updateSchema = z.object({
   name: z.string().min(1).optional(),
   description: z.string().nullable().optional(),
+  visibility: z.enum(["private", "public"]).optional(),
+  customDomain: z.string().nullable().optional(),
+  subdomain: z.string().min(1).max(63).regex(/^[a-z0-9-]+$/).nullable().optional(),
+  folderId: z.string().uuid().nullable().optional(),
 });
 
 // GET /api/projects — list user's projects

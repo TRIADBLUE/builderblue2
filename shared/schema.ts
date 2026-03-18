@@ -66,7 +66,26 @@ export const projects = pgTable("projects", {
   status: text("status").notNull().default("active"),
   repoName: text("repo_name"),
   repoBranch: text("repo_branch").default("main"),
+  visibility: text("visibility").notNull().default("private"),
+  customDomain: text("custom_domain"),
+  subdomain: text("subdomain"),
+  folderId: uuid("folder_id"),
   lastBuiltAt: timestamp("last_built_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Project Folders ─────────────────────────────────────────────────────────
+
+export const projectFolders = pgTable("project_folders", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  color: text("color").default("#4A90D9"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
