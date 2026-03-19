@@ -26,7 +26,7 @@ const PROVIDERS: { value: AIProvider; label: string }[] = [
 ];
 
 const MODELS: Record<AIProvider, string[]> = {
-  claude: ["claude-sonnet-4-20250514", "claude-haiku-4-5-20251001"],
+  claude: ["claude-opus-4-20250514", "claude-sonnet-4-20250514", "claude-haiku-4-5-20251001"],
   deepseek: ["deepseek-chat", "deepseek-coder"],
   gemini: ["gemini-2.0-flash", "gemini-1.5-pro"],
   kimi: ["moonshot-v1-8k", "moonshot-v1-32k"],
