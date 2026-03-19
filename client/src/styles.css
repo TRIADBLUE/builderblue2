@@ -74,6 +74,18 @@ html, body, #root {
   padding: 0;
 }
 
+/* Links that are not inside buttons or boxed elements must be underlined */
+a:not(button a):not(.no-underline) {
+  text-decoration: underline;
+}
+a:not(button a):not(.no-underline):hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+button a, a.no-underline {
+  text-decoration: none;
+}
+
 /* Only lock overflow on IDE pages, not landing/auth */
 .ide-layout {
   overflow: hidden;

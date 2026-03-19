@@ -37,8 +37,8 @@ export function TopNav({
     <nav
       className="flex h-12 items-center justify-between px-4"
       style={{
-        background: "var(--triad-black)",
-        borderBottom: "1px solid rgba(233, 236, 240, 0.1)",
+        background: "#FFF5ED",
+        borderBottom: "1px solid rgba(9, 8, 14, 0.1)",
       }}
     >
       {/* Left — brand */}
@@ -61,7 +61,7 @@ export function TopNav({
           style={{
             fontFamily: "var(--font-architect)",
             fontSize: "14px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             width: `${Math.max(projectName.length, 8) * 9}px`,
           }}
         />
@@ -70,7 +70,7 @@ export function TopNav({
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "11px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             background: "var(--steel-blue)",
           }}
         >
@@ -81,7 +81,7 @@ export function TopNav({
             style={{
               fontFamily: "var(--font-builder)",
               fontSize: "11px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               opacity: 0.4,
             }}
           >
@@ -97,7 +97,7 @@ export function TopNav({
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "11px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             border: `1px solid ${computeColor}`,
           }}
         >
@@ -113,8 +113,8 @@ export function TopNav({
           style={{
             fontFamily: "var(--font-builder)",
             fontSize: "13px",
-            background: "var(--pure-blue)",
-            color: "var(--cream)",
+            background: "var(--deep-blue)",
+            color: "#FFF5ED",
             borderRadius: "4px",
             border: "none",
             cursor: "pointer",
@@ -130,7 +130,7 @@ export function TopNav({
             fontFamily: "var(--font-builder)",
             fontSize: "11px",
             fontWeight: 600,
-            color: "var(--cream)",
+            color: "#FFF5ED",
           }}
         >
           {initials}

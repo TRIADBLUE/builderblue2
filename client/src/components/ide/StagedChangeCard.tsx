@@ -55,7 +55,7 @@ export function StagedChangeCard({
     <div
       className={`mb-3 rounded-md ${animState === "enter" ? "staged-card-enter" : animState === "approved" ? "staged-card-approved" : animState === "rejected" ? "staged-card-rejected" : ""}`}
       style={{
-        background: "var(--triad-black)",
+        background: "#D0B799",
         border: "1px solid var(--card-border)",
         borderLeft: `3px solid ${borderColor}`,
       }}
@@ -67,7 +67,7 @@ export function StagedChangeCard({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "12px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
             }}
           >
             {change.filePath}
@@ -77,7 +77,7 @@ export function StagedChangeCard({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "10px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               background: "var(--steel-blue)",
             }}
           >
@@ -112,7 +112,7 @@ export function StagedChangeCard({
                 style={{
                   fontFamily: "var(--font-runway)",
                   background: "#008060",
-                  color: "var(--cream)",
+                  color: "#FFF5ED",
                   border: "none",
                   cursor: "pointer",
                 }}
@@ -125,7 +125,7 @@ export function StagedChangeCard({
                 style={{
                   fontFamily: "var(--font-runway)",
                   background: "var(--ruby-red)",
-                  color: "var(--cream)",
+                  color: "#FFF5ED",
                   border: "none",
                   cursor: "pointer",
                 }}
@@ -202,7 +202,7 @@ export function StagedChangeCard({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "11px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               opacity: 0.8,
             }}
           >
@@ -219,7 +219,7 @@ export function StagedChangeCard({
       >
         <pre className="m-0 whitespace-pre">
           {previewLines.map((line, i) => {
-            let color = "var(--cream)";
+            let color = "var(--triad-black)";
             if (line.startsWith("+") && !line.startsWith("+++"))
               color = "#008060";
             if (line.startsWith("-") && !line.startsWith("---"))

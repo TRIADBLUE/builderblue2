@@ -69,7 +69,7 @@ export function ArchitectPane({
   return (
     <div
       className="flex h-full flex-col"
-      style={{ background: "var(--cream)" }}
+      style={{ background: "#FFF5ED" }}
       onClick={onFocus}
     >
       {/* Header */}
@@ -199,7 +199,7 @@ export function ArchitectPane({
               fontFamily: "var(--font-architect)",
               fontSize: "13px",
               color: "var(--triad-black)",
-              background: "var(--cream)",
+              background: "#FFF5ED",
               borderColor: "var(--steel-blue)",
             }}
           />

@@ -63,8 +63,8 @@ export function CenterPanel({
       <div
         className="flex"
         style={{
-          background: "var(--triad-black)",
-          borderBottom: "1px solid rgba(233, 236, 240, 0.1)",
+          background: "#A67C4B",
+          borderBottom: "1px solid rgba(9, 8, 14, 0.1)",
         }}
       >
         {TABS.map((tab) => (
