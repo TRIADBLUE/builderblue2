@@ -67,7 +67,7 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
             className="flex-1 resize-none rounded border bg-transparent p-2 text-xs outline-none"
             style={{
               fontFamily: "var(--font-runway)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               borderColor: "rgba(233, 236, 240, 0.2)",
             }}
             spellCheck={false}
@@ -80,7 +80,7 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
               style={{
                 fontFamily: "var(--font-runway)",
                 background: "var(--steel-blue)",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 border: "none",
                 cursor: "pointer",
                 opacity: isRunning ? 0.5 : 1,
@@ -95,7 +95,7 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
                 style={{
                   fontFamily: "var(--font-runway)",
                   background: "transparent",
-                  color: "var(--cream)",
+                  color: "var(--triad-black)",
                   border: "1px solid rgba(233, 236, 240, 0.2)",
                   cursor: "pointer",
                 }}
@@ -133,7 +133,7 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
                     style={{
                       fontFamily: "var(--font-runway)",
                       fontSize: "10px",
-                      color: "var(--cream)",
+                      color: "var(--triad-black)",
                       opacity: 0.5,
                       borderColor: "rgba(233, 236, 240, 0.1)",
                     }}
@@ -153,7 +153,7 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
                       style={{
                         fontFamily: "var(--font-runway)",
                         fontSize: "11px",
-                        color: "var(--cream)",
+                        color: "var(--triad-black)",
                         borderColor: "rgba(233, 236, 240, 0.05)",
                       }}
                     >
@@ -170,7 +170,7 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "13px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               opacity: 0.3,
             }}
           >

@@ -84,13 +84,13 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
   };
 
   const inputStyle = {
-    background: "rgba(233, 236, 240, 0.08)",
-    border: "1px solid rgba(233, 236, 240, 0.15)",
+    background: "rgba(255, 245, 237, 0.6)",
+    border: "1px solid rgba(9, 8, 14, 0.15)",
     borderRadius: "4px",
     padding: "4px 8px",
     fontFamily: "var(--font-runway)",
     fontSize: "12px",
-    color: "var(--cream)",
+    color: "var(--triad-black)",
     outline: "none",
     flex: 1,
   };
@@ -99,7 +99,7 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
     fontFamily: "var(--font-runway)",
     fontSize: "12px",
     fontWeight: 600 as const,
-    color: "var(--cream)",
+    color: "var(--triad-black)",
     marginBottom: "8px",
     textTransform: "uppercase" as const,
     letterSpacing: "0.06em",
@@ -131,16 +131,16 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
         <div
           key={key}
           className="mb-1 flex items-center justify-between rounded px-2 py-1"
-          style={{ background: "rgba(233, 236, 240, 0.05)" }}
+          style={{ background: "rgba(255, 245, 237, 0.5)" }}
         >
           <div className="flex items-center gap-2">
-            <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--cream)", fontWeight: 600 }}>
+            <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--triad-black)", fontWeight: 600 }}>
               {key}
             </span>
             {section === "colors" && (
               <div style={{ width: "14px", height: "14px", borderRadius: "3px", background: val, border: "1px solid rgba(255,255,255,0.2)" }} />
             )}
-            <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--cream)", opacity: 0.6 }}>
+            <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--triad-black)", opacity: 0.6 }}>
               {val}
             </span>
           </div>
@@ -189,7 +189,7 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
           }}
           style={{
             background: "var(--steel-blue)",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             border: "none",
             borderRadius: "4px",
             padding: "4px 10px",
@@ -209,9 +209,9 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
       {/* Header */}
       <div
         className="flex items-center justify-between px-4 py-2"
-        style={{ borderBottom: "1px solid rgba(233, 236, 240, 0.1)" }}
+        style={{ borderBottom: "1px solid rgba(9, 8, 14, 0.1)" }}
       >
-        <span style={{ fontFamily: "var(--font-runway)", fontSize: "12px", color: "var(--cream)", fontWeight: 600 }}>
+        <span style={{ fontFamily: "var(--font-runway)", fontSize: "12px", color: "var(--triad-black)", fontWeight: 600 }}>
           🎨 Style Guide
         </span>
         <div className="flex items-center gap-2">
@@ -225,7 +225,7 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
             disabled={isSaving}
             style={{
               background: "var(--steel-blue)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               border: "none",
               borderRadius: "4px",
               padding: "3px 12px",
@@ -256,7 +256,7 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
                   background: "rgba(74, 144, 217, 0.15)",
                   fontFamily: "var(--font-runway)",
                   fontSize: "11px",
-                  color: "var(--cream)",
+                  color: "var(--triad-black)",
                 }}
               >
                 {c}
@@ -292,7 +292,7 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
               }}
               style={{
                 background: "var(--steel-blue)",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 border: "none",
                 borderRadius: "4px",
                 padding: "4px 10px",

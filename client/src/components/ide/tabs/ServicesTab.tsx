@@ -43,7 +43,7 @@ export function ServicesTab() {
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "12px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             opacity: 0.6,
             textTransform: "uppercase",
             letterSpacing: "0.08em",
@@ -74,7 +74,7 @@ export function ServicesTab() {
                   style={{
                     fontFamily: "var(--font-runway)",
                     fontSize: "12px",
-                    color: "var(--cream)",
+                    color: "var(--triad-black)",
                   }}
                 >
                   {service.name}
@@ -84,7 +84,7 @@ export function ServicesTab() {
                 style={{
                   fontFamily: "var(--font-runway)",
                   fontSize: "11px",
-                  color: "var(--cream)",
+                  color: "var(--triad-black)",
                   opacity: 0.3,
                 }}
               >
@@ -105,7 +105,7 @@ export function ServicesTab() {
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "12px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             opacity: 0.6,
             textTransform: "uppercase",
             letterSpacing: "0.08em",
@@ -122,8 +122,8 @@ export function ServicesTab() {
                 className="rounded px-3 py-2 text-left text-xs transition-colors"
                 style={{
                   fontFamily: "var(--font-runway)",
-                  color: "var(--cream)",
-                  background: "rgba(233, 236, 240, 0.05)",
+                  color: "var(--triad-black)",
+                  background: "rgba(255, 245, 237, 0.5)",
                   border: "1px solid rgba(233, 236, 240, 0.1)",
                   cursor: "pointer",
                 }}
@@ -142,7 +142,7 @@ export function ServicesTab() {
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "12px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             opacity: 0.6,
             textTransform: "uppercase",
             letterSpacing: "0.08em",
@@ -154,7 +154,7 @@ export function ServicesTab() {
         <div
           className="rounded p-3"
           style={{
-            background: "rgba(233, 236, 240, 0.05)",
+            background: "rgba(255, 245, 237, 0.5)",
             border: "1px solid rgba(233, 236, 240, 0.1)",
           }}
         >
@@ -163,13 +163,13 @@ export function ServicesTab() {
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "12px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
             }}
           >
             <span>Payment Status</span>
             <span
               className="rounded-full px-2 py-0.5 text-xs"
-              style={{ background: "#008060", color: "var(--cream)" }}
+              style={{ background: "#008060", color: "var(--triad-black)" }}
             >
               Active
             </span>

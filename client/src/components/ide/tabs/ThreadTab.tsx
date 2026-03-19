@@ -78,13 +78,13 @@ export function ThreadTab({ projectId }: ThreadTabProps) {
       {/* Header */}
       <div
         className="flex items-center justify-between px-4 py-2"
-        style={{ borderBottom: "1px solid rgba(233, 236, 240, 0.1)" }}
+        style={{ borderBottom: "1px solid rgba(9, 8, 14, 0.1)" }}
       >
         <span
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "12px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             fontWeight: 600,
           }}
         >
@@ -94,7 +94,7 @@ export function ThreadTab({ projectId }: ThreadTabProps) {
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "10px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             opacity: 0.4,
           }}
         >
@@ -114,7 +114,7 @@ export function ThreadTab({ projectId }: ThreadTabProps) {
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "13px",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
               }}
             >
               Conversation thread will appear here
@@ -123,7 +123,7 @@ export function ThreadTab({ projectId }: ThreadTabProps) {
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "11px",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 opacity: 0.6,
               }}
             >
@@ -136,7 +136,7 @@ export function ThreadTab({ projectId }: ThreadTabProps) {
               key={entry.id}
               className="rounded-md px-3 py-2"
               style={{
-                background: "rgba(233, 236, 240, 0.05)",
+                background: "rgba(255, 245, 237, 0.5)",
                 borderLeft: `2px solid ${ROLE_COLORS[entry.role] ?? "var(--steel-blue)"}`,
               }}
             >
@@ -162,7 +162,7 @@ export function ThreadTab({ projectId }: ThreadTabProps) {
                       style={{
                         fontFamily: "var(--font-runway)",
                         fontSize: "9px",
-                        color: "var(--cream)",
+                        color: "var(--triad-black)",
                         background: "rgba(74, 144, 217, 0.2)",
                       }}
                     >
@@ -174,7 +174,7 @@ export function ThreadTab({ projectId }: ThreadTabProps) {
                   style={{
                     fontFamily: "var(--font-runway)",
                     fontSize: "9px",
-                    color: "var(--cream)",
+                    color: "var(--triad-black)",
                     opacity: 0.3,
                   }}
                 >
@@ -185,7 +185,7 @@ export function ThreadTab({ projectId }: ThreadTabProps) {
                 style={{
                   fontFamily: "var(--font-runway)",
                   fontSize: "12px",
-                  color: "var(--cream)",
+                  color: "var(--triad-black)",
                   opacity: 0.8,
                   lineHeight: 1.4,
                   margin: 0,

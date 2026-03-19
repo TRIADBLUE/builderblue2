@@ -36,7 +36,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "11px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               opacity: 0.5,
             }}
           >
@@ -47,7 +47,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "11px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               background: "var(--steel-blue)",
             }}
           >
@@ -58,7 +58,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "11px",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 opacity: 0.3,
               }}
             >
@@ -73,7 +73,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             style={{
               fontFamily: "var(--font-runway)",
               background: "var(--steel-blue)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               border: "none",
               cursor: "pointer",
             }}
@@ -85,7 +85,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             style={{
               fontFamily: "var(--font-runway)",
               background: "var(--steel-blue)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               border: "none",
               cursor: "pointer",
             }}
@@ -102,7 +102,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "12px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             opacity: 0.6,
             textTransform: "uppercase",
           }}
@@ -119,7 +119,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             className="w-full rounded border bg-transparent px-3 py-1.5 text-xs outline-none"
             style={{
               fontFamily: "var(--font-runway)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               borderColor: "rgba(233, 236, 240, 0.2)",
             }}
           />
@@ -131,7 +131,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             className="w-full resize-none rounded border bg-transparent px-3 py-1.5 text-xs outline-none"
             style={{
               fontFamily: "var(--font-runway)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               borderColor: "rgba(233, 236, 240, 0.2)",
             }}
           />
@@ -140,7 +140,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "11px",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 opacity: 0.5,
               }}
             >
@@ -153,7 +153,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
               className="w-24 rounded border bg-transparent px-2 py-1 text-xs outline-none"
               style={{
                 fontFamily: "var(--font-runway)",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 borderColor: "rgba(233, 236, 240, 0.2)",
               }}
             />
@@ -164,7 +164,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             style={{
               fontFamily: "var(--font-runway)",
               background: "var(--pure-blue)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               border: "none",
               cursor: "pointer",
             }}
@@ -176,7 +176,7 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
               className="mt-2 text-xs"
               style={{
                 fontFamily: "var(--font-runway)",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 opacity: 0.5,
               }}
             >

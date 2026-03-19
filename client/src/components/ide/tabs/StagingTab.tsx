@@ -75,7 +75,7 @@ export function StagingTab({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "12px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               opacity: 0.6,
             }}
           >
@@ -93,7 +93,7 @@ export function StagingTab({
             style={{
               fontFamily: "var(--font-runway)",
               background: "var(--steel-blue)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               border: "none",
               cursor: "pointer",
             }}
@@ -111,7 +111,7 @@ export function StagingTab({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "13px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               opacity: 0.4,
             }}
           >
@@ -146,7 +146,7 @@ export function StagingTab({
               className="flex-1 rounded border bg-transparent px-3 py-1.5 text-xs outline-none"
               style={{
                 fontFamily: "var(--font-runway)",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 borderColor: "rgba(233, 236, 240, 0.2)",
               }}
             />
@@ -159,7 +159,7 @@ export function StagingTab({
               style={{
                 fontFamily: "var(--font-runway)",
                 background: "var(--pure-blue)",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -180,7 +180,7 @@ export function StagingTab({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "10px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               opacity: 0.4,
               textTransform: "uppercase",
             }}
@@ -194,7 +194,7 @@ export function StagingTab({
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "11px",
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 opacity: 0.6,
               }}
             >

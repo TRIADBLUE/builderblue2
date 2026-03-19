@@ -89,7 +89,7 @@ export function PreviewTab({ projectId }: PreviewTabProps) {
                     device === mode
                       ? "var(--steel-blue)"
                       : "transparent",
-                  color: "var(--cream)",
+                  color: "var(--triad-black)",
                   border: device === mode ? "none" : "1px solid rgba(233, 236, 240, 0.2)",
                   cursor: "pointer",
                 }}
@@ -107,7 +107,7 @@ export function PreviewTab({ projectId }: PreviewTabProps) {
             className="rounded px-2 py-0.5 text-xs"
             style={{
               fontFamily: "var(--font-runway)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               background: isLoading ? "rgba(233, 236, 240, 0.1)" : "transparent",
               border: "1px solid rgba(233, 236, 240, 0.2)",
               cursor: isLoading ? "wait" : "pointer",
@@ -121,7 +121,7 @@ export function PreviewTab({ projectId }: PreviewTabProps) {
             className="rounded px-2 py-0.5 text-xs"
             style={{
               fontFamily: "var(--font-runway)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               background: "transparent",
               border: "1px solid rgba(233, 236, 240, 0.2)",
               cursor: "pointer",
@@ -134,7 +134,7 @@ export function PreviewTab({ projectId }: PreviewTabProps) {
             className="rounded px-2 py-0.5 text-xs"
             style={{
               fontFamily: "var(--font-runway)",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               background: "transparent",
               border: "1px solid rgba(233, 236, 240, 0.2)",
               cursor: "pointer",

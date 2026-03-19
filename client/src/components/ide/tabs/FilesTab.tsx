@@ -61,7 +61,7 @@ function FileTreeItem({
             paddingLeft: `${depth * 12 + 4}px`,
             fontFamily: "var(--font-runway)",
             fontSize: "11px",
-            color: "var(--cream)",
+            color: "var(--triad-black)",
             background: "none",
             border: "none",
             cursor: "pointer",
@@ -92,7 +92,7 @@ function FileTreeItem({
         paddingLeft: `${depth * 12 + 4}px`,
         fontFamily: "var(--font-runway)",
         fontSize: "11px",
-        color: "var(--cream)",
+        color: "var(--triad-black)",
         background: "none",
         border: "none",
         borderLeft: isActive ? "3px solid var(--steel-blue)" : "3px solid transparent",
@@ -133,7 +133,7 @@ export function FilesTab({ files, onSaveAsProposal }: FilesTabProps) {
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "11px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               opacity: 0.4,
             }}
           >
@@ -164,7 +164,7 @@ export function FilesTab({ files, onSaveAsProposal }: FilesTabProps) {
                 style={{
                   fontFamily: "var(--font-runway)",
                   fontSize: "11px",
-                  color: "var(--cream)",
+                  color: "var(--triad-black)",
                   opacity: 0.6,
                 }}
               >
@@ -178,7 +178,7 @@ export function FilesTab({ files, onSaveAsProposal }: FilesTabProps) {
                 style={{
                   fontFamily: "var(--font-runway)",
                   background: "var(--steel-blue)",
-                  color: "var(--cream)",
+                  color: "var(--triad-black)",
                   border: "none",
                   cursor: "pointer",
                 }}
@@ -194,7 +194,7 @@ export function FilesTab({ files, onSaveAsProposal }: FilesTabProps) {
                 fontFamily: "var(--font-runway)",
                 fontSize: "12px",
                 lineHeight: 1.6,
-                color: "var(--cream)",
+                color: "var(--triad-black)",
                 background: "var(--triad-black)",
                 tabSize: 2,
               }}
@@ -207,7 +207,7 @@ export function FilesTab({ files, onSaveAsProposal }: FilesTabProps) {
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "13px",
-              color: "var(--cream)",
+              color: "var(--triad-black)",
               opacity: 0.3,
             }}
           >
