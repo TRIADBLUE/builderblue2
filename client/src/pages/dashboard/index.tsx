@@ -294,7 +294,7 @@ export default function Dashboard() {
               className="mb-4 text-lg font-bold"
               style={{ color: "var(--triad-black)", fontFamily: "var(--font-heading)" }}
             >
-              Create a New Project
+              New Project
             </h2>
 
             {/* Mode tabs */}
@@ -551,7 +551,7 @@ export default function Dashboard() {
                   fontFamily: "var(--font-button)",
                 }}
               >
-                Create your first project
+                + New Project
               </button>
             </div>
           ) : (
