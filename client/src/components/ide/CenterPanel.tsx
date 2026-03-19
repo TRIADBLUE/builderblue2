@@ -8,6 +8,8 @@ import { DatabaseTab } from "./tabs/DatabaseTab";
 import { PreviewTab } from "./tabs/PreviewTab";
 import { GitTab } from "./tabs/GitTab";
 import { ServicesTab } from "./tabs/ServicesTab";
+import { ThreadTab } from "./tabs/ThreadTab";
+import { StyleGuideTab } from "./tabs/StyleGuideTab";
 
 interface CenterPanelProps {
   projectId: string;
@@ -34,6 +36,8 @@ const TABS: { key: CenterTab; label: string }[] = [
   { key: "preview", label: "Preview" },
   { key: "git", label: "Git" },
   { key: "services", label: "Services" },
+  { key: "thread", label: "🧵 Thread" },
+  { key: "style-guide", label: "🎨 Guide" },
 ];
 
 export function CenterPanel({
@@ -124,6 +128,8 @@ export function CenterPanel({
           />
         )}
         {activeTab === "services" && <ServicesTab />}
+        {activeTab === "thread" && <ThreadTab projectId={projectId} />}
+        {activeTab === "style-guide" && <StyleGuideTab projectId={projectId} />}
       </div>
     </div>
   );
