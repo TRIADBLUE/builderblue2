@@ -6,7 +6,9 @@ import { api } from "../../lib/api";
 import type { Project } from "@shared/types";
 
 type SortKey = "name" | "created" | "updated";
-type CreateMode = "blank" | "template" | "github" | "upload";
+type ProjectType = null | "new" | "existing";
+type NewMode = "fresh" | "template" | "repo";
+type ExistingMode = "github" | "upload";
 
 interface Template {
   id: string;
@@ -20,8 +22,10 @@ export default function Dashboard() {
   const [, setLocation] = useLocation();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showNewProject, setShowNewProject] = useState(false);
-  const [createMode, setCreateMode] = useState<CreateMode>("blank");
+  const [showAddProject, setShowAddProject] = useState(false);
+  const [projectType, setProjectType] = useState<ProjectType>(null);
+  const [newMode, setNewMode] = useState<NewMode>("fresh");
+  const [existingMode, setExistingMode] = useState<ExistingMode>("github");
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectDesc, setNewProjectDesc] = useState("");
   const [isCreating, setIsCreating] = useState(false);
@@ -80,19 +84,21 @@ export default function Dashboard() {
     load();
   }, []);
 
-  // Load templates when template mode selected
+  // Load templates when needed
   useEffect(() => {
-    if (createMode === "template" && templates.length === 0) {
+    if (newMode === "template" && templates.length === 0) {
       api.fetch<Template[]>("/api/projects/templates/list")
         .then(setTemplates)
         .catch(() => {});
     }
-  }, [createMode, templates.length]);
+  }, [newMode, templates.length]);
 
   // Reset form
   const resetForm = useCallback(() => {
-    setShowNewProject(false);
-    setCreateMode("blank");
+    setShowAddProject(false);
+    setProjectType(null);
+    setNewMode("fresh");
+    setExistingMode("github");
     setNewProjectName("");
     setNewProjectDesc("");
     setGithubUrl("");
@@ -194,17 +200,19 @@ export default function Dashboard() {
 
   // Handle create based on mode
   const handleCreate = useCallback(() => {
-    switch (createMode) {
-      case "blank":
-        return handleCreateBlank();
-      case "template":
-        return handleCreateFromTemplate();
-      case "github":
-        return handleImportGithub();
-      case "upload":
-        return handleUploadZip();
+    if (projectType === "new") {
+      switch (newMode) {
+        case "fresh": return handleCreateBlank();
+        case "template": return handleCreateFromTemplate();
+        case "repo": return handleCreateBlank(); // creates project + connects repo later
+      }
+    } else if (projectType === "existing") {
+      switch (existingMode) {
+        case "github": return handleImportGithub();
+        case "upload": return handleUploadZip();
+      }
     }
-  }, [createMode, handleCreateBlank, handleCreateFromTemplate, handleImportGithub, handleUploadZip]);
+  }, [projectType, newMode, existingMode, handleCreateBlank, handleCreateFromTemplate, handleImportGithub, handleUploadZip]);
 
   // Archive project
   const handleArchive = useCallback(async (id: string) => {
@@ -216,15 +224,50 @@ export default function Dashboard() {
     }
   }, []);
 
-  const tabStyle = (active: boolean) => ({
+  // Can submit?
+  const canSubmit = (() => {
+    if (isCreating) return false;
+    if (projectType === "new") {
+      if (newMode === "fresh" || newMode === "repo") return !!newProjectName.trim();
+      if (newMode === "template") return !!newProjectName.trim() && !!selectedTemplate;
+    }
+    if (projectType === "existing") {
+      if (existingMode === "github") return !!githubUrl.trim();
+      if (existingMode === "upload") return !!zipFile;
+    }
+    return false;
+  })();
+
+  // Button label
+  const buttonLabel = (() => {
+    if (isCreating) {
+      if (projectType === "existing" && existingMode === "github") return "Importing...";
+      if (projectType === "existing" && existingMode === "upload") return "Uploading...";
+      return "Creating...";
+    }
+    return "Open in IDE";
+  })();
+
+  const typeCardStyle = (active: boolean) => ({
+    flex: 1,
+    padding: "20px",
+    borderRadius: "10px",
+    border: active ? "2px solid var(--deep-blue)" : "1px solid rgba(74,144,217,0.2)",
+    background: active ? "rgba(20, 40, 125, 0.04)" : "white",
+    cursor: "pointer" as const,
+    textAlign: "center" as const,
+    transition: "all 0.15s",
+  });
+
+  const subTabStyle = (active: boolean) => ({
     fontFamily: "var(--font-button)" as const,
     fontSize: "12px",
     padding: "6px 14px",
     borderRadius: "6px",
-    border: "none",
+    border: "none" as const,
     cursor: "pointer" as const,
     background: active ? "var(--deep-blue)" : "transparent",
-    color: active ? "var(--cream)" : "var(--steel-blue)",
+    color: active ? "#FFF5ED" : "var(--steel-blue)",
     transition: "all 0.15s",
   });
 
@@ -266,22 +309,22 @@ export default function Dashboard() {
             </p>
           </div>
           <button
-            onClick={() => setShowNewProject(true)}
+            onClick={() => setShowAddProject(true)}
             className="rounded-md px-5 py-2.5 text-sm font-semibold transition-all hover:scale-105"
             style={{
               background: "var(--deep-blue)",
-              color: "var(--cream)",
+              color: "#FFF5ED",
               border: "none",
               cursor: "pointer",
               fontFamily: "var(--font-button)",
             }}
           >
-            + New Project
+            + Add Project
           </button>
         </div>
 
-        {/* New project form */}
-        {showNewProject && (
+        {/* Add Project form */}
+        {showAddProject && (
           <div
             className="mt-6 rounded-lg p-6"
             style={{
@@ -291,123 +334,201 @@ export default function Dashboard() {
             }}
           >
             <h2
-              className="mb-4 text-lg font-bold"
+              className="mb-5 text-lg font-bold"
               style={{ color: "var(--triad-black)", fontFamily: "var(--font-heading)" }}
             >
-              New Project
+              Add Project
             </h2>
 
-            {/* Mode tabs */}
-            <div className="mb-5 flex gap-2" style={{ borderBottom: "1px solid rgba(74,144,217,0.15)", paddingBottom: "10px" }}>
-              <button style={tabStyle(createMode === "blank")} onClick={() => setCreateMode("blank")}>Blank</button>
-              <button style={tabStyle(createMode === "template")} onClick={() => setCreateMode("template")}>Template</button>
-              <button style={tabStyle(createMode === "github")} onClick={() => setCreateMode("github")}>Import from GitHub</button>
-              <button style={tabStyle(createMode === "upload")} onClick={() => setCreateMode("upload")}>Upload ZIP</button>
-            </div>
-
-            {/* GitHub URL field */}
-            {createMode === "github" && (
-              <div className="mb-3">
-                <label style={labelStyle}>GitHub Repository URL</label>
-                <input
-                  type="text"
-                  value={githubUrl}
-                  onChange={(e) => setGithubUrl(e.target.value)}
-                  placeholder="https://github.com/username/repo"
-                  autoFocus
-                  style={inputStyle}
-                  onKeyDown={(e) => { if (e.key === "Enter") handleCreate(); }}
-                />
-              </div>
-            )}
-
-            {/* ZIP upload field */}
-            {createMode === "upload" && (
-              <div className="mb-3">
-                <label style={labelStyle}>Project ZIP File</label>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".zip"
-                  onChange={(e) => setZipFile(e.target.files?.[0] ?? null)}
-                  style={{ display: "none" }}
-                />
+            {/* Step 1: New or Existing? */}
+            {!projectType && (
+              <div className="flex gap-4">
                 <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="flex items-center justify-center rounded-lg border-2 border-dashed p-6 transition-all hover:border-solid"
-                  style={{
-                    borderColor: zipFile ? "var(--deep-blue)" : "var(--steel-blue)",
-                    cursor: "pointer",
-                    background: zipFile ? "rgba(26, 61, 143, 0.03)" : "transparent",
-                  }}
+                  style={typeCardStyle(false)}
+                  onClick={() => setProjectType("new")}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--deep-blue)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(74,144,217,0.2)"; }}
                 >
-                  <span style={{ fontFamily: "var(--font-content)", fontSize: "14px", color: zipFile ? "var(--deep-blue)" : "var(--steel-blue)" }}>
-                    {zipFile ? `Selected: ${zipFile.name}` : "Click to select a .zip file or drag & drop"}
-                  </span>
+                  <div style={{ fontSize: "28px", marginBottom: "8px" }}>✨</div>
+                  <div style={{ fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: "bold", color: "var(--triad-black)" }}>
+                    New Project
+                  </div>
+                  <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", color: "var(--steel-blue)", marginTop: "4px" }}>
+                    Start from scratch, use a template, or connect a new repo
+                  </div>
+                </div>
+                <div
+                  style={typeCardStyle(false)}
+                  onClick={() => setProjectType("existing")}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--deep-blue)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(74,144,217,0.2)"; }}
+                >
+                  <div style={{ fontSize: "28px", marginBottom: "8px" }}>📂</div>
+                  <div style={{ fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: "bold", color: "var(--triad-black)" }}>
+                    Existing Project
+                  </div>
+                  <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", color: "var(--steel-blue)", marginTop: "4px" }}>
+                    Import from GitHub or upload a ZIP of your existing code
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Template selector */}
-            {createMode === "template" && (
-              <div className="mb-3">
-                <label style={labelStyle}>Choose a Template</label>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {templates.map((t) => (
+            {/* Step 2: New Project options */}
+            {projectType === "new" && (
+              <>
+                <div className="mb-5 flex gap-2" style={{ borderBottom: "1px solid rgba(74,144,217,0.15)", paddingBottom: "10px" }}>
+                  <button style={subTabStyle(newMode === "fresh")} onClick={() => setNewMode("fresh")}>Start Fresh</button>
+                  <button style={subTabStyle(newMode === "template")} onClick={() => setNewMode("template")}>From Template</button>
+                  <button style={subTabStyle(newMode === "repo")} onClick={() => setNewMode("repo")}>Connect Repo</button>
+                </div>
+
+                {/* Template selector */}
+                {newMode === "template" && (
+                  <div className="mb-3">
+                    <label style={labelStyle}>Choose a Template</label>
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                      {templates.map((t) => (
+                        <div
+                          key={t.id}
+                          onClick={() => setSelectedTemplate(t.id)}
+                          className="rounded-lg p-3 transition-all"
+                          style={{
+                            border: selectedTemplate === t.id ? "2px solid var(--deep-blue)" : "1px solid rgba(74,144,217,0.2)",
+                            background: selectedTemplate === t.id ? "rgba(26, 61, 143, 0.03)" : "white",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <div style={{ fontFamily: "var(--font-heading)", fontSize: "13px", fontWeight: "bold", color: "var(--triad-black)" }}>
+                            {t.name}
+                          </div>
+                          <div style={{ fontFamily: "var(--font-content)", fontSize: "11px", color: "var(--steel-blue)", marginTop: "2px" }}>
+                            {t.description}
+                          </div>
+                          <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)", opacity: 0.5, marginTop: "4px" }}>
+                            {t.fileCount} files
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Connect repo hint */}
+                {newMode === "repo" && (
+                  <div className="mb-3 rounded-md px-3 py-2" style={{ background: "rgba(74,144,217,0.05)", fontFamily: "var(--font-content)", fontSize: "13px", color: "var(--steel-blue)" }}>
+                    A new GitHub repository will be created and linked to this project. You can configure the repo in Project Settings after opening the IDE.
+                  </div>
+                )}
+
+                {/* Name & Description */}
+                <div className="mb-3">
+                  <label style={labelStyle}>Project Name</label>
+                  <input
+                    type="text"
+                    value={newProjectName}
+                    onChange={(e) => setNewProjectName(e.target.value)}
+                    placeholder="My Awesome App"
+                    autoFocus
+                    style={inputStyle}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && canSubmit) handleCreate();
+                      if (e.key === "Escape") resetForm();
+                    }}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label style={labelStyle}>Description (optional)</label>
+                  <input
+                    type="text"
+                    value={newProjectDesc}
+                    onChange={(e) => setNewProjectDesc(e.target.value)}
+                    placeholder="A brief description of what you're building"
+                    style={inputStyle}
+                    onKeyDown={(e) => { if (e.key === "Enter" && canSubmit) handleCreate(); }}
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Step 2: Existing Project options */}
+            {projectType === "existing" && (
+              <>
+                <div className="mb-5 flex gap-2" style={{ borderBottom: "1px solid rgba(74,144,217,0.15)", paddingBottom: "10px" }}>
+                  <button style={subTabStyle(existingMode === "github")} onClick={() => setExistingMode("github")}>From GitHub</button>
+                  <button style={subTabStyle(existingMode === "upload")} onClick={() => setExistingMode("upload")}>Upload ZIP</button>
+                </div>
+
+                {/* GitHub URL */}
+                {existingMode === "github" && (
+                  <div className="mb-3">
+                    <label style={labelStyle}>GitHub Repository URL</label>
+                    <input
+                      type="text"
+                      value={githubUrl}
+                      onChange={(e) => setGithubUrl(e.target.value)}
+                      placeholder="https://github.com/username/repo"
+                      autoFocus
+                      style={inputStyle}
+                      onKeyDown={(e) => { if (e.key === "Enter" && canSubmit) handleCreate(); }}
+                    />
+                  </div>
+                )}
+
+                {/* ZIP upload */}
+                {existingMode === "upload" && (
+                  <div className="mb-3">
+                    <label style={labelStyle}>Project ZIP File</label>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".zip"
+                      onChange={(e) => setZipFile(e.target.files?.[0] ?? null)}
+                      style={{ display: "none" }}
+                    />
                     <div
-                      key={t.id}
-                      onClick={() => setSelectedTemplate(t.id)}
-                      className="rounded-lg p-3 transition-all"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex items-center justify-center rounded-lg border-2 border-dashed p-6 transition-all hover:border-solid"
                       style={{
-                        border: selectedTemplate === t.id ? "2px solid var(--deep-blue)" : "1px solid rgba(74,144,217,0.2)",
-                        background: selectedTemplate === t.id ? "rgba(26, 61, 143, 0.03)" : "white",
+                        borderColor: zipFile ? "var(--deep-blue)" : "var(--steel-blue)",
                         cursor: "pointer",
+                        background: zipFile ? "rgba(26, 61, 143, 0.03)" : "transparent",
                       }}
                     >
-                      <div style={{ fontFamily: "var(--font-heading)", fontSize: "13px", fontWeight: "bold", color: "var(--triad-black)" }}>
-                        {t.name}
-                      </div>
-                      <div style={{ fontFamily: "var(--font-content)", fontSize: "11px", color: "var(--steel-blue)", marginTop: "2px" }}>
-                        {t.description}
-                      </div>
-                      <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)", opacity: 0.5, marginTop: "4px" }}>
-                        {t.fileCount} files
-                      </div>
+                      <span style={{ fontFamily: "var(--font-content)", fontSize: "14px", color: zipFile ? "var(--deep-blue)" : "var(--steel-blue)" }}>
+                        {zipFile ? `Selected: ${zipFile.name}` : "Click to select a .zip file or drag & drop"}
+                      </span>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                  </div>
+                )}
 
-            {/* Name & Description (always shown) */}
-            <div className="mb-3">
-              <label style={labelStyle}>
-                Project Name{createMode === "github" ? " (optional — defaults to repo name)" : ""}
-              </label>
-              <input
-                type="text"
-                value={newProjectName}
-                onChange={(e) => setNewProjectName(e.target.value)}
-                placeholder={createMode === "github" ? "Leave blank to use repo name" : "My Awesome App"}
-                autoFocus={createMode === "blank"}
-                style={inputStyle}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleCreate();
-                  if (e.key === "Escape") resetForm();
-                }}
-              />
-            </div>
-            <div className="mb-4">
-              <label style={labelStyle}>Description (optional)</label>
-              <input
-                type="text"
-                value={newProjectDesc}
-                onChange={(e) => setNewProjectDesc(e.target.value)}
-                placeholder="A brief description of what you're building"
-                style={inputStyle}
-                onKeyDown={(e) => { if (e.key === "Enter") handleCreate(); }}
-              />
-            </div>
+                {/* Name & Description */}
+                <div className="mb-3">
+                  <label style={labelStyle}>
+                    Project Name{existingMode === "github" ? " (optional — defaults to repo name)" : ""}
+                  </label>
+                  <input
+                    type="text"
+                    value={newProjectName}
+                    onChange={(e) => setNewProjectName(e.target.value)}
+                    placeholder={existingMode === "github" ? "Leave blank to use repo name" : "My Project"}
+                    style={inputStyle}
+                    onKeyDown={(e) => { if (e.key === "Enter" && canSubmit) handleCreate(); }}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label style={labelStyle}>Description (optional)</label>
+                  <input
+                    type="text"
+                    value={newProjectDesc}
+                    onChange={(e) => setNewProjectDesc(e.target.value)}
+                    placeholder="A brief description of this project"
+                    style={inputStyle}
+                    onKeyDown={(e) => { if (e.key === "Enter" && canSubmit) handleCreate(); }}
+                  />
+                </div>
+              </>
+            )}
 
             {/* Error message */}
             {error && (
@@ -420,51 +541,70 @@ export default function Dashboard() {
             )}
 
             {/* Actions */}
-            <div className="flex gap-2">
-              <button
-                onClick={handleCreate}
-                disabled={isCreating || (
-                  createMode === "blank" && !newProjectName.trim() ||
-                  createMode === "template" && (!newProjectName.trim() || !selectedTemplate) ||
-                  createMode === "github" && !githubUrl.trim() ||
-                  createMode === "upload" && !zipFile
-                )}
-                className="rounded-md px-5 py-2 text-sm font-semibold transition-all"
-                style={{
-                  background: "var(--deep-blue)",
-                  color: "var(--cream)",
-                  border: "none",
-                  cursor: isCreating ? "wait" : "pointer",
-                  opacity: isCreating ? 0.7 : 1,
-                  fontFamily: "var(--font-button)",
-                }}
-              >
-                {isCreating
-                  ? createMode === "github"
-                    ? "Importing..."
-                    : createMode === "upload"
-                    ? "Uploading..."
-                    : "Creating..."
-                  : createMode === "github"
-                  ? "Import & Open IDE"
-                  : createMode === "upload"
-                  ? "Upload & Open IDE"
-                  : "Create & Open IDE"}
-              </button>
-              <button
-                onClick={resetForm}
-                className="rounded-md px-4 py-2 text-sm transition-all"
-                style={{
-                  background: "transparent",
-                  color: "var(--steel-blue)",
-                  border: "1px solid var(--steel-blue)",
-                  cursor: "pointer",
-                  fontFamily: "var(--font-button)",
-                }}
-              >
-                Cancel
-              </button>
-            </div>
+            {projectType && (
+              <div className="flex gap-2">
+                <button
+                  onClick={handleCreate}
+                  disabled={!canSubmit}
+                  className="rounded-md px-5 py-2 text-sm font-semibold transition-all"
+                  style={{
+                    background: canSubmit ? "var(--deep-blue)" : "var(--steel-blue)",
+                    color: "#FFF5ED",
+                    border: "none",
+                    cursor: canSubmit ? "pointer" : "not-allowed",
+                    opacity: canSubmit ? 1 : 0.5,
+                    fontFamily: "var(--font-button)",
+                  }}
+                >
+                  {buttonLabel}
+                </button>
+                <button
+                  onClick={() => setProjectType(null)}
+                  className="rounded-md px-4 py-2 text-sm transition-all"
+                  style={{
+                    background: "transparent",
+                    color: "var(--steel-blue)",
+                    border: "1px solid var(--steel-blue)",
+                    cursor: "pointer",
+                    fontFamily: "var(--font-button)",
+                  }}
+                >
+                  Back
+                </button>
+                <button
+                  onClick={resetForm}
+                  className="rounded-md px-4 py-2 text-sm transition-all"
+                  style={{
+                    background: "transparent",
+                    color: "var(--steel-blue)",
+                    border: "none",
+                    cursor: "pointer",
+                    fontFamily: "var(--font-button)",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+
+            {/* Cancel on step 1 */}
+            {!projectType && (
+              <div className="mt-4">
+                <button
+                  onClick={resetForm}
+                  className="rounded-md px-4 py-2 text-sm transition-all"
+                  style={{
+                    background: "transparent",
+                    color: "var(--steel-blue)",
+                    border: "1px solid var(--steel-blue)",
+                    cursor: "pointer",
+                    fontFamily: "var(--font-button)",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -525,7 +665,7 @@ export default function Dashboard() {
             <div className="py-12 text-center">
               <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600" />
             </div>
-          ) : projects.length === 0 && !showNewProject ? (
+          ) : projects.length === 0 && !showAddProject ? (
             <div
               className="rounded-lg border border-dashed p-12 text-center"
               style={{ borderColor: "var(--steel-blue)" }}
@@ -541,17 +681,17 @@ export default function Dashboard() {
                 No projects yet.
               </p>
               <button
-                onClick={() => setShowNewProject(true)}
+                onClick={() => setShowAddProject(true)}
                 className="rounded-md px-6 py-2.5 text-sm font-semibold transition-all hover:scale-105"
                 style={{
                   background: "var(--deep-blue)",
-                  color: "var(--cream)",
+                  color: "#FFF5ED",
                   border: "none",
                   cursor: "pointer",
                   fontFamily: "var(--font-button)",
                 }}
               >
-                + New Project
+                + Add Project
               </button>
             </div>
           ) : (
@@ -561,7 +701,7 @@ export default function Dashboard() {
                   className="col-span-full py-8 text-center"
                   style={{ color: "var(--steel-blue)", fontFamily: "var(--font-content)", fontSize: "14px" }}
                 >
-                  No projects matching "{searchQuery}"
+                  No projects matching &ldquo;{searchQuery}&rdquo;
                 </div>
               ) : null}
               {filteredProjects.map((project) => (
