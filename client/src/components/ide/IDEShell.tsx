@@ -9,6 +9,7 @@ import { TopNav } from "./TopNav";
 import { ArchitectPane } from "./ArchitectPane";
 import { BuilderPane } from "./BuilderPane";
 import { CenterPanel } from "./CenterPanel";
+import { TodoPanel } from "./TodoPanel";
 import { ComputeWarningBanner } from "./ComputeWarningBanner";
 import { ComputeDepletedModal } from "./ComputeDepletedModal";
 import { UpgradeToast } from "./UpgradeToast";
@@ -311,10 +312,10 @@ export function IDEShell({
 
       {/* Three panel layout */}
       <div className="flex flex-1 overflow-hidden" style={{ flexDirection: reversed ? "row-reverse" : "row" }}>
-        {/* Architect pane */}
+        {/* Architect pane + TODO panel */}
         {showArchitect && (
         <div
-          className={`ide-pane ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
+          className={`ide-pane flex ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
           style={{
             width: widths.left,
             borderLeft:
@@ -325,19 +326,22 @@ export function IDEShell({
             transition: "width 0.3s ease",
           }}
         >
-          <ArchitectPane
-            isActive={activePane === "architect"}
-            messages={architectMessages}
-            isStreaming={architectConvo.isStreaming}
-            streamedText={architectConvo.streamedText}
-            provider={architectProvider}
-            model={architectModel}
-            onProviderChange={setArchitectProvider}
-            onModelChange={setArchitectModel}
-            onSendMessage={handleArchitectMessage}
-            onHandToBuilder={handleHandToBuilder}
-            onFocus={() => setActivePane("architect")}
-          />
+          <TodoPanel projectId={projectId} />
+          <div className="flex-1 overflow-hidden">
+            <ArchitectPane
+              isActive={activePane === "architect"}
+              messages={architectMessages}
+              isStreaming={architectConvo.isStreaming}
+              streamedText={architectConvo.streamedText}
+              provider={architectProvider}
+              model={architectModel}
+              onProviderChange={setArchitectProvider}
+              onModelChange={setArchitectModel}
+              onSendMessage={handleArchitectMessage}
+              onHandToBuilder={handleHandToBuilder}
+              onFocus={() => setActivePane("architect")}
+            />
+          </div>
         </div>
         )}
 
