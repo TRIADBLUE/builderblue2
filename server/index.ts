@@ -18,6 +18,9 @@ import ideRoutes from "./routes/ide.js";
 import collaboratorRoutes from "./routes/collaborators.js";
 import folderRoutes from "./routes/folders.js";
 import memoryRoutes from "./routes/memory.js";
+import threadRoutes from "./routes/thread.js";
+import todosRoutes from "./routes/todos.js";
+import sessionsRoutes from "./routes/sessions.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -45,6 +48,9 @@ app.use("/api/conversations", conversationRoutes);
 app.use("/api/staging", stagingRoutes);
 app.use("/api/ide", ideRoutes);
 app.use("/api/memory", memoryRoutes);
+app.use("/api/thread", threadRoutes);
+app.use("/api/todos", todosRoutes);
+app.use("/api/sessions", sessionsRoutes);
 app.use("/api/collaborators", collaboratorRoutes);
 app.use("/api/folders", folderRoutes);
 

@@ -300,3 +300,74 @@ export const projectCollaborators = pgTable("project_collaborators", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+// ─── Project Memory ──────────────────────────────────────────────────────────
+// Persistent per-project storage: style guide, design decisions, brand rules.
+// Both AIs read this at the start of every session.
+
+export const projectMemory = pgTable("project_memory", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  key: text("key").notNull(),
+  value: jsonb("value").notNull().default(sql`'{}'::jsonb`),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Project TODOs ───────────────────────────────────────────────────────────
+
+export const projectTodos = pgTable("project_todos", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
+  status: text("status").notNull().default("pending"),
+  priority: integer("priority").notNull().default(0),
+  source: text("source").notNull().default("user"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// ─── Thread Entries ──────────────────────────────────────────────────────────
+
+export const threadEntries = pgTable("thread_entries", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  role: text("role").notNull(),
+  action: text("action").notNull(),
+  content: text("content").notNull(),
+  filePath: text("file_path"),
+  conversationId: uuid("conversation_id").references(() => conversations.id),
+  stagedChangeId: uuid("staged_change_id").references(() => stagedChanges.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// ─── Session Summaries ───────────────────────────────────────────────────────
+
+export const sessionSummaries = pgTable("session_summaries", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  conversationId: uuid("conversation_id").references(() => conversations.id),
+  role: text("role").notNull(),
+  summary: text("summary").notNull(),
+  keyDecisions: jsonb("key_decisions").notNull().default(sql`'[]'::jsonb`),
+  openItems: jsonb("open_items").notNull().default(sql`'[]'::jsonb`),
+  filesModified: jsonb("files_modified").notNull().default(sql`'[]'::jsonb`),
+  messageCount: integer("message_count").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
