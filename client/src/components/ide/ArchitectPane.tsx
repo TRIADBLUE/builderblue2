@@ -82,7 +82,7 @@ export function ArchitectPane({
             fontFamily: "var(--font-label)",
             fontWeight: "bold",
             fontSize: "13px",
-            color: "var(--triad-black)",
+            color: "#064A6C",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
           }}

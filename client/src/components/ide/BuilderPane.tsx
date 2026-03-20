@@ -132,7 +132,7 @@ export function BuilderPane({
             fontFamily: "var(--font-label)",
             fontWeight: 600,
             fontSize: "13px",
-            color: "var(--triad-black)",
+            color: "#82323C",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
           }}

@@ -151,14 +151,19 @@ export default function Landing() {
       </div>
 
       {/* ── Live IDE Demo ─────────────────────────────────────────────── */}
-      <div className="mx-auto max-w-7xl px-4 pb-20">
+      <div className="mx-auto max-w-7xl px-4 pb-20" style={{ perspective: "1200px" }}>
         <div
           className="overflow-hidden rounded-xl"
           style={{
             border: "1px solid rgba(9,8,14,0.12)",
-            boxShadow: "0 20px 80px rgba(166, 124, 75, 0.12), 0 4px 20px rgba(0,0,0,0.06)",
+            boxShadow: "0 30px 80px rgba(9, 8, 14, 0.15), 0 8px 30px rgba(9, 8, 14, 0.08), 0 0 0 1px rgba(9,8,14,0.04)",
             background: "#FFF5ED",
+            transform: "rotateX(2deg)",
+            transformOrigin: "center bottom",
+            transition: "transform 0.4s ease",
           }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "rotateX(0deg)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "rotateX(2deg)"; }}
         >
           {/* Window chrome */}
           <div className="flex items-center gap-2 px-4 py-2.5" style={{ background: "rgba(9,8,14,0.03)", borderBottom: "1px solid rgba(9,8,14,0.08)" }}>
@@ -178,7 +183,7 @@ export default function Landing() {
             {/* ── LEFT: Architect ──────────────────────────────────────── */}
             <div className="flex flex-col" style={{ flex: "1 1 0%", background: "#FFF5ED", borderRight: "1px solid rgba(9,8,14,0.08)" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.06)" }}>
-                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "var(--deep-blue)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#064A6C", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Architect
                 </span>
                 <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "var(--steel-blue)" }}>Claude Opus 4</span>
@@ -305,15 +310,15 @@ export default function Landing() {
             </div>
 
             {/* ── RIGHT: Visual / Files / Preview ─────────────────────── */}
-            <div className="flex flex-col" style={{ flex: "1.2 1 0%", background: "#A67C4B" }}>
-              <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.15)" }}>
-                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#FFF5ED", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+            <div className="flex flex-col" style={{ flex: "1.2 1 0%", background: "#FFF5ED" }}>
+              <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.08)" }}>
+                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#82323C", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Staging Runway
                 </span>
                 <div className="flex gap-2">
-                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#FFF5ED", opacity: 0.6 }}>Files</span>
-                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#FFF5ED", opacity: 0.6 }}>Preview</span>
-                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#FFF5ED", opacity: 0.6 }}>Git</span>
+                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#09080E", opacity: 0.5 }}>Files</span>
+                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#09080E", opacity: 0.5 }}>Preview</span>
+                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#09080E", opacity: 0.5 }}>Git</span>
                 </div>
               </div>
               <div className="flex-1 overflow-hidden p-3 space-y-2">
@@ -322,7 +327,7 @@ export default function Landing() {
                     key={i}
                     className="rounded-md px-3 py-2"
                     style={{
-                      background: "#D0B799",
+                      background: "rgba(9, 8, 14, 0.04)",
                       borderLeft: `3px solid ${file.status === "approved" ? "#008060" : file.status === "reviewing" ? "#D4A843" : "var(--steel-blue)"}`,
                       animation: "fadeSlideIn 0.4s ease-out",
                     }}

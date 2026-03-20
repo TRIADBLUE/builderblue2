@@ -55,7 +55,7 @@ export function StagedChangeCard({
     <div
       className={`mb-3 rounded-md ${animState === "enter" ? "staged-card-enter" : animState === "approved" ? "staged-card-approved" : animState === "rejected" ? "staged-card-rejected" : ""}`}
       style={{
-        background: "#D0B799",
+        background: "rgba(9, 8, 14, 0.04)",
         border: "1px solid var(--card-border)",
         borderLeft: `3px solid ${borderColor}`,
       }}

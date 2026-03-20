@@ -63,7 +63,7 @@ export function CenterPanel({
       <div
         className="flex"
         style={{
-          background: "#A67C4B",
+          background: "#FFF5ED",
           borderBottom: "1px solid rgba(9, 8, 14, 0.1)",
         }}
       >
@@ -75,16 +75,16 @@ export function CenterPanel({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "11px",
-              color: "var(--cream)",
+              color: "#FFF5ED",
               background:
                 activeTab === tab.key
-                  ? "var(--tan)"
+                  ? "#82323C"
                   : "transparent",
               border: "none",
               cursor: "pointer",
               borderBottom:
                 activeTab === tab.key
-                  ? "2px solid var(--cream)"
+                  ? "2px solid #FFF5ED"
                   : "2px solid transparent",
             }}
           >
@@ -96,7 +96,7 @@ export function CenterPanel({
       {/* Tab content */}
       <div
         className="flex-1 overflow-hidden"
-        style={{ background: "var(--tan)" }}
+        style={{ background: "#FFF5ED" }}
       >
         {activeTab === "staging" && (
           <StagingTab
