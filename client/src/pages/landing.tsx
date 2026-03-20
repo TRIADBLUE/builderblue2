@@ -575,7 +575,7 @@ export default function Landing() {
           <strong style={{ color: "#3E806B" }}>Architect</strong> plans it.{" "}
           <strong style={{ color: "#82323C" }}>Builder</strong> codes it.{" "}
           <strong style={{ color: "#09080E" }}>You</strong> approve it.{" "}
-          <span style={{ color: "#14287D", fontWeight: 600 }}>The Runway ships it.</span>
+          <span style={{ color: "#14287D", fontWeight: 600 }}>The Runway launches it.</span>
         </p>
       </div>
 
