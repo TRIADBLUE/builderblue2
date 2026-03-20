@@ -45,12 +45,12 @@ export function IDEShell({
   // Architect conversation
   const architectConvo = useConversation();
   const [architectProvider, setArchitectProvider] = useState<AIProvider>("claude");
-  const [architectModel, setArchitectModel] = useState("claude-sonnet-4-20250514");
+  const [architectModel, setArchitectModel] = useState("claude-opus-4-20250514");
 
   // Builder conversation
   const builderConvo = useConversation();
   const [builderProvider, setBuilderProvider] = useState<AIProvider>("claude");
-  const [builderModel, setBuilderModel] = useState("claude-sonnet-4-20250514");
+  const [builderModel, setBuilderModel] = useState("claude-opus-4-20250514");
   const [builderInput, setBuilderInput] = useState("");
 
   // New staged IDs for animation
@@ -198,7 +198,7 @@ export function IDEShell({
             width: widths.left,
             borderLeft:
               activePane === "architect"
-                ? "3px solid var(--steel-blue)"
+                ? "3px solid #3E806B"
                 : "3px solid transparent",
             overflow: "hidden",
           }}
@@ -244,7 +244,7 @@ export function IDEShell({
             width: widths.right,
             borderRight:
               activePane === "builder"
-                ? "3px solid var(--steel-blue)"
+                ? "3px solid #82323C"
                 : "3px solid transparent",
             overflow: "hidden",
           }}
