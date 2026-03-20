@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Nav } from "../components/layout/nav";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /**
  * BuilderBlue².com rendered in QTEraType with exact brand specs
@@ -43,6 +43,28 @@ const STAGED_FILES = [
   { path: "src/components/Analytics.tsx", lines: "+156", status: "pending" as const },
 ];
 
+const FILE_TREE = [
+  { name: "src/", indent: 0, type: "folder" as const },
+  { name: "components/", indent: 1, type: "folder" as const },
+  { name: "Dashboard.tsx", indent: 2, type: "file" as const },
+  { name: "Analytics.tsx", indent: 2, type: "file" as const },
+  { name: "Sidebar.tsx", indent: 2, type: "file" as const },
+  { name: "lib/", indent: 1, type: "folder" as const },
+  { name: "auth.ts", indent: 2, type: "file" as const },
+  { name: "api/", indent: 1, type: "folder" as const },
+  { name: "billing.ts", indent: 2, type: "file" as const },
+  { name: "routes.ts", indent: 2, type: "file" as const },
+  { name: "package.json", indent: 0, type: "file" as const },
+  { name: "tsconfig.json", indent: 0, type: "file" as const },
+];
+
+const GIT_LOG = [
+  { hash: "a3f8d21", msg: "Add Dashboard component with metrics grid", time: "2m ago" },
+  { hash: "b7e1c44", msg: "Implement JWT auth with refresh tokens", time: "4m ago" },
+  { hash: "c9d2e55", msg: "Wire Stripe billing webhooks", time: "5m ago" },
+  { hash: "d1a3f66", msg: "Initial project scaffold", time: "8m ago" },
+];
+
 function useTypingEffect(messages: { role: string; text: string }[], delay: number) {
   const [visibleCount, setVisibleCount] = useState(0);
   const [currentText, setCurrentText] = useState("");
@@ -72,10 +94,67 @@ function useTypingEffect(messages: { role: string; text: string }[], delay: numb
   return { visibleCount, currentText, isTyping };
 }
 
+/* ── Mouse parallax hook ───────────────────────────────────────────── */
+function useMouseParallax(ref: React.RefObject<HTMLDivElement | null>, intensity = 8) {
+  const [transform, setTransform] = useState("rotateX(3deg) rotateY(0deg)");
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const handleMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const rotateY = ((e.clientX - centerX) / rect.width) * intensity;
+      const rotateX = ((centerY - e.clientY) / rect.height) * intensity + 2;
+      setTransform(`rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
+    };
+
+    const handleLeave = () => {
+      setTransform("rotateX(3deg) rotateY(0deg)");
+    };
+
+    el.addEventListener("mousemove", handleMove);
+    el.addEventListener("mouseleave", handleLeave);
+    return () => {
+      el.removeEventListener("mousemove", handleMove);
+      el.removeEventListener("mouseleave", handleLeave);
+    };
+  }, [ref, intensity]);
+
+  return transform;
+}
+
+/* ── Scroll fade-in hook ───────────────────────────────────────────── */
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, visible };
+}
+
+type RightTab = "staging" | "files" | "preview" | "git";
+
 export default function Landing() {
   const arch = useTypingEffect(ARCHITECT_MESSAGES, 1200);
   const build = useTypingEffect(BUILDER_MESSAGES, 800);
   const [stagedVisible, setStagedVisible] = useState(0);
+  const [rightTab, setRightTab] = useState<RightTab>("staging");
+  const demoRef = useRef<HTMLDivElement>(null);
+  const demoTransform = useMouseParallax(demoRef, 6);
+  const tagline = useScrollReveal();
 
   // Reveal staged files progressively
   useEffect(() => {
@@ -83,6 +162,18 @@ export default function Landing() {
     const timer = setTimeout(() => setStagedVisible((c) => c + 1), 2500);
     return () => clearTimeout(timer);
   }, [stagedVisible]);
+
+  const rightTabStyle = (active: boolean) => ({
+    fontFamily: "var(--font-runway)",
+    fontSize: "9px",
+    color: active ? "#FFF5ED" : "#09080E",
+    background: active ? "#14287D" : "transparent",
+    border: "none",
+    borderRadius: "3px",
+    padding: "2px 6px",
+    cursor: "pointer" as const,
+    transition: "all 0.15s",
+  });
 
   return (
     <div className="min-h-screen" style={{ background: "#FFF5ED" }}>
@@ -150,20 +241,25 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* ── Live IDE Demo ─────────────────────────────────────────────── */}
-      <div className="mx-auto max-w-7xl px-4 pb-20" style={{ perspective: "1200px" }}>
+      {/* ── Live IDE Demo (3D) ──────────────────────────────────────── */}
+      <div className="mx-auto max-w-7xl px-4 pb-20" style={{ perspective: "1400px" }}>
         <div
+          ref={demoRef}
           className="overflow-hidden rounded-xl"
           style={{
             border: "1px solid rgba(9,8,14,0.12)",
-            boxShadow: "0 30px 80px rgba(9, 8, 14, 0.15), 0 8px 30px rgba(9, 8, 14, 0.08), 0 0 0 1px rgba(9,8,14,0.04)",
+            boxShadow:
+              "0 60px 120px rgba(9, 8, 14, 0.2), " +
+              "0 30px 60px rgba(9, 8, 14, 0.12), " +
+              "0 12px 24px rgba(9, 8, 14, 0.08), " +
+              "0 0 0 1px rgba(9,8,14,0.04), " +
+              "0 80px 100px -20px rgba(20, 40, 125, 0.08)",
             background: "#FFF5ED",
-            transform: "rotateX(2deg)",
-            transformOrigin: "center bottom",
-            transition: "transform 0.4s ease",
+            transform: demoTransform,
+            transformOrigin: "center center",
+            transition: "transform 0.15s ease-out",
+            transformStyle: "preserve-3d",
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "rotateX(0deg)"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "rotateX(2deg)"; }}
         >
           {/* Window chrome */}
           <div className="flex items-center gap-2 px-4 py-2.5" style={{ background: "rgba(9,8,14,0.03)", borderBottom: "1px solid rgba(9,8,14,0.08)" }}>
@@ -178,12 +274,12 @@ export default function Landing() {
           </div>
 
           {/* Three columns */}
-          <div className="flex" style={{ height: "420px" }}>
+          <div className="flex" style={{ height: "440px" }}>
 
             {/* ── LEFT: Architect ──────────────────────────────────────── */}
             <div className="flex flex-col" style={{ flex: "1 1 0%", background: "#FFF5ED", borderRight: "1px solid rgba(9,8,14,0.08)" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.06)" }}>
-                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#064A6C", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#3E806B", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Architect
                 </span>
                 <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "var(--steel-blue)" }}>Claude Opus 4</span>
@@ -197,8 +293,8 @@ export default function Landing() {
                         fontFamily: "var(--font-architect)",
                         fontSize: "12px",
                         lineHeight: 1.5,
-                        color: msg.role === "user" ? "#FFF5ED" : "var(--triad-black)",
-                        background: msg.role === "user" ? "var(--steel-blue)" : "white",
+                        color: msg.role === "user" ? "#FFF5ED" : "#09080E",
+                        background: msg.role === "user" ? "#3E806B" : "white",
                         borderRadius: msg.role === "user" ? "10px 10px 2px 10px" : "10px 10px 10px 2px",
                       }}
                     >
@@ -207,25 +303,24 @@ export default function Landing() {
                   </div>
                 ))}
                 {arch.isTyping && arch.visibleCount < ARCHITECT_MESSAGES.length && (
-                  <div className="max-w-[90%]">
+                  <div className={`max-w-[90%] ${ARCHITECT_MESSAGES[arch.visibleCount].role === "user" ? "ml-auto" : ""}`}>
                     <div
                       className="rounded-xl px-3 py-2"
                       style={{
                         fontFamily: "var(--font-architect)",
                         fontSize: "12px",
                         lineHeight: 1.5,
-                        color: ARCHITECT_MESSAGES[arch.visibleCount].role === "user" ? "#FFF5ED" : "var(--triad-black)",
-                        background: ARCHITECT_MESSAGES[arch.visibleCount].role === "user" ? "var(--steel-blue)" : "white",
+                        color: ARCHITECT_MESSAGES[arch.visibleCount].role === "user" ? "#FFF5ED" : "#09080E",
+                        background: ARCHITECT_MESSAGES[arch.visibleCount].role === "user" ? "#3E806B" : "white",
                         borderRadius: "10px 10px 10px 2px",
                       }}
                     >
                       {arch.currentText}
-                      <span className="inline-block w-0.5 h-3 ml-0.5 animate-pulse" style={{ background: "var(--deep-blue)" }} />
+                      <span className="inline-block w-0.5 h-3 ml-0.5 animate-pulse" style={{ background: "#3E806B" }} />
                     </div>
                   </div>
                 )}
               </div>
-              {/* Handoff indicator */}
               <div className="px-3 pb-3">
                 <div
                   className="rounded py-1.5 text-center"
@@ -234,7 +329,7 @@ export default function Landing() {
                     fontSize: "11px",
                     fontWeight: 700,
                     color: "#FFF5ED",
-                    background: "var(--steel-blue)",
+                    background: "#3E806B",
                     opacity: arch.visibleCount >= 3 ? 1 : 0.3,
                     transition: "opacity 0.5s",
                   }}
@@ -247,7 +342,7 @@ export default function Landing() {
             {/* ── CENTER: Builder ──────────────────────────────────────── */}
             <div className="flex flex-col" style={{ flex: "1 1 0%", background: "#FFF5ED", borderRight: "1px solid rgba(9,8,14,0.08)" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.06)" }}>
-                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "var(--triad-black)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#82323C", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Builder
                 </span>
                 <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "var(--steel-blue)" }}>Claude Opus 4</span>
@@ -261,8 +356,8 @@ export default function Landing() {
                         fontFamily: "var(--font-builder)",
                         fontSize: "12px",
                         lineHeight: 1.5,
-                        color: msg.role === "system" ? "var(--steel-blue)" : "var(--triad-black)",
-                        background: msg.role === "system" ? "rgba(31,88,130,0.08)" : "white",
+                        color: msg.role === "system" ? "#82323C" : "#09080E",
+                        background: msg.role === "system" ? "rgba(130,50,60,0.06)" : "white",
                         borderRadius: "10px 10px 10px 2px",
                         fontStyle: msg.role === "system" ? "italic" : "normal",
                       }}
@@ -279,18 +374,17 @@ export default function Landing() {
                         fontFamily: "var(--font-builder)",
                         fontSize: "12px",
                         lineHeight: 1.5,
-                        color: "var(--triad-black)",
+                        color: "#09080E",
                         background: "white",
                         borderRadius: "10px 10px 10px 2px",
                       }}
                     >
                       {build.currentText}
-                      <span className="inline-block w-0.5 h-3 ml-0.5 animate-pulse" style={{ background: "var(--triad-black)" }} />
+                      <span className="inline-block w-0.5 h-3 ml-0.5 animate-pulse" style={{ background: "#82323C" }} />
                     </div>
                   </div>
                 )}
               </div>
-              {/* Staged indicator */}
               <div className="px-3 pb-3">
                 <div
                   className="rounded py-1.5 text-center"
@@ -299,7 +393,7 @@ export default function Landing() {
                     fontSize: "11px",
                     fontWeight: 700,
                     color: "#FFF5ED",
-                    background: "var(--deep-blue)",
+                    background: "#82323C",
                     opacity: build.visibleCount >= 2 ? 1 : 0.3,
                     transition: "opacity 0.5s",
                   }}
@@ -309,55 +403,130 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* ── RIGHT: Visual / Files / Preview ─────────────────────── */}
+            {/* ── RIGHT: Staging Runway (with interactive tabs) ─────── */}
             <div className="flex flex-col" style={{ flex: "1.2 1 0%", background: "#FFF5ED" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.08)" }}>
-                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#82323C", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#14287D", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Staging Runway
                 </span>
-                <div className="flex gap-2">
-                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#09080E", opacity: 0.5 }}>Files</span>
-                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#09080E", opacity: 0.5 }}>Preview</span>
-                  <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "#09080E", opacity: 0.5 }}>Git</span>
+                <div className="flex gap-1">
+                  <button onClick={() => setRightTab("staging")} style={rightTabStyle(rightTab === "staging")}>Staging</button>
+                  <button onClick={() => setRightTab("files")} style={rightTabStyle(rightTab === "files")}>Files</button>
+                  <button onClick={() => setRightTab("preview")} style={rightTabStyle(rightTab === "preview")}>Preview</button>
+                  <button onClick={() => setRightTab("git")} style={rightTabStyle(rightTab === "git")}>Git</button>
                 </div>
               </div>
               <div className="flex-1 overflow-hidden p-3 space-y-2">
-                {STAGED_FILES.slice(0, stagedVisible).map((file, i) => (
-                  <div
-                    key={i}
-                    className="rounded-md px-3 py-2"
-                    style={{
-                      background: "rgba(9, 8, 14, 0.04)",
-                      borderLeft: `3px solid ${file.status === "approved" ? "#008060" : file.status === "reviewing" ? "#D4A843" : "var(--steel-blue)"}`,
-                      animation: "fadeSlideIn 0.4s ease-out",
-                    }}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "var(--triad-black)" }}>
-                        {file.path}
-                      </span>
-                      <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: file.status === "approved" ? "#008060" : file.status === "reviewing" ? "#D4A843" : "var(--steel-blue)", textTransform: "uppercase", fontWeight: 600 }}>
-                        {file.status === "reviewing" ? "Architect reviewing..." : file.status}
-                      </span>
-                    </div>
-                    <span style={{ fontFamily: "var(--font-runway)", fontSize: "10px", color: "#008060" }}>{file.lines}</span>
+
+                {/* Staging tab */}
+                {rightTab === "staging" && (
+                  <>
+                    {STAGED_FILES.slice(0, stagedVisible).map((file, i) => (
+                      <div
+                        key={i}
+                        className="rounded-md px-3 py-2 staged-card-enter"
+                        style={{
+                          background: "rgba(9, 8, 14, 0.04)",
+                          borderLeft: `3px solid ${file.status === "approved" ? "#008060" : file.status === "reviewing" ? "#D4A843" : "#14287D"}`,
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "#09080E" }}>
+                            {file.path}
+                          </span>
+                          <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: file.status === "approved" ? "#008060" : file.status === "reviewing" ? "#D4A843" : "#14287D", textTransform: "uppercase", fontWeight: 600 }}>
+                            {file.status === "reviewing" ? "Architect reviewing..." : file.status}
+                          </span>
+                        </div>
+                        <span style={{ fontFamily: "var(--font-runway)", fontSize: "10px", color: "#008060" }}>{file.lines}</span>
+                      </div>
+                    ))}
+                    {stagedVisible >= STAGED_FILES.length && (
+                      <div
+                        className="mt-4 rounded-md px-3 py-2 text-center staged-card-enter"
+                        style={{
+                          background: "rgba(0, 128, 96, 0.1)",
+                          border: "1px solid rgba(0, 128, 96, 0.2)",
+                        }}
+                      >
+                        <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "#008060", fontWeight: 600 }}>
+                          First try. Just like the last 3,422,435 times. ;-)
+                        </span>
+                      </div>
+                    )}
+                  </>
+                )}
+
+                {/* Files tab */}
+                {rightTab === "files" && (
+                  <div>
+                    {FILE_TREE.map((item, i) => (
+                      <div
+                        key={i}
+                        className="flex items-center gap-1.5 py-0.5"
+                        style={{ paddingLeft: `${item.indent * 16 + 4}px` }}
+                      >
+                        <span style={{ fontSize: "11px" }}>{item.type === "folder" ? "📁" : "📄"}</span>
+                        <span style={{
+                          fontFamily: "var(--font-runway)",
+                          fontSize: "11px",
+                          color: "#09080E",
+                          fontWeight: item.type === "folder" ? 600 : 400,
+                        }}>
+                          {item.name}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-                {stagedVisible >= STAGED_FILES.length && (
-                  <div
-                    className="mt-4 rounded-md px-3 py-2 text-center"
-                    style={{
-                      background: "rgba(0, 128, 96, 0.15)",
-                      border: "1px solid rgba(0, 128, 96, 0.3)",
-                      animation: "fadeSlideIn 0.4s ease-out",
-                    }}
-                  >
-                    <span style={{ fontFamily: "var(--font-runway)", fontSize: "11px", color: "#008060", fontWeight: 600 }}>
-                      First try. Just like the last 3,422,435 times. ;-)
-                    </span>
+                )}
+
+                {/* Preview tab */}
+                {rightTab === "preview" && (
+                  <div className="flex h-full flex-col items-center justify-center">
+                    <div
+                      className="w-full rounded-lg overflow-hidden"
+                      style={{ border: "1px solid rgba(9,8,14,0.08)", background: "white" }}
+                    >
+                      <div className="flex items-center gap-1.5 px-3 py-1.5" style={{ background: "rgba(9,8,14,0.03)", borderBottom: "1px solid rgba(9,8,14,0.06)" }}>
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#FF5F57" }} />
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#FEBD2E" }} />
+                        <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#27C840" }} />
+                        <span style={{ fontFamily: "var(--font-runway)", fontSize: "8px", color: "var(--steel-blue)", marginLeft: "6px" }}>localhost:3000</span>
+                      </div>
+                      <div className="p-4">
+                        <div style={{ fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: "bold", color: "#09080E", marginBottom: "8px" }}>Dashboard</div>
+                        <div className="flex gap-3 mb-3">
+                          {[{ label: "Users", val: "1,247" }, { label: "Revenue", val: "$34.2k" }, { label: "Active", val: "89%" }].map((m, i) => (
+                            <div key={i} className="flex-1 rounded-md p-2" style={{ background: "rgba(9,8,14,0.03)" }}>
+                              <div style={{ fontFamily: "var(--font-content)", fontSize: "9px", color: "var(--steel-blue)" }}>{m.label}</div>
+                              <div style={{ fontFamily: "var(--font-heading)", fontSize: "14px", fontWeight: "bold", color: "#09080E" }}>{m.val}</div>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="rounded-md" style={{ height: "60px", background: "linear-gradient(135deg, rgba(62,128,107,0.1), rgba(20,40,125,0.1))" }} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Git tab */}
+                {rightTab === "git" && (
+                  <div className="space-y-1.5">
+                    <div className="mb-2 flex items-center gap-2">
+                      <span className="rounded px-1.5 py-0.5" style={{ fontFamily: "var(--font-runway)", fontSize: "10px", fontWeight: 600, color: "#FFF5ED", background: "#14287D" }}>main</span>
+                      <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "var(--steel-blue)" }}>4 commits</span>
+                    </div>
+                    {GIT_LOG.map((c, i) => (
+                      <div key={i} className="flex items-start gap-2 rounded px-2 py-1.5" style={{ background: "rgba(9,8,14,0.03)" }}>
+                        <span style={{ fontFamily: "var(--font-runway)", fontSize: "10px", color: "#14287D", fontWeight: 600, flexShrink: 0 }}>{c.hash}</span>
+                        <span style={{ fontFamily: "var(--font-runway)", fontSize: "10px", color: "#09080E", flex: 1 }}>{c.msg}</span>
+                        <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "var(--steel-blue)", flexShrink: 0 }}>{c.time}</span>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
+
               {/* Commit button */}
               <div className="px-3 pb-3">
                 <div
@@ -367,7 +536,7 @@ export default function Landing() {
                     fontSize: "12px",
                     fontWeight: 700,
                     color: "#FFF5ED",
-                    background: stagedVisible >= 3 ? "#008060" : "rgba(0,128,96,0.3)",
+                    background: stagedVisible >= 3 ? "#14287D" : "rgba(20,40,125,0.3)",
                     transition: "all 0.5s",
                     letterSpacing: "0.03em",
                   }}
@@ -378,15 +547,35 @@ export default function Landing() {
             </div>
           </div>
         </div>
+
+        {/* Floor shadow / reflection */}
+        <div
+          className="mx-auto"
+          style={{
+            width: "85%",
+            height: "40px",
+            marginTop: "-8px",
+            background: "radial-gradient(ellipse at center, rgba(9,8,14,0.08) 0%, transparent 70%)",
+            filter: "blur(8px)",
+          }}
+        />
       </div>
 
-      {/* ── One line. That's it. ───────────────────────────────────────── */}
-      <div className="mx-auto max-w-3xl px-4 pb-20 text-center">
+      {/* ── Tagline (scroll reveal) ──────────────────────────────────── */}
+      <div
+        ref={tagline.ref}
+        className="mx-auto max-w-3xl px-4 pb-20 text-center"
+        style={{
+          opacity: tagline.visible ? 1 : 0,
+          transform: tagline.visible ? "translateY(0)" : "translateY(30px)",
+          transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}
+      >
         <p style={{ fontFamily: "var(--font-content)", fontSize: "20px", color: "var(--steel-blue)", lineHeight: 1.8 }}>
-          <strong style={{ color: "var(--triad-black)" }}>Architect</strong> plans it.{" "}
-          <strong style={{ color: "var(--triad-black)" }}>Builder</strong> codes it.{" "}
-          <strong style={{ color: "var(--triad-black)" }}>You</strong> approve it.{" "}
-          <span style={{ color: "#A67C4B" }}>The Runway ships it.</span>
+          <strong style={{ color: "#3E806B" }}>Architect</strong> plans it.{" "}
+          <strong style={{ color: "#82323C" }}>Builder</strong> codes it.{" "}
+          <strong style={{ color: "#09080E" }}>You</strong> approve it.{" "}
+          <span style={{ color: "#14287D", fontWeight: 600 }}>The Runway ships it.</span>
         </p>
       </div>
 
@@ -407,6 +596,9 @@ export default function Landing() {
         @keyframes fadeSlideIn {
           from { opacity: 0; transform: translateX(-12px); }
           to { opacity: 1; transform: translateX(0); }
+        }
+        .staged-card-enter {
+          animation: fadeSlideIn 0.4s ease-out;
         }
       `}</style>
     </div>
