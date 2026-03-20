@@ -64,17 +64,17 @@ export function IDEShell({
       case "focus-build":
         setShowArchitect(false);
         setShowBuilder(true);
-        setShowRunway(true);
+        setShowRunway(true);  // Builder + Runway
         break;
       case "focus-plan":
         setShowArchitect(true);
         setShowBuilder(false);
-        setShowRunway(true);
+        setShowRunway(true);  // Architect + Runway
         break;
       case "focus-review":
         setShowArchitect(false);
         setShowBuilder(false);
-        setShowRunway(true);
+        setShowRunway(true);  // Runway only (full width review)
         break;
     }
   }, []);
@@ -107,20 +107,20 @@ export function IDEShell({
     builderConvo.loadConversations(projectId);
   }, [projectId]);
 
-  // Width calculations based on visible panels
+  // Width calculations: left=Architect, center=Builder, right=Runway
   const getWidths = () => {
-    const visible = [showArchitect, showRunway, showBuilder].filter(Boolean).length;
+    const visible = [showArchitect, showBuilder, showRunway].filter(Boolean).length;
     if (visible === 3) {
-      if (activePane === "architect") return { left: "35%", center: "40%", right: "25%" };
+      if (activePane === "architect") return { left: "35%", center: "30%", right: "35%" };
       if (activePane === "builder") return { left: "25%", center: "40%", right: "35%" };
-      return { left: "30%", center: "40%", right: "30%" };
+      return { left: "30%", center: "30%", right: "40%" };
     }
     if (visible === 2) {
-      if (showArchitect && showRunway) return { left: "40%", center: "60%", right: "0%" };
-      if (showBuilder && showRunway) return { left: "0%", center: "60%", right: "40%" };
-      if (showArchitect && showBuilder) return { left: "50%", center: "0%", right: "50%" };
+      if (showArchitect && showBuilder) return { left: "50%", center: "50%", right: "0%" };
+      if (showArchitect && showRunway) return { left: "40%", center: "0%", right: "60%" };
+      if (showBuilder && showRunway) return { left: "0%", center: "40%", right: "60%" };
     }
-    return { left: showArchitect ? "100%" : "0%", center: showRunway ? "100%" : "0%", right: showBuilder ? "100%" : "0%" };
+    return { left: showArchitect ? "100%" : "0%", center: showBuilder ? "100%" : "0%", right: showRunway ? "100%" : "0%" };
   };
 
   const widths = getWidths();
@@ -310,9 +310,9 @@ export function IDEShell({
         </div>
       </div>
 
-      {/* Three panel layout */}
+      {/* Three panel layout: Architect | Builder | Staging Runway */}
       <div className="flex flex-1 overflow-hidden" style={{ flexDirection: reversed ? "row-reverse" : "row" }}>
-        {/* Architect pane + TODO panel */}
+        {/* LEFT: Architect + TODO panel */}
         {showArchitect && (
         <div
           className={`ide-pane flex ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
@@ -345,37 +345,14 @@ export function IDEShell({
         </div>
         )}
 
-        {/* Center runway */}
-        {showRunway && (
-        <div style={{ width: widths.center, transition: "width 0.3s ease" }} className="ide-pane ide-pane-active">
-          <CenterPanel
-            projectId={projectId}
-            projectName={projectName}
-            branch={branch}
-            repoName={repoName}
-            files={files}
-            stagedChanges={staging.changes}
-            newStagedIds={newStagedIds}
-            onApproveChange={staging.approveChange}
-            onRejectChange={staging.rejectChange}
-            onApproveAll={() => staging.approveAll(projectId)}
-            onCommit={handleCommit}
-            onSaveAsProposal={handleSaveAsProposal}
-            onRetryReview={staging.retryReview}
-          />
-        </div>
-        )}
-
-        {/* Builder pane */}
+        {/* CENTER: Builder */}
         {showBuilder && (
         <div
           className={`ide-pane ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
           style={{
-            width: widths.right,
-            borderRight:
-              activePane === "builder"
-                ? "3px solid #82323C"
-                : "3px solid transparent",
+            width: widths.center,
+            borderLeft: "1px solid rgba(9,8,14,0.08)",
+            borderRight: "1px solid rgba(9,8,14,0.08)",
             overflow: "hidden",
             transition: "width 0.3s ease",
           }}
@@ -397,6 +374,37 @@ export function IDEShell({
           />
         </div>
         )}
+
+        {/* RIGHT: Staging Runway (with Files, Preview, Git tabs) */}
+        {showRunway && (
+        <div
+          style={{
+            width: widths.right,
+            transition: "width 0.3s ease",
+            borderRight:
+              activePane === "builder"
+                ? "3px solid #14287D"
+                : "3px solid transparent",
+          }}
+          className="ide-pane ide-pane-active"
+        >
+          <CenterPanel
+            projectId={projectId}
+            projectName={projectName}
+            branch={branch}
+            repoName={repoName}
+            files={files}
+            stagedChanges={staging.changes}
+            newStagedIds={newStagedIds}
+            onApproveChange={staging.approveChange}
+            onRejectChange={staging.rejectChange}
+            onApproveAll={() => staging.approveAll(projectId)}
+            onCommit={handleCommit}
+            onSaveAsProposal={handleSaveAsProposal}
+            onRetryReview={staging.retryReview}
+          />
+        </div>
+        )}
       </div>
 
       {/* Handoff animation overlay */}
@@ -405,7 +413,7 @@ export function IDEShell({
           style={{
             position: "fixed",
             top: "50%",
-            left: handoffDirection === "to-builder" ? "30%" : "70%",
+            left: handoffDirection === "to-builder" ? "45%" : "15%",
             transform: "translate(-50%, -50%)",
             zIndex: 100,
             pointerEvents: "none",
