@@ -82,7 +82,7 @@ export function ArchitectPane({
             fontFamily: "var(--font-label)",
             fontWeight: "bold",
             fontSize: "13px",
-            color: "#064A6C",
+            color: "#3E806B",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
           }}
@@ -208,8 +208,8 @@ export function ArchitectPane({
             disabled={isStreaming || !input.trim()}
             className="flex h-9 w-9 items-center justify-center rounded-md"
             style={{
-              background: "var(--steel-blue)",
-              color: "var(--cream)",
+              background: "#3E806B",
+              color: "#FFF5ED",
               border: "none",
               cursor: isStreaming ? "not-allowed" : "pointer",
               opacity: isStreaming || !input.trim() ? 0.5 : 1,
@@ -244,8 +244,8 @@ export function ArchitectPane({
             fontFamily: "var(--font-architect)",
             fontWeight: "bold",
             fontSize: "12px",
-            background: "var(--steel-blue)",
-            color: "var(--cream)",
+            background: "#3E806B",
+            color: "#FFF5ED",
             border: "none",
             cursor: "pointer",
           }}

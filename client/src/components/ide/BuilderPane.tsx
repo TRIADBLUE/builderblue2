@@ -260,8 +260,8 @@ export function BuilderPane({
             disabled={isStreaming || !inputValue.trim()}
             className="flex h-9 w-9 items-center justify-center rounded-md"
             style={{
-              background: "var(--steel-blue)",
-              color: "var(--cream)",
+              background: "#82323C",
+              color: "#FFF5ED",
               border: "none",
               cursor: isStreaming ? "not-allowed" : "pointer",
               opacity: isStreaming || !inputValue.trim() ? 0.5 : 1,
@@ -296,8 +296,8 @@ export function BuilderPane({
             fontFamily: "var(--font-builder)",
             fontWeight: 600,
             fontSize: "12px",
-            background: "var(--steel-blue)",
-            color: "var(--cream)",
+            background: "#82323C",
+            color: "#FFF5ED",
             border: "none",
             cursor: "pointer",
           }}
