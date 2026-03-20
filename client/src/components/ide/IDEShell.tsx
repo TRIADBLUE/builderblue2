@@ -42,6 +42,42 @@ export function IDEShell({
   const [activePane, setActivePane] = useState<ActivePane>(null);
   const [flashPane, setFlashPane] = useState<"architect" | "builder" | null>(null);
 
+  // Layout customization
+  type LayoutPreset = "full" | "focus-build" | "focus-plan" | "focus-review";
+  const [layoutPreset, setLayoutPreset] = useState<LayoutPreset>("full");
+  const [showArchitect, setShowArchitect] = useState(true);
+  const [showBuilder, setShowBuilder] = useState(true);
+  const [showRunway, setShowRunway] = useState(true);
+  const [showLayoutMenu, setShowLayoutMenu] = useState(false);
+  const [reversed, setReversed] = useState(false);
+
+  // Apply layout presets
+  const applyPreset = useCallback((preset: LayoutPreset) => {
+    setLayoutPreset(preset);
+    switch (preset) {
+      case "full":
+        setShowArchitect(true);
+        setShowBuilder(true);
+        setShowRunway(true);
+        break;
+      case "focus-build":
+        setShowArchitect(false);
+        setShowBuilder(true);
+        setShowRunway(true);
+        break;
+      case "focus-plan":
+        setShowArchitect(true);
+        setShowBuilder(false);
+        setShowRunway(true);
+        break;
+      case "focus-review":
+        setShowArchitect(false);
+        setShowBuilder(false);
+        setShowRunway(true);
+        break;
+    }
+  }, []);
+
   // Architect conversation
   const architectConvo = useConversation();
   const [architectProvider, setArchitectProvider] = useState<AIProvider>("claude");
@@ -70,11 +106,20 @@ export function IDEShell({
     builderConvo.loadConversations(projectId);
   }, [projectId]);
 
-  // Width calculations based on active pane
+  // Width calculations based on visible panels
   const getWidths = () => {
-    if (activePane === "architect") return { left: "35%", center: "40%", right: "25%" };
-    if (activePane === "builder") return { left: "25%", center: "40%", right: "35%" };
-    return { left: "30%", center: "40%", right: "30%" };
+    const visible = [showArchitect, showRunway, showBuilder].filter(Boolean).length;
+    if (visible === 3) {
+      if (activePane === "architect") return { left: "35%", center: "40%", right: "25%" };
+      if (activePane === "builder") return { left: "25%", center: "40%", right: "35%" };
+      return { left: "30%", center: "40%", right: "30%" };
+    }
+    if (visible === 2) {
+      if (showArchitect && showRunway) return { left: "40%", center: "60%", right: "0%" };
+      if (showBuilder && showRunway) return { left: "0%", center: "60%", right: "40%" };
+      if (showArchitect && showBuilder) return { left: "50%", center: "0%", right: "50%" };
+    }
+    return { left: showArchitect ? "100%" : "0%", center: showRunway ? "100%" : "0%", right: showBuilder ? "100%" : "0%" };
   };
 
   const widths = getWidths();
@@ -189,9 +234,85 @@ export function IDEShell({
       {/* Compute warning */}
       <ComputeWarningBanner status={computeStatus} />
 
+      {/* Layout controls bar */}
+      <div className="flex items-center justify-between px-3 py-1" style={{ background: "#FFF5ED", borderBottom: "1px solid rgba(9,8,14,0.06)", minHeight: "28px" }}>
+        <div className="flex items-center gap-2">
+          {/* Panel toggles */}
+          {[
+            { key: "architect" as const, label: "Architect", color: "#3E806B", visible: showArchitect, toggle: setShowArchitect },
+            { key: "runway" as const, label: "Runway", color: "#14287D", visible: showRunway, toggle: setShowRunway },
+            { key: "builder" as const, label: "Builder", color: "#82323C", visible: showBuilder, toggle: setShowBuilder },
+          ].map((p) => (
+            <button
+              key={p.key}
+              onClick={() => p.toggle(!p.visible)}
+              style={{
+                fontFamily: "var(--font-label)",
+                fontSize: "9px",
+                fontWeight: 600,
+                color: p.visible ? "#FFF5ED" : p.color,
+                background: p.visible ? p.color : "transparent",
+                border: `1px solid ${p.color}`,
+                borderRadius: "4px",
+                padding: "2px 8px",
+                cursor: "pointer",
+                textTransform: "uppercase",
+                letterSpacing: "0.05em",
+                transition: "all 0.15s",
+              }}
+            >
+              {p.label}
+            </button>
+          ))}
+          <button
+            onClick={() => setReversed(!reversed)}
+            style={{
+              fontFamily: "var(--font-runway)",
+              fontSize: "9px",
+              color: "var(--steel-blue)",
+              background: "transparent",
+              border: "1px solid rgba(9,8,14,0.1)",
+              borderRadius: "4px",
+              padding: "2px 8px",
+              cursor: "pointer",
+            }}
+          >
+            {reversed ? "⇄ Reversed" : "⇄ Reverse"}
+          </button>
+        </div>
+        <div className="flex items-center gap-1">
+          {/* Layout presets */}
+          {([
+            { key: "full" as LayoutPreset, label: "Full IDE" },
+            { key: "focus-build" as LayoutPreset, label: "Build" },
+            { key: "focus-plan" as LayoutPreset, label: "Plan" },
+            { key: "focus-review" as LayoutPreset, label: "Review" },
+          ]).map((p) => (
+            <button
+              key={p.key}
+              onClick={() => applyPreset(p.key)}
+              style={{
+                fontFamily: "var(--font-runway)",
+                fontSize: "9px",
+                color: layoutPreset === p.key ? "#FFF5ED" : "var(--steel-blue)",
+                background: layoutPreset === p.key ? "var(--steel-blue)" : "transparent",
+                border: "none",
+                borderRadius: "3px",
+                padding: "2px 8px",
+                cursor: "pointer",
+                transition: "all 0.15s",
+              }}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Three panel layout */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden" style={{ flexDirection: reversed ? "row-reverse" : "row" }}>
         {/* Architect pane */}
+        {showArchitect && (
         <div
           className={`ide-pane ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
           style={{
@@ -201,6 +322,7 @@ export function IDEShell({
                 ? "3px solid #3E806B"
                 : "3px solid transparent",
             overflow: "hidden",
+            transition: "width 0.3s ease",
           }}
         >
           <ArchitectPane
@@ -217,9 +339,11 @@ export function IDEShell({
             onFocus={() => setActivePane("architect")}
           />
         </div>
+        )}
 
         {/* Center runway */}
-        <div style={{ width: widths.center }} className="ide-pane ide-pane-active">
+        {showRunway && (
+        <div style={{ width: widths.center, transition: "width 0.3s ease" }} className="ide-pane ide-pane-active">
           <CenterPanel
             projectId={projectId}
             projectName={projectName}
@@ -236,8 +360,10 @@ export function IDEShell({
             onRetryReview={staging.retryReview}
           />
         </div>
+        )}
 
         {/* Builder pane */}
+        {showBuilder && (
         <div
           className={`ide-pane ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
           style={{
@@ -247,6 +373,7 @@ export function IDEShell({
                 ? "3px solid #82323C"
                 : "3px solid transparent",
             overflow: "hidden",
+            transition: "width 0.3s ease",
           }}
         >
           <BuilderPane
@@ -265,6 +392,7 @@ export function IDEShell({
             onInputChange={setBuilderInput}
           />
         </div>
+        )}
       </div>
 
       {/* Handoff animation overlay */}
