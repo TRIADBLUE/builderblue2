@@ -188,8 +188,8 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
             setNewVal("");
           }}
           style={{
-            background: "var(--steel-blue)",
-            color: "var(--triad-black)",
+            background: "#14287D",
+            color: "#FFF5ED",
             border: "none",
             borderRadius: "4px",
             padding: "4px 10px",
@@ -242,7 +242,7 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
       <div className="flex-1 overflow-y-auto p-4">
         {renderSection("Fonts", "🔤", "fonts", newFontKey, setNewFontKey, newFontVal, setNewFontVal, ["Name (e.g. Heading)", "Value (e.g. QTEraType)"])}
         {renderSection("Colors", "🎨", "colors", newColorKey, setNewColorKey, newColorVal, setNewColorVal, ["Name (e.g. Primary)", "Value (e.g. #1A3D8F)"])}
-        {renderSection("Spacing", "📏", "spacing", newSpaceKey, setNewSpaceKey, newSpaceVal, setNewSpaceVal, ["Name (e.g. Section Gap)", "Value (e.g. 32px)"])}
+        {renderSection("Layout & Sizing", "📏", "spacing", newSpaceKey, setNewSpaceKey, newSpaceVal, setNewSpaceVal, ["Element (e.g. Button Padding)", "Size (e.g. 12px 24px)"])}
 
         {/* Components */}
         <div className="mb-4">

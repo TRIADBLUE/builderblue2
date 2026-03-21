@@ -293,7 +293,7 @@ export default function Landing() {
                         fontFamily: "var(--font-architect)",
                         fontSize: "12px",
                         lineHeight: 1.5,
-                        color: msg.role === "user" ? "#FFF5ED" : "#09080E",
+                        color: msg.role === "user" ? "#E9ECF0" : "#09080E",
                         background: msg.role === "user" ? "#3E806B" : "white",
                         borderRadius: msg.role === "user" ? "10px 10px 2px 10px" : "10px 10px 10px 2px",
                       }}
@@ -328,7 +328,7 @@ export default function Landing() {
                     fontFamily: "var(--font-architect)",
                     fontSize: "11px",
                     fontWeight: 700,
-                    color: "#FFF5ED",
+                    color: "#E9ECF0",
                     background: "#3E806B",
                     opacity: arch.visibleCount >= 3 ? 1 : 0.3,
                     transition: "opacity 0.5s",

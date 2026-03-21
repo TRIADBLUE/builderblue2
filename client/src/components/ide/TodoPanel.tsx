@@ -119,7 +119,7 @@ export function TodoPanel({ projectId }: TodoPanelProps) {
             disabled={!newContent.trim()}
             style={{
               background: newContent.trim() ? "#3E806B" : "rgba(62,128,107,0.3)",
-              color: "#FFF5ED",
+              color: "#E9ECF0",
               border: "none",
               borderRadius: "4px",
               padding: "4px 8px",

@@ -209,7 +209,7 @@ export function ArchitectPane({
             className="flex h-9 w-9 items-center justify-center rounded-md"
             style={{
               background: "#3E806B",
-              color: "#FFF5ED",
+              color: "#E9ECF0",
               border: "none",
               cursor: isStreaming ? "not-allowed" : "pointer",
               opacity: isStreaming || !input.trim() ? 0.5 : 1,
@@ -245,7 +245,7 @@ export function ArchitectPane({
             fontWeight: "bold",
             fontSize: "12px",
             background: "#3E806B",
-            color: "#FFF5ED",
+            color: "#E9ECF0",
             border: "none",
             cursor: "pointer",
           }}
