@@ -21,6 +21,7 @@ const PROVIDER_ENDPOINTS: Record<string, { baseUrl: string; envKey: string }> = 
   deepseek: { baseUrl: "https://api.deepseek.com/v1", envKey: "DEEPSEEK_API_KEY" },
   gemini: { baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai", envKey: "GEMINI_API_KEY" },
   kimi: { baseUrl: "https://api.moonshot.cn/v1", envKey: "KIMI_API_KEY" },
+  groq: { baseUrl: "https://api.groq.com/openai/v1", envKey: "GROQ_API_KEY" },
 };
 
 // ─── Claude streaming ───────────────────────────────────────────────────────
@@ -184,6 +185,7 @@ async function recordUsage(
     deepseek: { input: 0.14, output: 0.28 },
     gemini: { input: 0.075, output: 0.3 },
     kimi: { input: 1.0, output: 2.0 },
+    groq: { input: 0.05, output: 0.10 },
   };
 
   const rate = costs[provider] ?? { input: 1.0, output: 5.0 };

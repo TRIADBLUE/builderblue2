@@ -18,6 +18,7 @@ interface ArchitectPaneProps {
 
 const PROVIDERS: { value: AIProvider; label: string }[] = [
   { value: "claude", label: "Claude" },
+  { value: "groq", label: "Groq" },
   { value: "deepseek", label: "DeepSeek" },
   { value: "gemini", label: "Gemini" },
   { value: "kimi", label: "Kimi" },
@@ -25,6 +26,7 @@ const PROVIDERS: { value: AIProvider; label: string }[] = [
 
 const MODELS: Record<AIProvider, string[]> = {
   claude: ["claude-opus-4-20250514", "claude-sonnet-4-20250514", "claude-haiku-4-5-20251001"],
+  groq: ["qwen-qwq-32b", "llama-3.1-70b-versatile", "llama-3.1-8b-instant", "gemma2-9b-it"],
   deepseek: ["deepseek-chat", "deepseek-coder"],
   gemini: ["gemini-2.0-flash", "gemini-1.5-pro"],
   kimi: ["moonshot-v1-8k", "moonshot-v1-32k"],

@@ -131,7 +131,7 @@ export interface ProjectFile {
 // ─── Conversations ──────────────────────────────────────────────────────────
 
 export type ConversationRole = "architect" | "builder";
-export type AIProvider = "claude" | "deepseek" | "gemini" | "kimi";
+export type AIProvider = "claude" | "deepseek" | "gemini" | "kimi" | "groq";
 
 export interface ConversationMessage {
   role: "user" | "assistant";
