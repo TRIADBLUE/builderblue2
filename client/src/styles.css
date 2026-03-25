@@ -92,6 +92,11 @@ button a, a.no-underline {
   height: 100%;
 }
 
+/* Hide scrollbar on tab bars */
+.runway div:first-child::-webkit-scrollbar {
+  display: none;
+}
+
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;

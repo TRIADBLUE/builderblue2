@@ -242,22 +242,41 @@ export default function Landing() {
       </div>
 
       {/* ── Live IDE Demo (3D) ──────────────────────────────────────── */}
-      <div className="mx-auto max-w-7xl px-4 pb-20" style={{ perspective: "1400px" }}>
+      <div className="mx-auto max-w-7xl px-4 pb-20" style={{ perspective: "1400px", position: "relative" }}>
+        {/* Background glow */}
+        <div
+          className="demo-glow"
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "80%",
+            height: "70%",
+            background: "radial-gradient(ellipse at center, rgba(20, 40, 125, 0.06) 0%, rgba(62, 128, 107, 0.04) 40%, transparent 70%)",
+            filter: "blur(40px)",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
         <div
           ref={demoRef}
-          className="overflow-hidden rounded-xl"
+          className="overflow-hidden rounded-xl demo-idle demo-entrance"
           style={{
+            position: "relative",
+            zIndex: 1,
             border: "1px solid rgba(9,8,14,0.12)",
             boxShadow:
-              "0 60px 120px rgba(9, 8, 14, 0.2), " +
-              "0 30px 60px rgba(9, 8, 14, 0.12), " +
-              "0 12px 24px rgba(9, 8, 14, 0.08), " +
-              "0 0 0 1px rgba(9,8,14,0.04), " +
-              "0 80px 100px -20px rgba(20, 40, 125, 0.08)",
+              "0 60px 120px rgba(9, 8, 14, 0.22), " +
+              "0 30px 60px rgba(9, 8, 14, 0.14), " +
+              "0 12px 24px rgba(9, 8, 14, 0.10), " +
+              "0 0 0 1px rgba(9,8,14,0.05), " +
+              "0 80px 100px -20px rgba(20, 40, 125, 0.10), " +
+              "inset 0 1px 0 rgba(255,255,255,0.5)",
             background: "#FFF5ED",
             transform: demoTransform,
             transformOrigin: "center center",
-            transition: "transform 0.15s ease-out",
+            transition: "transform 0.15s ease-out, box-shadow 0.3s ease",
             transformStyle: "preserve-3d",
           }}
         >
@@ -599,6 +618,32 @@ export default function Landing() {
         }
         .staged-card-enter {
           animation: fadeSlideIn 0.4s ease-out;
+        }
+        @keyframes idleFloat {
+          0%, 100% { transform: rotateX(3deg) rotateY(0deg) translateY(0px); }
+          25% { transform: rotateX(2.5deg) rotateY(0.5deg) translateY(-4px); }
+          50% { transform: rotateX(3.5deg) rotateY(-0.3deg) translateY(-2px); }
+          75% { transform: rotateX(2.8deg) rotateY(0.2deg) translateY(-5px); }
+        }
+        .demo-idle {
+          animation: idleFloat 8s ease-in-out infinite;
+        }
+        .demo-idle:hover {
+          animation: none;
+        }
+        @keyframes demoEntrance {
+          from { opacity: 0; transform: rotateX(8deg) translateY(60px) scale(0.95); }
+          to { opacity: 1; transform: rotateX(3deg) translateY(0) scale(1); }
+        }
+        .demo-entrance {
+          animation: demoEntrance 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes glowPulse {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.5; }
+        }
+        .demo-glow {
+          animation: glowPulse 4s ease-in-out infinite;
         }
       `}</style>
     </div>

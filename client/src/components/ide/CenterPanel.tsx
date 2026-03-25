@@ -59,22 +59,27 @@ export function CenterPanel({
 
   return (
     <div className="flex h-full flex-col runway" style={{ zIndex: 10 }}>
-      {/* Tab bar */}
+      {/* Tab bar — scrollable */}
       <div
         className="flex"
         style={{
           background: "#FFF5ED",
           borderBottom: "1px solid rgba(9, 8, 14, 0.1)",
+          overflowX: "auto",
+          overflowY: "hidden",
+          scrollbarWidth: "none",
+          WebkitOverflowScrolling: "touch",
+          flexShrink: 0,
         }}
       >
         {TABS.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className="px-3 py-1.5 transition-colors"
+            className="transition-colors"
             style={{
               fontFamily: "var(--font-runway)",
-              fontSize: "11px",
+              fontSize: "10px",
               color: activeTab === tab.key ? "#FFF5ED" : "#09080E",
               background:
                 activeTab === tab.key
@@ -86,6 +91,9 @@ export function CenterPanel({
                 activeTab === tab.key
                   ? "2px solid #14287D"
                   : "2px solid transparent",
+              padding: "6px 8px",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
             }}
           >
             {tab.label}
