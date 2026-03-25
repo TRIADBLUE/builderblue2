@@ -251,9 +251,9 @@ export default function Landing() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "80%",
-            height: "70%",
-            background: "radial-gradient(ellipse at center, rgba(20, 40, 125, 0.06) 0%, rgba(62, 128, 107, 0.04) 40%, transparent 70%)",
+            width: "90%",
+            height: "80%",
+            background: "radial-gradient(ellipse at center, rgba(20, 40, 125, 0.08) 0%, rgba(62, 128, 107, 0.06) 30%, rgba(130, 50, 60, 0.04) 50%, transparent 70%)",
             filter: "blur(40px)",
             pointerEvents: "none",
             zIndex: 0,
@@ -273,15 +273,33 @@ export default function Landing() {
               "0 0 0 1px rgba(9,8,14,0.05), " +
               "0 80px 100px -20px rgba(20, 40, 125, 0.10), " +
               "inset 0 1px 0 rgba(255,255,255,0.5)",
-            background: "#FFF5ED",
+            background: "rgba(255, 245, 237, 0.65)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
             transform: demoTransform,
             transformOrigin: "center center",
             transition: "transform 0.15s ease-out, box-shadow 0.3s ease",
             transformStyle: "preserve-3d",
           }}
         >
+          {/* Glass glare overlay */}
+          <div
+            className="glass-glare"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.05) 100%)",
+              pointerEvents: "none",
+              zIndex: 50,
+              borderRadius: "inherit",
+            }}
+          />
+
           {/* Window chrome */}
-          <div className="flex items-center gap-2 px-4 py-2.5" style={{ background: "rgba(9,8,14,0.03)", borderBottom: "1px solid rgba(9,8,14,0.08)" }}>
+          <div className="flex items-center gap-2 px-4 py-2.5" style={{ background: "rgba(9,8,14,0.03)", borderBottom: "1px solid rgba(9,8,14,0.08)", position: "relative", zIndex: 1 }}>
             <div className="flex gap-1.5">
               <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FF5F57" }} />
               <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FEBD2E" }} />
@@ -293,10 +311,10 @@ export default function Landing() {
           </div>
 
           {/* Three columns */}
-          <div className="flex" style={{ height: "440px" }}>
+          <div className="flex" style={{ height: "440px", position: "relative", zIndex: 1 }}>
 
             {/* ── LEFT: Architect ──────────────────────────────────────── */}
-            <div className="flex flex-col" style={{ flex: "1 1 0%", background: "#FFF5ED", borderRight: "1px solid rgba(9,8,14,0.08)" }}>
+            <div className="flex flex-col" style={{ flex: "1 1 0%", background: "rgba(62, 128, 107, 0.04)", borderRight: "1px solid rgba(62, 128, 107, 0.12)" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.06)" }}>
                 <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#3E806B", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Architect
@@ -359,7 +377,7 @@ export default function Landing() {
             </div>
 
             {/* ── CENTER: Builder ──────────────────────────────────────── */}
-            <div className="flex flex-col" style={{ flex: "1 1 0%", background: "#FFF5ED", borderRight: "1px solid rgba(9,8,14,0.08)" }}>
+            <div className="flex flex-col" style={{ flex: "1 1 0%", background: "rgba(130, 50, 60, 0.04)", borderRight: "1px solid rgba(130, 50, 60, 0.12)" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.06)" }}>
                 <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#82323C", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Builder
@@ -423,7 +441,7 @@ export default function Landing() {
             </div>
 
             {/* ── RIGHT: Staging Runway (with interactive tabs) ─────── */}
-            <div className="flex flex-col" style={{ flex: "1.2 1 0%", background: "#FFF5ED" }}>
+            <div className="flex flex-col" style={{ flex: "1.2 1 0%", background: "rgba(20, 40, 125, 0.04)" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.08)" }}>
                 <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#14287D", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Staging Runway
