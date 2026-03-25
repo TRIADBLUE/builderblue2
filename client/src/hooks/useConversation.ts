@@ -148,6 +148,24 @@ export function useConversation(): UseConversationReturn {
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
           console.error("Send message error:", error);
+          // Show the error to the user in the conversation
+          setConversation((prev) => {
+            if (!prev) return prev;
+            const messages = [
+              ...((prev.messages ?? []) as ConversationMessage[]),
+              {
+                role: "user" as const,
+                content,
+                timestamp: new Date().toISOString(),
+              },
+              {
+                role: "assistant" as const,
+                content: `⚠️ Message failed to send. ${(error as Error)?.message ?? "Check your API key configuration."}`,
+                timestamp: new Date().toISOString(),
+              },
+            ];
+            return { ...prev, messages };
+          });
         }
       } finally {
         setIsStreaming(false);

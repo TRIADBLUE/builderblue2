@@ -165,7 +165,7 @@ export function TerminalTab({ projectId, projectName }: TerminalTabProps) {
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "11px",
-            color: "var(--triad-black)",
+            color: "var(--cream)",
             opacity: 0.6,
           }}
         >
@@ -175,7 +175,7 @@ export function TerminalTab({ projectId, projectName }: TerminalTabProps) {
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "11px",
-            color: "var(--triad-black)",
+            color: "var(--cream)",
             opacity: 0.3,
           }}
         >
@@ -187,7 +187,7 @@ export function TerminalTab({ projectId, projectName }: TerminalTabProps) {
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "10px",
-            color: "var(--triad-black)",
+            color: "var(--cream)",
             opacity: 0.4,
             background: "none",
             border: "none",
@@ -205,7 +205,7 @@ export function TerminalTab({ projectId, projectName }: TerminalTabProps) {
         style={{
           fontFamily: "var(--font-runway)",
           fontSize: "13px",
-          color: "var(--triad-black)",
+          color: "var(--cream)",
           lineHeight: "1.4",
         }}
       >
@@ -239,7 +239,7 @@ export function TerminalTab({ projectId, projectName }: TerminalTabProps) {
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "13px",
-            color: "var(--triad-black)",
+            color: "var(--cream)",
             border: "none",
           }}
           placeholder={connected ? "Type a command..." : "Connecting..."}
