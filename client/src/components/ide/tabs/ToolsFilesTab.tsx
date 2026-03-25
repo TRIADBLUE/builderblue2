@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { ProjectFile, CenterTab } from "@shared/types";
 
 interface ToolsFilesTabProps {
@@ -78,6 +78,24 @@ const TOOLS: { key: CenterTab; name: string; description: string }[] = [
 
 export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFilesTabProps) {
   const tree = buildTree(files);
+  const [showNewFile, setShowNewFile] = useState(false);
+  const [newFilePath, setNewFilePath] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleCreateFile = () => {
+    if (!newFilePath.trim()) return;
+    onSaveAsProposal(newFilePath.trim(), "");
+    setNewFilePath("");
+    setShowNewFile(false);
+  };
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const text = await file.text();
+    onSaveAsProposal(file.name, text);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   return (
     <div className="h-full overflow-y-auto" style={{ background: "#FFF5ED" }}>
@@ -167,7 +185,15 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
             </div>
           )}
 
-          <div className="flex gap-4">
+          {/* Hidden file input for upload */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleUpload}
+            style={{ display: "none" }}
+          />
+
+          <div className="flex gap-4 flex-wrap">
             <button
               onClick={() => onOpenTool("files")}
               style={{
@@ -180,9 +206,10 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                 padding: 0,
               }}
             >
-              Browse & edit files
+              Browse & edit
             </button>
             <button
+              onClick={() => setShowNewFile(!showNewFile)}
               style={{
                 fontFamily: "var(--font-content)",
                 fontSize: "12px",
@@ -196,6 +223,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               Create new file
             </button>
             <button
+              onClick={() => fileInputRef.current?.click()}
               style={{
                 fontFamily: "var(--font-content)",
                 fontSize: "12px",
@@ -208,20 +236,49 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
             >
               Upload
             </button>
-            <button
-              style={{
-                fontFamily: "var(--font-content)",
-                fontSize: "12px",
-                color: "#14287D",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
-              }}
-            >
-              Download
-            </button>
           </div>
+
+          {/* New file inline form */}
+          {showNewFile && (
+            <div className="mt-3 flex gap-2">
+              <input
+                type="text"
+                value={newFilePath}
+                onChange={(e) => setNewFilePath(e.target.value)}
+                placeholder="src/components/MyFile.tsx"
+                autoFocus
+                style={{
+                  flex: 1,
+                  fontFamily: "var(--font-runway)",
+                  fontSize: "12px",
+                  color: "#09080E",
+                  background: "transparent",
+                  border: "none",
+                  borderBottom: "1px solid rgba(9,8,14,0.15)",
+                  outline: "none",
+                  padding: "4px 0",
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleCreateFile();
+                  if (e.key === "Escape") { setShowNewFile(false); setNewFilePath(""); }
+                }}
+              />
+              <button
+                onClick={handleCreateFile}
+                style={{
+                  fontFamily: "var(--font-content)",
+                  fontSize: "12px",
+                  color: "#14287D",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                }}
+              >
+                Create
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
