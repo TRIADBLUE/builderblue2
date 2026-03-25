@@ -95,42 +95,46 @@ export function CenterPanel({
           flexShrink: 0,
         }}
       >
-        {activeTabs.map((tab, i) => (
+        {activeTabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className="transition-colors"
+            className="no-underline"
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "11px",
-              color: activeTab === tab.key ? "#FFF5ED" : "#09080E",
-              background: activeTab === tab.key ? "#14287D" : "transparent",
+              color: activeTab === tab.key ? "#14287D" : "rgba(9, 8, 14, 0.45)",
+              background: "transparent",
               border: "none",
               borderRight: "1px solid rgba(9, 8, 14, 0.06)",
-              cursor: "pointer",
               borderBottom: activeTab === tab.key ? "2px solid #14287D" : "2px solid transparent",
-              padding: "7px 12px",
+              cursor: "pointer",
+              padding: "6px 10px",
               whiteSpace: "nowrap",
+              fontWeight: activeTab === tab.key ? 600 : 400,
+              textDecoration: "none",
+              transition: "color 0.15s",
             }}
           >
-            {tab.icon} {tab.label}
+            {tab.label}
           </button>
         ))}
 
         {/* "+" chooser button */}
         <button
           onClick={() => setShowChooser(!showChooser)}
+          className="no-underline"
           style={{
             fontFamily: "var(--font-runway)",
-            fontSize: "13px",
-            color: showChooser ? "#14287D" : "rgba(9,8,14,0.3)",
+            fontSize: "12px",
+            color: showChooser ? "#14287D" : "rgba(9,8,14,0.25)",
             background: "transparent",
             border: "none",
-            borderLeft: "1px solid rgba(9, 8, 14, 0.08)",
-            borderBottom: "1px solid rgba(9, 8, 14, 0.06)",
+            borderLeft: "1px solid rgba(9, 8, 14, 0.06)",
             cursor: "pointer",
-            padding: "7px 12px",
+            padding: "6px 10px",
             marginLeft: "auto",
+            textDecoration: "none",
             transition: "color 0.15s",
           }}
         >
@@ -143,37 +147,35 @@ export function CenterPanel({
         <div
           style={{
             background: "#FFF5ED",
-            borderBottom: "1px solid rgba(9,8,14,0.1)",
-            padding: "8px 12px",
+            borderBottom: "1px solid rgba(9,8,14,0.08)",
+            padding: "10px 14px",
             flexShrink: 0,
           }}
         >
-          <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "var(--steel-blue)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
-            Choose your tabs
-          </div>
-          <div className="grid grid-cols-2 gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {ALL_TABS.map((tab) => {
               const isVisible = visibleTabs.includes(tab.key);
               return (
                 <button
                   key={tab.key}
                   onClick={() => toggleTab(tab.key)}
-                  className="flex items-start gap-2 rounded-md px-2.5 py-2 text-left transition-all"
+                  className="no-underline"
+                  title={tab.description}
                   style={{
-                    background: isVisible ? "rgba(20, 40, 125, 0.06)" : "rgba(9,8,14,0.02)",
-                    border: isVisible ? "1px solid rgba(20, 40, 125, 0.2)" : "1px solid rgba(9,8,14,0.06)",
+                    fontFamily: "var(--font-runway)",
+                    fontSize: "11px",
+                    color: isVisible ? "#14287D" : "rgba(9,8,14,0.35)",
+                    background: "transparent",
+                    border: isVisible ? "1px solid rgba(20, 40, 125, 0.25)" : "1px solid rgba(9,8,14,0.08)",
+                    borderRadius: "4px",
+                    padding: "4px 10px",
                     cursor: "pointer",
+                    textDecoration: "none",
+                    fontWeight: isVisible ? 600 : 400,
+                    transition: "all 0.15s",
                   }}
                 >
-                  <span style={{ fontSize: "14px", flexShrink: 0, marginTop: "1px" }}>{tab.icon}</span>
-                  <div>
-                    <div style={{ fontFamily: "var(--font-runway)", fontSize: "11px", fontWeight: 600, color: isVisible ? "#14287D" : "#09080E" }}>
-                      {tab.label}
-                    </div>
-                    <div style={{ fontFamily: "var(--font-content)", fontSize: "9px", color: "var(--steel-blue)", lineHeight: 1.3, marginTop: "1px" }}>
-                      {tab.description}
-                    </div>
-                  </div>
+                  {tab.label}
                 </button>
               );
             })}
