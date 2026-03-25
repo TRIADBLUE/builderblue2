@@ -30,6 +30,7 @@
 }
 
 /* ─── CSS Custom Properties — LOCKED PALETTE ─────────────────────────────── */
+/* ─── Brand colors (constant across themes) ─────────────────────────────── */
 :root {
   --cream: #E9ECF0;
   --tan: #A67C4B;
@@ -39,28 +40,87 @@
   --ruby-red: #82323C;
   --pure-blue: #0000FF;
   --yellow: #FFFF00;
-
-  /* Derived */
-  --runway-glow: rgba(169, 124, 75, 0.4);
-  --runway-glow-outer: rgba(169, 124, 75, 0.15);
-  --runway-border: rgba(233, 236, 240, 0.3);
-  --card-border: rgba(233, 236, 240, 0.2);
+  --architect-color: #3E806B;
+  --builder-color: #82323C;
+  --staging-color: #14287D;
 
   /* Fonts — sitewide roles */
-  /* QTEraType: headers, titles */
   --font-heading: 'QTEraType', 'Georgia', serif;
-  /* Acherus Grotesque: buttons */
   --font-button: 'Acherus Grotesque', 'Source Sans 3', sans-serif;
-  /* Source Code Pro: pane labels (ARCHITECT/STAGING RUNWAY/BUILDER) */
   --font-label: 'Source Code Pro', monospace;
-  /* M PLUS Rounded 1c: Architect pane output */
   --font-architect: 'M PLUS Rounded 1c', sans-serif;
-  /* SN Pro: Staging/runway output */
   --font-runway: 'SN Pro', monospace;
-  /* Datatype: Builder pane output */
   --font-builder: 'Datatype', monospace;
-  /* Content/body text */
   --font-content: 'Source Sans 3', sans-serif;
+}
+
+/* ─── Light theme (default) ──────────────────────────────────────────────── */
+:root,
+[data-theme="light"] {
+  --bg-primary: #FFF5ED;
+  --bg-secondary: #FFFFFF;
+  --bg-elevated: #FFF5ED;
+  --bg-hover: rgba(9, 8, 14, 0.04);
+  --bg-input: rgba(255, 245, 237, 0.6);
+  --text-primary: #09080E;
+  --text-secondary: #1F5882;
+  --text-muted: rgba(9, 8, 14, 0.4);
+  --text-on-color: #FFF5ED;
+  --border-primary: rgba(9, 8, 14, 0.1);
+  --border-subtle: rgba(9, 8, 14, 0.06);
+  --card-border: rgba(9, 8, 14, 0.08);
+  --runway-glow: rgba(169, 124, 75, 0.4);
+  --runway-glow-outer: rgba(169, 124, 75, 0.15);
+  --shadow-sm: 0 1px 3px rgba(9, 8, 14, 0.06);
+  --shadow-md: 0 4px 12px rgba(9, 8, 14, 0.08);
+  --shadow-lg: 0 12px 40px rgba(9, 8, 14, 0.12);
+  color-scheme: light;
+}
+
+/* ─── Dark theme ─────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --bg-primary: #0D0D12;
+  --bg-secondary: #16161D;
+  --bg-elevated: #1C1C26;
+  --bg-hover: rgba(255, 245, 237, 0.04);
+  --bg-input: rgba(255, 245, 237, 0.06);
+  --text-primary: #E9ECF0;
+  --text-secondary: #8BA4B8;
+  --text-muted: rgba(233, 236, 240, 0.35);
+  --text-on-color: #E9ECF0;
+  --border-primary: rgba(233, 236, 240, 0.1);
+  --border-subtle: rgba(233, 236, 240, 0.05);
+  --card-border: rgba(233, 236, 240, 0.08);
+  --runway-glow: rgba(20, 40, 125, 0.3);
+  --runway-glow-outer: rgba(20, 40, 125, 0.1);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}
+
+/* ─── Auto theme (follows OS preference) ─────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] {
+    --bg-primary: #0D0D12;
+    --bg-secondary: #16161D;
+    --bg-elevated: #1C1C26;
+    --bg-hover: rgba(255, 245, 237, 0.04);
+    --bg-input: rgba(255, 245, 237, 0.06);
+    --text-primary: #E9ECF0;
+    --text-secondary: #8BA4B8;
+    --text-muted: rgba(233, 236, 240, 0.35);
+    --text-on-color: #E9ECF0;
+    --border-primary: rgba(233, 236, 240, 0.1);
+    --border-subtle: rgba(233, 236, 240, 0.05);
+    --card-border: rgba(233, 236, 240, 0.08);
+    --runway-glow: rgba(20, 40, 125, 0.3);
+    --runway-glow-outer: rgba(20, 40, 125, 0.1);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
 }
 
 /* ─── Global resets ──────────────────────────────────────────────────────── */

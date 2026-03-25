@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import type { ComputeStatus } from "@shared/types";
 import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
 
 interface TopNavProps {
   projectName: string;
@@ -32,6 +33,10 @@ export function TopNav({
   const menuRef = useRef<HTMLDivElement>(null);
   const [, setLocation] = useLocation();
   const { logout } = useAuth();
+  const { theme, cycleTheme } = useTheme();
+
+  const themeIcon = theme === "light" ? "☀️" : theme === "dark" ? "🌙" : "🔄";
+  const themeLabel = theme === "light" ? "Light" : theme === "dark" ? "Dark" : "Auto";
 
   const computeColor =
     computeStatus.level === "normal"
@@ -252,6 +257,18 @@ export function TopNav({
                   onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
                 >
                   Account Settings
+                </button>
+              </div>
+
+              {/* Theme toggle */}
+              <div style={{ borderTop: "1px solid rgba(9,8,14,0.06)", padding: "4px 0" }}>
+                <button
+                  onClick={() => { cycleTheme(); }}
+                  style={menuItemStyle}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(9,8,14,0.04)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+                >
+                  {themeIcon} Theme: {themeLabel}
                 </button>
               </div>
 
