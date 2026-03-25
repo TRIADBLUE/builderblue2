@@ -45,8 +45,8 @@ const PROVIDERS: ProviderInfo[] = [
     id: "gemini",
     name: "Gemini",
     models: [
+      { id: "gemini-3.1-pro-preview", name: "Gemini 3.1 Pro Preview", description: "Latest and most capable" },
       { id: "gemini-2.0-flash", name: "Gemini 2.0 Flash", description: "Fast multimodal reasoning" },
-      { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro", description: "Long context, deep analysis" },
     ],
   },
   {
