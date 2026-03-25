@@ -134,15 +134,27 @@ html, body, #root {
   padding: 0;
 }
 
-/* Links that are not inside buttons or boxed elements must be underlined */
-a:not(button a):not(.no-underline) {
+/* Every <a> link gets an underline UNLESS it has .no-underline or contains a <button> */
+a {
   text-decoration: underline;
 }
-a:not(button a):not(.no-underline):hover {
+a:hover {
   text-decoration: underline;
   opacity: 0.85;
 }
-button a, a.no-underline {
+/* Exceptions: links that wrap buttons, images, or are explicitly opt-out */
+a.no-underline,
+a:has(> button),
+a:has(> img) {
+  text-decoration: none;
+}
+a.no-underline:hover,
+a:has(> button):hover,
+a:has(> img):hover {
+  text-decoration: none;
+}
+/* Buttons that look like links inside dropdowns — no underline */
+button {
   text-decoration: none;
 }
 
