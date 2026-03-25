@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import type { ConversationMessage, AIProvider, ActivePane } from "@shared/types";
 import { ThinkingIndicator } from "./ThinkingIndicator";
+import { ModelPicker } from "./ModelPicker";
 
 interface ArchitectPaneProps {
   isActive: boolean;
@@ -16,21 +17,7 @@ interface ArchitectPaneProps {
   onFocus: () => void;
 }
 
-const PROVIDERS: { value: AIProvider; label: string }[] = [
-  { value: "claude", label: "Claude" },
-  { value: "groq", label: "Groq" },
-  { value: "deepseek", label: "DeepSeek" },
-  { value: "gemini", label: "Gemini" },
-  { value: "kimi", label: "Kimi" },
-];
-
-const MODELS: Record<AIProvider, string[]> = {
-  claude: ["claude-opus-4-20250514", "claude-sonnet-4-20250514", "claude-haiku-4-5-20251001"],
-  groq: ["qwen-qwq-32b", "llama-3.1-70b-versatile", "llama-3.1-8b-instant", "gemma2-9b-it"],
-  deepseek: ["deepseek-chat", "deepseek-coder"],
-  gemini: ["gemini-2.0-flash", "gemini-1.5-pro"],
-  kimi: ["moonshot-v1-8k", "moonshot-v1-32k"],
-};
+// Model selection is handled by ModelPicker component
 
 export function ArchitectPane({
   isActive,
@@ -91,39 +78,14 @@ export function ArchitectPane({
         >
           Architect
         </span>
-        <div className="flex items-center gap-2">
-          <select
-            value={provider}
-            onChange={(e) => onProviderChange(e.target.value as AIProvider)}
-            className="rounded border-none bg-transparent text-xs outline-none"
-            style={{
-              fontFamily: "var(--font-architect)",
-              color: "var(--triad-black)",
-              fontSize: "11px",
-            }}
-          >
-            {PROVIDERS.map((p) => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={model}
-            onChange={(e) => onModelChange(e.target.value)}
-            className="rounded border-none bg-transparent text-xs outline-none"
-            style={{
-              fontFamily: "var(--font-architect)",
-              color: "var(--triad-black)",
-              fontSize: "11px",
-            }}
-          >
-            {(MODELS[provider] ?? []).map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
+        <div className="flex items-center">
+          <ModelPicker
+            provider={provider}
+            model={model}
+            panelColor="#3E806B"
+            onProviderChange={onProviderChange}
+            onModelChange={onModelChange}
+          />
         </div>
       </div>
 
