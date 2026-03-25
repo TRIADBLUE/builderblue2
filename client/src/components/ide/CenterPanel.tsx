@@ -99,7 +99,6 @@ export function CenterPanel({
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className="no-underline"
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "11px",
@@ -107,23 +106,20 @@ export function CenterPanel({
               background: "transparent",
               border: "none",
               borderRight: "1px solid rgba(9, 8, 14, 0.06)",
-              borderBottom: activeTab === tab.key ? "2px solid #14287D" : "2px solid transparent",
               cursor: "pointer",
               padding: "6px 10px",
               whiteSpace: "nowrap",
               fontWeight: activeTab === tab.key ? 600 : 400,
-              textDecoration: "none",
               transition: "color 0.15s",
             }}
           >
-            {tab.label}
+            {tab.icon} {tab.label}
           </button>
         ))}
 
         {/* "+" chooser button */}
         <button
           onClick={() => setShowChooser(!showChooser)}
-          className="no-underline"
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "12px",
@@ -134,7 +130,6 @@ export function CenterPanel({
             cursor: "pointer",
             padding: "6px 10px",
             marginLeft: "auto",
-            textDecoration: "none",
             transition: "color 0.15s",
           }}
         >
@@ -152,30 +147,27 @@ export function CenterPanel({
             flexShrink: 0,
           }}
         >
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {ALL_TABS.map((tab) => {
               const isVisible = visibleTabs.includes(tab.key);
               return (
                 <button
                   key={tab.key}
                   onClick={() => toggleTab(tab.key)}
-                  className="no-underline"
                   title={tab.description}
                   style={{
                     fontFamily: "var(--font-runway)",
                     fontSize: "11px",
                     color: isVisible ? "#14287D" : "rgba(9,8,14,0.35)",
                     background: "transparent",
-                    border: isVisible ? "1px solid rgba(20, 40, 125, 0.25)" : "1px solid rgba(9,8,14,0.08)",
-                    borderRadius: "4px",
-                    padding: "4px 10px",
+                    border: "none",
+                    padding: "2px 0",
                     cursor: "pointer",
-                    textDecoration: "none",
                     fontWeight: isVisible ? 600 : 400,
-                    transition: "all 0.15s",
+                    transition: "color 0.15s",
                   }}
                 >
-                  {tab.label}
+                  {tab.icon} {tab.label}
                 </button>
               );
             })}

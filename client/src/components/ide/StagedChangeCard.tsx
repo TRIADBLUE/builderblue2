@@ -108,7 +108,7 @@ export function StagedChangeCard({
             <div className="flex gap-1">
               <button
                 onClick={handleApprove}
-                className="rounded px-2 py-0.5 text-xs font-medium transition-colors"
+                className="btn rounded px-2 py-0.5 text-xs font-medium transition-colors"
                 style={{
                   fontFamily: "var(--font-runway)",
                   background: "#008060",
@@ -121,7 +121,7 @@ export function StagedChangeCard({
               </button>
               <button
                 onClick={handleReject}
-                className="rounded px-2 py-0.5 text-xs font-medium transition-colors"
+                className="btn rounded px-2 py-0.5 text-xs font-medium transition-colors"
                 style={{
                   fontFamily: "var(--font-runway)",
                   background: "var(--ruby-red)",

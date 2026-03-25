@@ -161,7 +161,7 @@ export function TopNav({
 
         <button
           onClick={onDeploy}
-          className="rounded px-3 py-1.5 text-xs font-bold transition-colors"
+          className="btn rounded px-3 py-1.5 text-xs font-bold transition-colors"
           style={{
             fontFamily: "var(--font-builder)",
             fontSize: "13px",

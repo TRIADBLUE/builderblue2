@@ -134,28 +134,16 @@ html, body, #root {
   padding: 0;
 }
 
-/* Every <a> link gets an underline UNLESS it has .no-underline or contains a <button> */
-a {
+/* All clickable text gets underlines — links AND button-links */
+a, button:not(.btn) {
   text-decoration: underline;
 }
-a:hover {
-  text-decoration: underline;
+a:hover, button:not(.btn):hover {
   opacity: 0.85;
 }
-/* Exceptions: links that wrap buttons, images, or are explicitly opt-out */
-a.no-underline,
-a:has(> button),
-a:has(> img) {
-  text-decoration: none;
-}
-a.no-underline:hover,
-a:has(> button):hover,
-a:has(> img):hover {
-  text-decoration: none;
-}
-/* Buttons that look like links inside dropdowns — no underline */
-button {
-  text-decoration: none;
+/* Actual styled buttons (Deploy, Send, Approve, etc.) — no underline */
+.btn {
+  text-decoration: none !important;
 }
 
 /* Only lock overflow on IDE pages, not landing/auth */

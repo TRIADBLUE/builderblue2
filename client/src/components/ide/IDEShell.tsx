@@ -246,6 +246,7 @@ export function IDEShell({
           ].map((p) => (
             <button
               key={p.key}
+              className="btn"
               onClick={() => p.toggle(!p.visible)}
               style={{
                 fontFamily: "var(--font-label)",
@@ -266,6 +267,7 @@ export function IDEShell({
             </button>
           ))}
           <button
+            className="btn"
             onClick={() => setReversed(!reversed)}
             style={{
               fontFamily: "var(--font-runway)",
@@ -295,13 +297,13 @@ export function IDEShell({
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "9px",
-                color: layoutPreset === p.key ? "#FFF5ED" : "var(--steel-blue)",
-                background: layoutPreset === p.key ? "var(--steel-blue)" : "transparent",
+                color: layoutPreset === p.key ? "var(--steel-blue)" : "rgba(9,8,14,0.35)",
+                background: "transparent",
                 border: "none",
-                borderRadius: "3px",
-                padding: "2px 8px",
+                padding: "2px 6px",
                 cursor: "pointer",
-                transition: "all 0.15s",
+                fontWeight: layoutPreset === p.key ? 600 : 400,
+                transition: "color 0.15s",
               }}
             >
               {p.label}

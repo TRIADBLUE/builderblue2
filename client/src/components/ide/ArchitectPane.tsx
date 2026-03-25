@@ -170,7 +170,7 @@ export function ArchitectPane({
           <button
             type="submit"
             disabled={isStreaming || !input.trim()}
-            className="flex h-9 w-9 items-center justify-center rounded-md"
+            className="btn flex h-9 w-9 items-center justify-center rounded-md"
             style={{
               background: "#3E806B",
               color: "#E9ECF0",
@@ -203,7 +203,7 @@ export function ArchitectPane({
               .find((m) => m.role === "assistant");
             if (lastAssistant) onHandToBuilder(lastAssistant.content);
           }}
-          className="mt-2 w-full rounded py-1.5 text-center transition-colors"
+          className="btn mt-2 w-full rounded py-1.5 text-center transition-colors"
           style={{
             fontFamily: "var(--font-architect)",
             fontWeight: "bold",

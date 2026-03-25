@@ -310,7 +310,7 @@ export default function Dashboard() {
           </div>
           <button
             onClick={() => setShowAddProject(true)}
-            className="rounded-md px-5 py-2.5 text-sm font-semibold transition-all hover:scale-105"
+            className="btn rounded-md px-5 py-2.5 text-sm font-semibold transition-all hover:scale-105"
             style={{
               background: "var(--deep-blue)",
               color: "#FFF5ED",
@@ -546,7 +546,7 @@ export default function Dashboard() {
                 <button
                   onClick={handleCreate}
                   disabled={!canSubmit}
-                  className="rounded-md px-5 py-2 text-sm font-semibold transition-all"
+                  className="btn rounded-md px-5 py-2 text-sm font-semibold transition-all"
                   style={{
                     background: canSubmit ? "var(--deep-blue)" : "var(--steel-blue)",
                     color: "#FFF5ED",
@@ -682,7 +682,7 @@ export default function Dashboard() {
               </p>
               <button
                 onClick={() => setShowAddProject(true)}
-                className="rounded-md px-6 py-2.5 text-sm font-semibold transition-all hover:scale-105"
+                className="btn rounded-md px-6 py-2.5 text-sm font-semibold transition-all hover:scale-105"
                 style={{
                   background: "var(--deep-blue)",
                   color: "#FFF5ED",

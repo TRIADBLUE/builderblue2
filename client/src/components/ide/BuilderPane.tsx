@@ -222,7 +222,7 @@ export function BuilderPane({
           <button
             type="submit"
             disabled={isStreaming || !inputValue.trim()}
-            className="flex h-9 w-9 items-center justify-center rounded-md"
+            className="btn flex h-9 w-9 items-center justify-center rounded-md"
             style={{
               background: "#82323C",
               color: "#FFF5ED",
@@ -255,7 +255,7 @@ export function BuilderPane({
               .find((m) => m.role === "assistant");
             if (lastAssistant) onHandToArchitect(lastAssistant.content);
           }}
-          className="mt-2 w-full rounded py-1.5 text-center transition-colors"
+          className="btn mt-2 w-full rounded py-1.5 text-center transition-colors"
           style={{
             fontFamily: "var(--font-builder)",
             fontWeight: 600,
