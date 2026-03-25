@@ -27,18 +27,27 @@ interface CenterPanelProps {
   onRetryReview?: (id: string) => void;
 }
 
-const TABS: { key: CenterTab; label: string }[] = [
-  { key: "staging", label: "Staging" },
-  { key: "files", label: "Files" },
-  { key: "terminal", label: "Terminal" },
-  { key: "secrets", label: "Secrets" },
-  { key: "database", label: "Database" },
-  { key: "preview", label: "Preview" },
-  { key: "git", label: "Git" },
-  { key: "services", label: "Services" },
-  { key: "thread", label: "🧵 Thread" },
-  { key: "style-guide", label: "🎨 Guide" },
+interface TabInfo {
+  key: CenterTab;
+  label: string;
+  icon: string;
+  description: string;
+}
+
+const ALL_TABS: TabInfo[] = [
+  { key: "staging", label: "Staging", icon: "📋", description: "Review and approve staged code changes" },
+  { key: "files", label: "Files", icon: "📁", description: "Browse and edit project files" },
+  { key: "terminal", label: "Terminal", icon: "⌨️", description: "Run commands in a project shell" },
+  { key: "preview", label: "Preview", icon: "👁️", description: "Live preview of your running app" },
+  { key: "git", label: "Git", icon: "🔀", description: "Commits, branches, and version control" },
+  { key: "thread", label: "Thread", icon: "🧵", description: "Construction log of all AI activity" },
+  { key: "style-guide", label: "Guide", icon: "🎨", description: "Design system — fonts, colors, spacing" },
+  { key: "secrets", label: "Secrets", icon: "🔐", description: "Environment variables and API keys" },
+  { key: "database", label: "Database", icon: "🗄️", description: "View and manage database tables" },
+  { key: "services", label: "Services", icon: "⚙️", description: "Connected services and integrations" },
 ];
+
+const DEFAULT_VISIBLE: CenterTab[] = ["staging", "files", "terminal", "preview", "git"];
 
 export function CenterPanel({
   projectId,
@@ -56,50 +65,118 @@ export function CenterPanel({
   onRetryReview,
 }: CenterPanelProps) {
   const [activeTab, setActiveTab] = useState<CenterTab>("staging");
+  const [visibleTabs, setVisibleTabs] = useState<CenterTab[]>(DEFAULT_VISIBLE);
+  const [showChooser, setShowChooser] = useState(false);
+
+  const toggleTab = (key: CenterTab) => {
+    setVisibleTabs((prev) => {
+      if (prev.includes(key)) {
+        // Don't remove if it's the last one
+        if (prev.length <= 1) return prev;
+        const next = prev.filter((k) => k !== key);
+        // If we removed the active tab, switch to first remaining
+        if (key === activeTab) setActiveTab(next[0]);
+        return next;
+      }
+      return [...prev, key];
+    });
+  };
+
+  const activeTabs = ALL_TABS.filter((t) => visibleTabs.includes(t.key));
 
   return (
     <div className="flex h-full flex-col runway" style={{ zIndex: 10 }}>
-      {/* Tab bar — scrollable */}
+      {/* Tab bar */}
       <div
-        className="flex"
+        className="flex items-center"
         style={{
           background: "#FFF5ED",
           borderBottom: "1px solid rgba(9, 8, 14, 0.1)",
-          overflowX: "auto",
-          overflowY: "hidden",
-          scrollbarWidth: "none",
-          WebkitOverflowScrolling: "touch",
           flexShrink: 0,
         }}
       >
-        {TABS.map((tab) => (
+        {activeTabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             className="transition-colors"
             style={{
               fontFamily: "var(--font-runway)",
-              fontSize: "10px",
+              fontSize: "11px",
               color: activeTab === tab.key ? "#FFF5ED" : "#09080E",
-              background:
-                activeTab === tab.key
-                  ? "#14287D"
-                  : "transparent",
+              background: activeTab === tab.key ? "#14287D" : "transparent",
               border: "none",
               cursor: "pointer",
-              borderBottom:
-                activeTab === tab.key
-                  ? "2px solid #14287D"
-                  : "2px solid transparent",
-              padding: "6px 8px",
+              borderBottom: activeTab === tab.key ? "2px solid #14287D" : "2px solid transparent",
+              padding: "7px 12px",
               whiteSpace: "nowrap",
-              flexShrink: 0,
             }}
           >
-            {tab.label}
+            {tab.icon} {tab.label}
           </button>
         ))}
+
+        {/* "+" chooser button */}
+        <button
+          onClick={() => setShowChooser(!showChooser)}
+          style={{
+            fontFamily: "var(--font-runway)",
+            fontSize: "13px",
+            color: showChooser ? "#14287D" : "rgba(9,8,14,0.3)",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            padding: "7px 10px",
+            marginLeft: "auto",
+            transition: "color 0.15s",
+          }}
+        >
+          {showChooser ? "✕" : "+"}
+        </button>
       </div>
+
+      {/* Tab chooser dropdown */}
+      {showChooser && (
+        <div
+          style={{
+            background: "#FFF5ED",
+            borderBottom: "1px solid rgba(9,8,14,0.1)",
+            padding: "8px 12px",
+            flexShrink: 0,
+          }}
+        >
+          <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "var(--steel-blue)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
+            Choose your tabs
+          </div>
+          <div className="grid grid-cols-2 gap-1.5">
+            {ALL_TABS.map((tab) => {
+              const isVisible = visibleTabs.includes(tab.key);
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => toggleTab(tab.key)}
+                  className="flex items-start gap-2 rounded-md px-2.5 py-2 text-left transition-all"
+                  style={{
+                    background: isVisible ? "rgba(20, 40, 125, 0.06)" : "rgba(9,8,14,0.02)",
+                    border: isVisible ? "1px solid rgba(20, 40, 125, 0.2)" : "1px solid rgba(9,8,14,0.06)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span style={{ fontSize: "14px", flexShrink: 0, marginTop: "1px" }}>{tab.icon}</span>
+                  <div>
+                    <div style={{ fontFamily: "var(--font-runway)", fontSize: "11px", fontWeight: 600, color: isVisible ? "#14287D" : "#09080E" }}>
+                      {tab.label}
+                    </div>
+                    <div style={{ fontFamily: "var(--font-content)", fontSize: "9px", color: "var(--steel-blue)", lineHeight: 1.3, marginTop: "1px" }}>
+                      {tab.description}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Tab content */}
       <div
