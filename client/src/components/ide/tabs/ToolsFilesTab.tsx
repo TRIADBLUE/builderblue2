@@ -83,88 +83,8 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
     <div className="h-full overflow-y-auto" style={{ background: "#FFF5ED" }}>
       <div style={{ maxWidth: "480px", margin: "0 auto", padding: "24px 20px" }}>
 
-        {/* Files section */}
-        <div style={{ marginBottom: "32px" }}>
-          <div style={{
-            fontFamily: "var(--font-label)",
-            fontSize: "10px",
-            fontWeight: 700,
-            color: "#14287D",
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            marginBottom: "12px",
-          }}>
-            Files
-          </div>
-
-          {/* File tree */}
-          {tree.length > 0 ? (
-            <div style={{ marginBottom: "12px" }}>
-              {tree.map((node) => (
-                <MiniTreeItem key={node.path} node={node} depth={0} />
-              ))}
-            </div>
-          ) : (
-            <div style={{
-              fontFamily: "var(--font-content)",
-              fontSize: "12px",
-              color: "rgba(9,8,14,0.4)",
-              marginBottom: "12px",
-            }}>
-              No files yet. Ask the Builder to write code.
-            </div>
-          )}
-
-          {/* File actions */}
-          <div className="flex gap-4">
-            <button
-              onClick={() => onOpenTool("files")}
-              style={{
-                fontFamily: "var(--font-content)",
-                fontSize: "12px",
-                color: "#14287D",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
-              }}
-            >
-              Browse & edit files
-            </button>
-            <button
-              style={{
-                fontFamily: "var(--font-content)",
-                fontSize: "12px",
-                color: "#14287D",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
-              }}
-            >
-              Create new file
-            </button>
-            <button
-              style={{
-                fontFamily: "var(--font-content)",
-                fontSize: "12px",
-                color: "#14287D",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: 0,
-              }}
-            >
-              Upload
-            </button>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div style={{ height: "1px", background: "rgba(9,8,14,0.06)", marginBottom: "24px" }} />
-
         {/* Tools section */}
-        <div>
+        <div style={{ marginBottom: "32px" }}>
           <div style={{
             fontFamily: "var(--font-label)",
             fontSize: "10px",
@@ -210,6 +130,97 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                 </div>
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div style={{ height: "1px", background: "rgba(9,8,14,0.06)", marginBottom: "24px" }} />
+
+        {/* Files section */}
+        <div>
+          <div style={{
+            fontFamily: "var(--font-label)",
+            fontSize: "10px",
+            fontWeight: 700,
+            color: "#14287D",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            marginBottom: "12px",
+          }}>
+            Files
+          </div>
+
+          {tree.length > 0 ? (
+            <div style={{ marginBottom: "12px" }}>
+              {tree.map((node) => (
+                <MiniTreeItem key={node.path} node={node} depth={0} />
+              ))}
+            </div>
+          ) : (
+            <div style={{
+              fontFamily: "var(--font-content)",
+              fontSize: "12px",
+              color: "rgba(9,8,14,0.4)",
+              marginBottom: "12px",
+            }}>
+              No files yet. Ask the Builder to write code.
+            </div>
+          )}
+
+          <div className="flex gap-4">
+            <button
+              onClick={() => onOpenTool("files")}
+              style={{
+                fontFamily: "var(--font-content)",
+                fontSize: "12px",
+                color: "#14287D",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              Browse & edit files
+            </button>
+            <button
+              style={{
+                fontFamily: "var(--font-content)",
+                fontSize: "12px",
+                color: "#14287D",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              Create new file
+            </button>
+            <button
+              style={{
+                fontFamily: "var(--font-content)",
+                fontSize: "12px",
+                color: "#14287D",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              Upload
+            </button>
+            <button
+              style={{
+                fontFamily: "var(--font-content)",
+                fontSize: "12px",
+                color: "#14287D",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+            >
+              Download
+            </button>
           </div>
         </div>
       </div>
