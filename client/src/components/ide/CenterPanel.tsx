@@ -80,6 +80,12 @@ export function CenterPanel({
       }
       return [...prev, key];
     });
+    // Close the chooser after selection
+    setShowChooser(false);
+    // Switch to the newly added tab
+    if (!visibleTabs.includes(key)) {
+      setActiveTab(key);
+    }
   };
 
   const activeTabs = ALL_TABS.filter((t) => visibleTabs.includes(t.key));
