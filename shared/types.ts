@@ -237,7 +237,7 @@ export interface BillingCycle {
 // ─── IDE ─────────────────────────────────────────────────────────────────────
 
 export type ActivePane = "architect" | "builder" | null;
-export type CenterTab = "staging" | "files" | "terminal" | "secrets" | "database" | "preview" | "git" | "services" | "thread" | "style-guide";
+export type CenterTab = "tools" | "staging" | "files" | "terminal" | "secrets" | "database" | "preview" | "git" | "services" | "thread" | "style-guide";
 
 export interface ComputeStatus {
   sessionsUsed: number;
