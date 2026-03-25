@@ -95,7 +95,7 @@ export function CenterPanel({
           flexShrink: 0,
         }}
       >
-        {activeTabs.map((tab) => (
+        {activeTabs.map((tab, i) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
@@ -106,6 +106,7 @@ export function CenterPanel({
               color: activeTab === tab.key ? "#FFF5ED" : "#09080E",
               background: activeTab === tab.key ? "#14287D" : "transparent",
               border: "none",
+              borderRight: "1px solid rgba(9, 8, 14, 0.06)",
               cursor: "pointer",
               borderBottom: activeTab === tab.key ? "2px solid #14287D" : "2px solid transparent",
               padding: "7px 12px",
@@ -125,8 +126,10 @@ export function CenterPanel({
             color: showChooser ? "#14287D" : "rgba(9,8,14,0.3)",
             background: "transparent",
             border: "none",
+            borderLeft: "1px solid rgba(9, 8, 14, 0.08)",
+            borderBottom: "1px solid rgba(9, 8, 14, 0.06)",
             cursor: "pointer",
-            padding: "7px 10px",
+            padding: "7px 12px",
             marginLeft: "auto",
             transition: "color 0.15s",
           }}
