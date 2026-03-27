@@ -128,17 +128,17 @@ export function IDEShell({
   } | null>(null);
 
   // Default widths: [architect%, builder%, runway%]
-  const [colWidths, setColWidths] = useState<[number, number, number]>([30, 30, 40]);
+  const [colWidths, setColWidths] = useState<[number, number, number]>([42, 38, 20]);
 
   // Reset widths when visibility changes
   useEffect(() => {
     const visible = [showArchitect, showBuilder, showRunway].filter(Boolean).length;
     if (visible === 3) {
-      setColWidths([30, 30, 40]);
+      setColWidths([42, 38, 20]);
     } else if (visible === 2) {
       if (showArchitect && showBuilder) setColWidths([50, 50, 0]);
-      else if (showArchitect && showRunway) setColWidths([40, 0, 60]);
-      else if (showBuilder && showRunway) setColWidths([0, 40, 60]);
+      else if (showArchitect && showRunway) setColWidths([55, 0, 45]);
+      else if (showBuilder && showRunway) setColWidths([0, 55, 45]);
     } else {
       setColWidths([
         showArchitect ? 100 : 0,
@@ -541,6 +541,7 @@ export function IDEShell({
             onCommit={handleCommit}
             onSaveAsProposal={handleSaveAsProposal}
             onRetryReview={staging.retryReview}
+            onCollapse={() => setShowRunway(false)}
           />
         </div>
         )}

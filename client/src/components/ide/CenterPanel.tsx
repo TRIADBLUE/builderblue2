@@ -26,6 +26,7 @@ interface CenterPanelProps {
   onCommit: (message: string) => void;
   onSaveAsProposal: (filePath: string, content: string) => void;
   onRetryReview?: (id: string) => void;
+  onCollapse?: () => void;
 }
 
 const TAB_LABELS: Record<string, string> = {
@@ -56,6 +57,7 @@ export function CenterPanel({
   onCommit,
   onSaveAsProposal,
   onRetryReview,
+  onCollapse,
 }: CenterPanelProps) {
   const [activeTab, setActiveTab] = useState<CenterTab>("tools");
   const [openTabs, setOpenTabs] = useState<CenterTab[]>(["tools"]);
@@ -152,6 +154,31 @@ export function CenterPanel({
         >
           +
         </button>
+        {/* Spacer pushes collapse button to the right */}
+        <div style={{ flex: 1 }} />
+        {/* Collapse panel button */}
+        {onCollapse && (
+          <button
+            onClick={onCollapse}
+            style={{
+              fontFamily: "var(--font-runway)",
+              fontSize: "13px",
+              color: "rgba(9,8,14,0.25)",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              padding: "4px 8px",
+              lineHeight: 1,
+              transition: "color 0.15s",
+              flexShrink: 0,
+            }}
+            title="Collapse panel"
+            onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.6)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.25)")}
+          >
+            ▷
+          </button>
+        )}
       </div>
 
       {/* Tab content */}
