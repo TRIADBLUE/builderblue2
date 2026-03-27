@@ -1,6 +1,7 @@
 import { Router } from "express";
 import crypto from "crypto";
 import { z } from "zod";
+import { eq } from "drizzle-orm";
 import {
   registerUser,
   loginUser,
@@ -12,7 +13,10 @@ import {
 } from "../services/auth-service.js";
 import { verifyRefreshToken } from "../services/jwt-service.js";
 import { sendWelcomeEmail, sendMagicLinkEmail } from "../services/email-service.js";
-import type { SsoPayload } from "../../shared/types.js";
+import { authenticate } from "../middleware/authenticate.js";
+import { db } from "../db.js";
+import { users } from "../../shared/schema.js";
+import type { SsoPayload, BusinessIndustry, PrimaryGoal } from "../../shared/types.js";
 
 const router = Router();
 
@@ -281,6 +285,59 @@ router.post("/sso/hostsblue", async (req, res) => {
     });
   } catch (error) {
     console.error("SSO error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// ─── PATCH /api/auth/onboarding ─────────────────────────────────────────────
+
+const onboardingSchema = z.object({
+  businessIndustry: z.enum([
+    "restaurant", "retail", "professional-services", "construction",
+    "health-wellness", "home-services", "automotive", "real-estate",
+    "creative-agency", "other",
+  ] as const),
+  primaryGoal: z.enum([
+    "get-found-online", "sell-products", "book-appointments",
+    "showcase-portfolio", "build-internal-tool", "launch-saas", "other",
+  ] as const),
+});
+
+router.patch("/onboarding", authenticate, async (req, res) => {
+  try {
+    const parsed = onboardingSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ message: parsed.error.errors[0].message });
+      return;
+    }
+
+    const [updated] = await db
+      .update(users)
+      .set({
+        businessIndustry: parsed.data.businessIndustry,
+        primaryGoal: parsed.data.primaryGoal,
+        onboardingCompletedAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, req.user!.userId))
+      .returning();
+
+    if (!updated) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.json({
+      id: updated.id,
+      email: updated.email,
+      name: updated.name,
+      role: updated.role,
+      businessIndustry: updated.businessIndustry as BusinessIndustry,
+      primaryGoal: updated.primaryGoal as PrimaryGoal,
+      onboardingCompletedAt: updated.onboardingCompletedAt?.toISOString() ?? null,
+    });
+  } catch (error) {
+    console.error("Onboarding update error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });

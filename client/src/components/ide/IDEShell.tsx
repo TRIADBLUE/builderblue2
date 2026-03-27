@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import type {
   ActivePane,
   AIProvider,
@@ -25,6 +25,8 @@ interface IDEShellProps {
   repoName: string | null;
   files: ProjectFile[];
   onProjectNameChange: (name: string) => void;
+  defaultArchitectConfig?: { provider: string; model: string } | null;
+  defaultBuilderConfig?: { provider: string; model: string } | null;
 }
 
 export function IDEShell({
@@ -34,6 +36,8 @@ export function IDEShell({
   repoName,
   files,
   onProjectNameChange,
+  defaultArchitectConfig,
+  defaultBuilderConfig,
 }: IDEShellProps) {
   const { user } = useAuth();
   const { status: computeStatus } = useComputeStatus();
@@ -81,13 +85,21 @@ export function IDEShell({
 
   // Architect conversation
   const architectConvo = useConversation();
-  const [architectProvider, setArchitectProvider] = useState<AIProvider>("claude");
-  const [architectModel, setArchitectModel] = useState("claude-opus-4-20250514");
+  const [architectProvider, setArchitectProvider] = useState<AIProvider>(
+    (defaultArchitectConfig?.provider as AIProvider) ?? "claude"
+  );
+  const [architectModel, setArchitectModel] = useState(
+    defaultArchitectConfig?.model ?? "claude-opus-4-20250514"
+  );
 
   // Builder conversation
   const builderConvo = useConversation();
-  const [builderProvider, setBuilderProvider] = useState<AIProvider>("claude");
-  const [builderModel, setBuilderModel] = useState("claude-opus-4-20250514");
+  const [builderProvider, setBuilderProvider] = useState<AIProvider>(
+    (defaultBuilderConfig?.provider as AIProvider) ?? "claude"
+  );
+  const [builderModel, setBuilderModel] = useState(
+    defaultBuilderConfig?.model ?? "claude-opus-4-20250514"
+  );
   const [builderInput, setBuilderInput] = useState("");
 
   // New staged IDs for animation
@@ -107,23 +119,98 @@ export function IDEShell({
     builderConvo.loadConversations(projectId);
   }, [projectId]);
 
-  // Width calculations: left=Architect, center=Builder, right=Runway
-  const getWidths = () => {
+  // Resizable column widths (percentages)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{
+    handle: "left" | "right";
+    startX: number;
+    startWidths: [number, number, number];
+  } | null>(null);
+
+  // Default widths: [architect%, builder%, runway%]
+  const [colWidths, setColWidths] = useState<[number, number, number]>([30, 30, 40]);
+
+  // Reset widths when visibility changes
+  useEffect(() => {
     const visible = [showArchitect, showBuilder, showRunway].filter(Boolean).length;
     if (visible === 3) {
-      if (activePane === "architect") return { left: "35%", center: "30%", right: "35%" };
-      if (activePane === "builder") return { left: "25%", center: "40%", right: "35%" };
-      return { left: "30%", center: "30%", right: "40%" };
+      setColWidths([30, 30, 40]);
+    } else if (visible === 2) {
+      if (showArchitect && showBuilder) setColWidths([50, 50, 0]);
+      else if (showArchitect && showRunway) setColWidths([40, 0, 60]);
+      else if (showBuilder && showRunway) setColWidths([0, 40, 60]);
+    } else {
+      setColWidths([
+        showArchitect ? 100 : 0,
+        showBuilder ? 100 : 0,
+        showRunway ? 100 : 0,
+      ]);
     }
-    if (visible === 2) {
-      if (showArchitect && showBuilder) return { left: "50%", center: "50%", right: "0%" };
-      if (showArchitect && showRunway) return { left: "40%", center: "0%", right: "60%" };
-      if (showBuilder && showRunway) return { left: "0%", center: "40%", right: "60%" };
-    }
-    return { left: showArchitect ? "100%" : "0%", center: showBuilder ? "100%" : "0%", right: showRunway ? "100%" : "0%" };
-  };
+  }, [showArchitect, showBuilder, showRunway]);
 
-  const widths = getWidths();
+  // Drag-to-resize handlers
+  const handleResizeStart = useCallback((handle: "left" | "right", e: React.MouseEvent) => {
+    e.preventDefault();
+    dragRef.current = {
+      handle,
+      startX: e.clientX,
+      startWidths: [...colWidths],
+    };
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  }, [colWidths]);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const drag = dragRef.current;
+      if (!drag || !containerRef.current) return;
+      const containerWidth = containerRef.current.offsetWidth;
+      const deltaPercent = ((e.clientX - drag.startX) / containerWidth) * 100;
+      const [a, b, c] = drag.startWidths;
+      const MIN = 15; // minimum column width %
+
+      if (drag.handle === "left") {
+        // Between architect and builder (or architect and runway if builder hidden)
+        if (showArchitect && showBuilder) {
+          const newA = Math.max(MIN, Math.min(a + deltaPercent, a + b - MIN));
+          const newB = a + b - newA;
+          setColWidths([newA, newB, c]);
+        } else if (showArchitect && showRunway && !showBuilder) {
+          const newA = Math.max(MIN, Math.min(a + deltaPercent, a + c - MIN));
+          const newC = a + c - newA;
+          setColWidths([newA, 0, newC]);
+        }
+      } else {
+        // Between builder and runway (or architect and runway if builder hidden)
+        if (showBuilder && showRunway) {
+          const newB = Math.max(MIN, Math.min(b + deltaPercent, b + c - MIN));
+          const newC = b + c - newB;
+          setColWidths([a, newB, newC]);
+        }
+      }
+    };
+
+    const handleMouseUp = () => {
+      if (dragRef.current) {
+        dragRef.current = null;
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [showArchitect, showBuilder, showRunway]);
+
+  const widths = {
+    left: `${colWidths[0]}%`,
+    center: `${colWidths[1]}%`,
+    right: `${colWidths[2]}%`,
+  };
 
   // Hand-off handlers
   // Handoff animation state
@@ -313,7 +400,7 @@ export function IDEShell({
       </div>
 
       {/* Three panel layout: Architect | Builder | Staging Runway */}
-      <div className="flex flex-1 overflow-hidden" style={{ flexDirection: reversed ? "row-reverse" : "row" }}>
+      <div ref={containerRef} className="flex flex-1 overflow-hidden" style={{ flexDirection: reversed ? "row-reverse" : "row" }}>
         {/* LEFT: Architect + TODO panel */}
         {showArchitect && (
         <div
@@ -325,7 +412,7 @@ export function IDEShell({
                 ? "3px solid #3E806B"
                 : "3px solid transparent",
             overflow: "hidden",
-            transition: "width 0.3s ease",
+            flexShrink: 0,
           }}
         >
           <TodoPanel projectId={projectId} />
@@ -347,16 +434,40 @@ export function IDEShell({
         </div>
         )}
 
+        {/* Resize handle: between Architect and Builder (or Runway if Builder hidden) */}
+        {showArchitect && (showBuilder || showRunway) && (
+          <div
+            className="resize-handle"
+            onMouseDown={(e) => handleResizeStart("left", e)}
+            style={{
+              width: "5px",
+              cursor: "col-resize",
+              background: "transparent",
+              position: "relative",
+              flexShrink: 0,
+              zIndex: 20,
+            }}
+          >
+            <div style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: "2px",
+              width: "1px",
+              background: "rgba(9,8,14,0.08)",
+              transition: "background 0.15s, width 0.15s",
+            }} />
+          </div>
+        )}
+
         {/* CENTER: Builder */}
         {showBuilder && (
         <div
           className={`ide-pane ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
           style={{
             width: widths.center,
-            borderLeft: "1px solid rgba(9,8,14,0.08)",
-            borderRight: "1px solid rgba(9,8,14,0.08)",
             overflow: "hidden",
-            transition: "width 0.3s ease",
+            flexShrink: 0,
           }}
         >
           <BuilderPane
@@ -377,16 +488,42 @@ export function IDEShell({
         </div>
         )}
 
+        {/* Resize handle: between Builder and Runway */}
+        {showBuilder && showRunway && (
+          <div
+            className="resize-handle"
+            onMouseDown={(e) => handleResizeStart("right", e)}
+            style={{
+              width: "5px",
+              cursor: "col-resize",
+              background: "transparent",
+              position: "relative",
+              flexShrink: 0,
+              zIndex: 20,
+            }}
+          >
+            <div style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: "2px",
+              width: "1px",
+              background: "rgba(9,8,14,0.08)",
+              transition: "background 0.15s, width 0.15s",
+            }} />
+          </div>
+        )}
+
         {/* RIGHT: Staging Runway (with Files, Preview, Git tabs) */}
         {showRunway && (
         <div
           style={{
             width: widths.right,
-            transition: "width 0.3s ease",
             borderRight:
               activePane === "builder"
                 ? "3px solid #14287D"
                 : "3px solid transparent",
+            flexShrink: 0,
           }}
           className="ide-pane ide-pane-active"
         >

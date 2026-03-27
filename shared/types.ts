@@ -1,3 +1,47 @@
+// ─── Onboarding ─────────────────────────────────────────────────────────────
+
+export type BusinessIndustry =
+  | "restaurant"
+  | "retail"
+  | "professional-services"
+  | "construction"
+  | "health-wellness"
+  | "home-services"
+  | "automotive"
+  | "real-estate"
+  | "creative-agency"
+  | "other";
+
+export type PrimaryGoal =
+  | "get-found-online"
+  | "sell-products"
+  | "book-appointments"
+  | "showcase-portfolio"
+  | "build-internal-tool"
+  | "launch-saas"
+  | "other";
+
+export interface OnboardingInput {
+  businessIndustry: BusinessIndustry;
+  primaryGoal: PrimaryGoal;
+}
+
+export interface AICombo {
+  id: string;
+  label: string;
+  architectProvider: AIProvider;
+  architectModel: string;
+  builderProvider: AIProvider;
+  builderModel: string;
+  reason: string;
+  recommended: boolean;
+}
+
+export interface AIModelConfig {
+  provider: string;
+  model: string;
+}
+
 // ─── User ────────────────────────────────────────────────────────────────────
 
 export type UserRole = "owner" | "admin" | "builder";
@@ -7,6 +51,9 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  businessIndustry: BusinessIndustry | null;
+  primaryGoal: PrimaryGoal | null;
+  onboardingCompletedAt: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -16,6 +63,9 @@ export interface PublicUser {
   email: string;
   name: string;
   role: UserRole;
+  businessIndustry: BusinessIndustry | null;
+  primaryGoal: PrimaryGoal | null;
+  onboardingCompletedAt: string | null;
 }
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
@@ -59,6 +109,8 @@ export interface Project {
   status: ProjectStatus;
   repoName: string | null;
   repoBranch: string;
+  defaultArchitectConfig: AIModelConfig | null;
+  defaultBuilderConfig: AIModelConfig | null;
   lastBuiltAt: string | null;
   createdAt: string;
   updatedAt: string;

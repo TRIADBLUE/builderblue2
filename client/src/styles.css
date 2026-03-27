@@ -178,7 +178,14 @@ a:hover, button:not(.btn):hover {
 
 /* ─── IDE Pane transitions ───────────────────────────────────────────────── */
 .ide-pane {
-  transition: width 400ms ease-in-out, opacity 400ms ease-in-out, filter 400ms ease-in-out;
+  transition: opacity 400ms ease-in-out, filter 400ms ease-in-out;
+}
+
+/* ─── Column resize handles ──────────────────────────────────────────────── */
+.resize-handle:hover > div,
+.resize-handle:active > div {
+  background: var(--steel-blue) !important;
+  width: 3px !important;
 }
 
 .ide-pane-inactive {

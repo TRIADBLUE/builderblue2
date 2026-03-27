@@ -60,6 +60,8 @@ export default function IDEPage() {
       repoName={project.repoName ?? null}
       files={project.files}
       onProjectNameChange={(name) => updateProject(project.id, { name })}
+      defaultArchitectConfig={project.defaultArchitectConfig ?? null}
+      defaultBuilderConfig={project.defaultBuilderConfig ?? null}
     />
   );
 }

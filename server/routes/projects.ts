@@ -8,6 +8,8 @@ import os from "os";
 import { db } from "../db.js";
 import { projects, projectFiles } from "../../shared/schema.js";
 import { authenticate } from "../middleware/authenticate.js";
+import { TEMPLATE_TAGS, getRecommendedTemplates, getRecommendedCombos } from "../services/onboarding-recommendations.js";
+import type { BusinessIndustry, PrimaryGoal } from "../../shared/types.js";
 
 const router = Router();
 router.use(authenticate);
@@ -395,15 +397,56 @@ router.get("/templates/list", async (_req, res) => {
     name: t.name,
     description: t.description,
     fileCount: t.files.length,
+    tags: TEMPLATE_TAGS[id] ?? { industries: [], goals: [] },
   }));
   res.json(list);
 });
 
-// POST /api/projects — updated to support templateId
+// GET /api/projects/recommendations — personalized template + AI combo recs
+router.get("/recommendations", async (req, res) => {
+  try {
+    const industry = req.query.industry as BusinessIndustry | undefined;
+    const goal = req.query.goal as PrimaryGoal | undefined;
+
+    if (!industry || !goal) {
+      res.status(400).json({ message: "industry and goal query params required" });
+      return;
+    }
+
+    const rankedTemplates = getRecommendedTemplates(industry, goal);
+    const templates = rankedTemplates.map((r) => {
+      const t = TEMPLATES[r.id];
+      return {
+        id: r.id,
+        name: t.name,
+        description: t.description,
+        fileCount: t.files.length,
+        matchScore: r.matchScore,
+        tags: TEMPLATE_TAGS[r.id] ?? { industries: [], goals: [] },
+      };
+    });
+
+    const aiCombos = getRecommendedCombos(goal);
+
+    res.json({ templates, aiCombos });
+  } catch (error) {
+    console.error("Recommendations error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// POST /api/projects — updated to support templateId + AI combo
+const aiModelConfigSchema = z.object({
+  provider: z.string(),
+  model: z.string(),
+}).optional();
+
 const createWithTemplateSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().nullable().optional(),
   templateId: z.string().optional(),
+  defaultArchitectConfig: aiModelConfigSchema,
+  defaultBuilderConfig: aiModelConfigSchema,
 });
 
 // Override the original POST to support templates
@@ -421,6 +464,8 @@ router.post("/from-template", async (req, res) => {
         userId: req.user!.userId,
         name: parsed.data.name,
         description: parsed.data.description ?? null,
+        defaultArchitectConfig: parsed.data.defaultArchitectConfig ?? null,
+        defaultBuilderConfig: parsed.data.defaultBuilderConfig ?? null,
       })
       .returning();
 

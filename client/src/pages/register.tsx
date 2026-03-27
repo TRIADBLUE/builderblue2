@@ -5,12 +5,14 @@ import { Nav } from "../components/layout/nav";
 import { RegisterForm } from "../components/auth/register-form";
 
 export default function Register() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    if (isAuthenticated) setLocation("/dashboard");
-  }, [isAuthenticated, setLocation]);
+    if (isAuthenticated) {
+      setLocation(user?.onboardingCompletedAt ? "/dashboard" : "/onboarding");
+    }
+  }, [isAuthenticated, user, setLocation]);
 
   return (
     <div className="min-h-screen bg-gray-50">

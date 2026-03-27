@@ -20,6 +20,9 @@ export const users = pgTable("users", {
   passwordHash: text("password_hash"),
   name: text("name").notNull(),
   role: text("role").notNull().default("builder"),
+  businessIndustry: text("business_industry"),
+  primaryGoal: text("primary_goal"),
+  onboardingCompletedAt: timestamp("onboarding_completed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -70,6 +73,8 @@ export const projects = pgTable("projects", {
   customDomain: text("custom_domain"),
   subdomain: text("subdomain"),
   folderId: uuid("folder_id"),
+  defaultArchitectConfig: jsonb("default_architect_config"),
+  defaultBuilderConfig: jsonb("default_builder_config"),
   lastBuiltAt: timestamp("last_built_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

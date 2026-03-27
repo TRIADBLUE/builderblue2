@@ -81,61 +81,78 @@ export function CenterPanel({
 
   return (
     <div className="flex h-full flex-col runway" style={{ zIndex: 10 }}>
-      {/* Tab bar — only shows when more than just Tools & Files is open */}
-      {openTabs.length > 1 && (
-        <div
-          className="flex items-center"
-          style={{
-            background: "#FFF5ED",
-            borderBottom: "1px solid rgba(9, 8, 14, 0.08)",
-            flexShrink: 0,
-          }}
-        >
-          {openTabs.map((tab) => (
-            <div
-              key={tab}
-              className="flex items-center"
-              style={{ borderRight: "1px solid rgba(9, 8, 14, 0.06)" }}
+      {/* Tab bar — always visible */}
+      <div
+        className="flex items-center"
+        style={{
+          background: "#FFF5ED",
+          borderBottom: "1px solid rgba(9, 8, 14, 0.08)",
+          flexShrink: 0,
+        }}
+      >
+        {openTabs.map((tab) => (
+          <div
+            key={tab}
+            className="flex items-center"
+            style={{ borderRight: "1px solid rgba(9, 8, 14, 0.06)" }}
+          >
+            <button
+              onClick={() => setActiveTab(tab)}
+              style={{
+                fontFamily: "var(--font-runway)",
+                fontSize: "11px",
+                color: activeTab === tab ? "#14287D" : "rgba(9, 8, 14, 0.45)",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: "6px 8px 6px 10px",
+                whiteSpace: "nowrap",
+                fontWeight: activeTab === tab ? 600 : 400,
+                transition: "color 0.15s",
+              }}
             >
+              {TAB_LABELS[tab] ?? tab}
+            </button>
+            {/* Close button (not on Tools & Files) */}
+            {tab !== "tools" && (
               <button
-                onClick={() => setActiveTab(tab)}
+                onClick={(e) => { e.stopPropagation(); handleCloseTab(tab); }}
                 style={{
                   fontFamily: "var(--font-runway)",
-                  fontSize: "11px",
-                  color: activeTab === tab ? "#14287D" : "rgba(9, 8, 14, 0.45)",
+                  fontSize: "10px",
+                  color: "rgba(9,8,14,0.25)",
                   background: "transparent",
                   border: "none",
                   cursor: "pointer",
-                  padding: "6px 8px 6px 10px",
-                  whiteSpace: "nowrap",
-                  fontWeight: activeTab === tab ? 600 : 400,
-                  transition: "color 0.15s",
+                  padding: "4px 6px 4px 2px",
+                  lineHeight: 1,
                 }}
+                title={`Close ${TAB_LABELS[tab] ?? tab}`}
               >
-                {TAB_LABELS[tab] ?? tab}
+                ✕
               </button>
-              {/* Close button (not on Tools & Files) */}
-              {tab !== "tools" && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); handleCloseTab(tab); }}
-                  style={{
-                    fontFamily: "var(--font-runway)",
-                    fontSize: "10px",
-                    color: "rgba(9,8,14,0.25)",
-                    background: "transparent",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: "4px 6px 4px 2px",
-                    lineHeight: 1,
-                  }}
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+            )}
+          </div>
+        ))}
+        {/* Add tab button */}
+        <button
+          onClick={() => setActiveTab("tools")}
+          style={{
+            fontFamily: "var(--font-runway)",
+            fontSize: "14px",
+            color: "rgba(9,8,14,0.3)",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            padding: "4px 8px",
+            lineHeight: 1,
+            transition: "color 0.15s",
+          }}
+          title="Open a tool"
+        >
+          +
+        </button>
+      </div>
 
       {/* Tab content */}
       <div

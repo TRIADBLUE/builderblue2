@@ -20,12 +20,18 @@ function toPublicUser(user: {
   email: string;
   name: string;
   role: string;
+  businessIndustry?: string | null;
+  primaryGoal?: string | null;
+  onboardingCompletedAt?: Date | null;
 }): PublicUser {
   return {
     id: user.id,
     email: user.email,
     name: user.name,
     role: user.role as PublicUser["role"],
+    businessIndustry: (user.businessIndustry ?? null) as PublicUser["businessIndustry"],
+    primaryGoal: (user.primaryGoal ?? null) as PublicUser["primaryGoal"],
+    onboardingCompletedAt: user.onboardingCompletedAt?.toISOString() ?? null,
   };
 }
 

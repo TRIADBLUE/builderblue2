@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { AppShell } from "../../components/layout/app-shell";
 import { useAuth } from "../../hooks/useAuth";
 import { api } from "../../lib/api";
-import type { Project } from "@shared/types";
+import type { Project, AICombo, AIModelConfig } from "@shared/types";
 
 type SortKey = "name" | "created" | "updated";
 type ProjectType = null | "new" | "existing";
@@ -15,6 +15,13 @@ interface Template {
   name: string;
   description: string;
   fileCount: number;
+  matchScore?: number;
+  tags?: { industries: string[]; goals: string[] };
+}
+
+interface Recommendations {
+  templates: Template[];
+  aiCombos: AICombo[];
 }
 
 export default function Dashboard() {
@@ -43,6 +50,11 @@ export default function Dashboard() {
   // Templates
   const [templates, setTemplates] = useState<Template[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState("");
+
+  // Onboarding recommendations
+  const [recommendations, setRecommendations] = useState<Recommendations | null>(null);
+  const [selectedCombo, setSelectedCombo] = useState<AICombo | null>(null);
+  const [wizardStep, setWizardStep] = useState<"type" | "recs" | "combo" | "details">("type");
 
   // Filter and sort projects
   const filteredProjects = useMemo(() => {
@@ -93,6 +105,23 @@ export default function Dashboard() {
     }
   }, [newMode, templates.length]);
 
+  // Fetch recommendations when user picks "new" and has onboarding data
+  const hasOnboarding = !!user?.businessIndustry && !!user?.primaryGoal;
+  useEffect(() => {
+    if (projectType === "new" && hasOnboarding && !recommendations) {
+      api.fetch<Recommendations>(
+        `/api/projects/recommendations?industry=${user!.businessIndustry}&goal=${user!.primaryGoal}`
+      )
+        .then((recs) => {
+          setRecommendations(recs);
+          // Pre-select the recommended combo
+          const rec = recs.aiCombos.find((c) => c.recommended);
+          if (rec) setSelectedCombo(rec);
+        })
+        .catch(() => {});
+    }
+  }, [projectType, hasOnboarding, recommendations, user]);
+
   // Reset form
   const resetForm = useCallback(() => {
     setShowAddProject(false);
@@ -105,6 +134,9 @@ export default function Dashboard() {
     setZipFile(null);
     setSelectedTemplate("");
     setError("");
+    setRecommendations(null);
+    setSelectedCombo(null);
+    setWizardStep("type");
   }, []);
 
   // Create blank project
@@ -134,13 +166,24 @@ export default function Dashboard() {
     setIsCreating(true);
     setError("");
     try {
+      const body: Record<string, unknown> = {
+        name: newProjectName.trim(),
+        description: newProjectDesc.trim() || null,
+        templateId: selectedTemplate,
+      };
+      if (selectedCombo) {
+        body.defaultArchitectConfig = {
+          provider: selectedCombo.architectProvider,
+          model: selectedCombo.architectModel,
+        };
+        body.defaultBuilderConfig = {
+          provider: selectedCombo.builderProvider,
+          model: selectedCombo.builderModel,
+        };
+      }
       const project = await api.fetch<Project>("/api/projects/from-template", {
         method: "POST",
-        body: {
-          name: newProjectName.trim(),
-          description: newProjectDesc.trim() || null,
-          templateId: selectedTemplate,
-        },
+        body,
       });
       setLocation(`/ide/${project.id}`);
     } catch (err: any) {
@@ -148,7 +191,7 @@ export default function Dashboard() {
     } finally {
       setIsCreating(false);
     }
-  }, [newProjectName, newProjectDesc, selectedTemplate, setLocation]);
+  }, [newProjectName, newProjectDesc, selectedTemplate, selectedCombo, setLocation]);
 
   // Import from GitHub
   const handleImportGithub = useCallback(async () => {
@@ -341,11 +384,18 @@ export default function Dashboard() {
             </h2>
 
             {/* Step 1: New or Existing? */}
-            {!projectType && (
+            {!projectType && wizardStep === "type" && (
               <div className="flex gap-4">
                 <div
                   style={typeCardStyle(false)}
-                  onClick={() => setProjectType("new")}
+                  onClick={() => {
+                    setProjectType("new");
+                    if (hasOnboarding) {
+                      setWizardStep("recs");
+                    } else {
+                      setWizardStep("details");
+                    }
+                  }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--deep-blue)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(74,144,217,0.2)"; }}
                 >
@@ -359,7 +409,7 @@ export default function Dashboard() {
                 </div>
                 <div
                   style={typeCardStyle(false)}
-                  onClick={() => setProjectType("existing")}
+                  onClick={() => { setProjectType("existing"); setWizardStep("details"); }}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--deep-blue)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(74,144,217,0.2)"; }}
                 >
@@ -374,8 +424,173 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* Step 2: New Project options */}
-            {projectType === "new" && (
+            {/* Recommended Templates (onboarding users only) */}
+            {projectType === "new" && wizardStep === "recs" && recommendations && (
+              <>
+                <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "15px", color: "var(--triad-black)", marginBottom: "4px" }}>
+                  Recommended for your business
+                </h3>
+                <p style={{ fontFamily: "var(--font-content)", fontSize: "12px", color: "var(--steel-blue)", marginBottom: "16px" }}>
+                  Based on what you told us, these templates are the best fit. Pick one, or scroll down for all options.
+                </p>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 mb-4">
+                  {recommendations.templates.map((t) => (
+                    <div
+                      key={t.id}
+                      onClick={() => {
+                        setSelectedTemplate(t.id);
+                        setNewMode("template");
+                        setWizardStep("combo");
+                      }}
+                      className="rounded-lg p-3 transition-all"
+                      style={{
+                        border: "1px solid rgba(74,144,217,0.2)",
+                        background: "white",
+                        cursor: "pointer",
+                        position: "relative",
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--deep-blue)"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(74,144,217,0.2)"; }}
+                    >
+                      {t.matchScore === 2 && (
+                        <span style={{
+                          position: "absolute", top: "6px", right: "6px",
+                          fontFamily: "var(--font-label)", fontSize: "9px",
+                          background: "var(--deep-blue)", color: "#FFF5ED",
+                          padding: "1px 6px", borderRadius: "4px",
+                        }}>
+                          Best match
+                        </span>
+                      )}
+                      <div style={{ fontFamily: "var(--font-heading)", fontSize: "13px", fontWeight: "bold", color: "var(--triad-black)" }}>
+                        {t.name}
+                      </div>
+                      <div style={{ fontFamily: "var(--font-content)", fontSize: "11px", color: "var(--steel-blue)", marginTop: "2px" }}>
+                        {t.description}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      setNewMode("fresh");
+                      setSelectedTemplate("");
+                      setWizardStep("combo");
+                    }}
+                    style={{
+                      fontFamily: "var(--font-content)", fontSize: "12px",
+                      color: "var(--steel-blue)", background: "none",
+                      border: "none", cursor: "pointer", textDecoration: "underline",
+                    }}
+                  >
+                    Skip — start from scratch
+                  </button>
+                  <button
+                    onClick={() => { setProjectType(null); setWizardStep("type"); }}
+                    style={{
+                      fontFamily: "var(--font-content)", fontSize: "12px",
+                      color: "var(--steel-blue)", background: "none",
+                      border: "none", cursor: "pointer",
+                    }}
+                  >
+                    ← Back
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* AI Combo Selection (onboarding users only) */}
+            {projectType === "new" && wizardStep === "combo" && recommendations && (
+              <>
+                <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "15px", color: "var(--triad-black)", marginBottom: "4px" }}>
+                  Choose your AI team
+                </h3>
+                <p style={{ fontFamily: "var(--font-content)", fontSize: "12px", color: "var(--steel-blue)", marginBottom: "16px" }}>
+                  Each project uses two AI assistants — an Architect that plans and a Builder that writes code. Here are the best combos for what you are building.
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "16px" }}>
+                  {recommendations.aiCombos.map((combo) => (
+                    <div
+                      key={combo.id}
+                      onClick={() => setSelectedCombo(combo)}
+                      style={{
+                        padding: "16px",
+                        borderRadius: "10px",
+                        border: selectedCombo?.id === combo.id
+                          ? "2px solid var(--deep-blue)"
+                          : "1px solid rgba(74,144,217,0.2)",
+                        background: selectedCombo?.id === combo.id
+                          ? "rgba(20, 40, 125, 0.04)"
+                          : "white",
+                        cursor: "pointer",
+                        transition: "all 0.15s",
+                        position: "relative",
+                      }}
+                    >
+                      {combo.recommended && (
+                        <span style={{
+                          position: "absolute", top: "10px", right: "10px",
+                          fontFamily: "var(--font-label)", fontSize: "9px",
+                          background: "var(--deep-blue)", color: "#FFF5ED",
+                          padding: "2px 8px", borderRadius: "4px",
+                        }}>
+                          Recommended
+                        </span>
+                      )}
+                      <div style={{ fontFamily: "var(--font-heading)", fontSize: "14px", fontWeight: "bold", color: "var(--triad-black)", marginBottom: "4px" }}>
+                        {combo.label}
+                      </div>
+                      <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", color: "var(--steel-blue)", marginBottom: "8px" }}>
+                        {combo.reason}
+                      </div>
+                      <div style={{ fontFamily: "var(--font-label)", fontSize: "10px", color: "rgba(9,8,14,0.4)", display: "flex", gap: "12px" }}>
+                        <span>Architect: {combo.architectProvider} / {combo.architectModel.split("-").slice(0, 2).join(" ")}</span>
+                        <span>Builder: {combo.builderProvider} / {combo.builderModel.split("-").slice(0, 2).join(" ")}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setWizardStep("details")}
+                    className="btn rounded-md px-5 py-2 text-sm font-semibold"
+                    style={{
+                      background: "var(--deep-blue)", color: "#FFF5ED",
+                      border: "none", cursor: "pointer", fontFamily: "var(--font-button)",
+                    }}
+                  >
+                    Continue
+                  </button>
+                  <button
+                    onClick={() => {
+                      setSelectedCombo(null);
+                      setWizardStep("details");
+                    }}
+                    style={{
+                      fontFamily: "var(--font-content)", fontSize: "12px",
+                      color: "var(--steel-blue)", background: "none",
+                      border: "none", cursor: "pointer", textDecoration: "underline",
+                    }}
+                  >
+                    Skip — I will pick my own later
+                  </button>
+                  <button
+                    onClick={() => setWizardStep("recs")}
+                    style={{
+                      fontFamily: "var(--font-content)", fontSize: "12px",
+                      color: "var(--steel-blue)", background: "none",
+                      border: "none", cursor: "pointer",
+                    }}
+                  >
+                    ← Back
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* New Project details */}
+            {projectType === "new" && wizardStep === "details" && (
               <>
                 <div className="mb-5 flex gap-2" style={{ borderBottom: "1px solid rgba(74,144,217,0.15)", paddingBottom: "10px" }}>
                   <button style={subTabStyle(newMode === "fresh")} onClick={() => setNewMode("fresh")}>Start Fresh</button>
@@ -451,8 +666,8 @@ export default function Dashboard() {
               </>
             )}
 
-            {/* Step 2: Existing Project options */}
-            {projectType === "existing" && (
+            {/* Existing Project options */}
+            {projectType === "existing" && wizardStep === "details" && (
               <>
                 <div className="mb-5 flex gap-2" style={{ borderBottom: "1px solid rgba(74,144,217,0.15)", paddingBottom: "10px" }}>
                   <button style={subTabStyle(existingMode === "github")} onClick={() => setExistingMode("github")}>From GitHub</button>
@@ -541,7 +756,7 @@ export default function Dashboard() {
             )}
 
             {/* Actions */}
-            {projectType && (
+            {projectType && wizardStep === "details" && (
               <div className="flex gap-2">
                 <button
                   onClick={handleCreate}
@@ -559,7 +774,14 @@ export default function Dashboard() {
                   {buttonLabel}
                 </button>
                 <button
-                  onClick={() => setProjectType(null)}
+                  onClick={() => {
+                    if (hasOnboarding && projectType === "new") {
+                      setWizardStep("combo");
+                    } else {
+                      setProjectType(null);
+                      setWizardStep("type");
+                    }
+                  }}
                   className="rounded-md px-4 py-2 text-sm transition-all"
                   style={{
                     background: "transparent",
