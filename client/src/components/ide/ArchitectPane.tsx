@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect, type FormEvent } from "react";
+import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
 import type { ConversationMessage, AIProvider, ActivePane } from "@shared/types";
 import { ThinkingIndicator } from "./ThinkingIndicator";
 import { ModelPicker } from "./ModelPicker";
+import { useVoiceInput } from "../../hooks/useVoiceInput";
 
 interface ArchitectPaneProps {
   isActive: boolean;
@@ -54,6 +55,12 @@ export function ArchitectPane({
       textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 160)}px`;
     }
   };
+
+  const handleVoiceTranscript = useCallback((text: string) => {
+    setInput(prev => (prev ? `${prev} ${text}` : text));
+  }, []);
+
+  const { isListening, isSupported, toggleListening } = useVoiceInput(handleVoiceTranscript);
 
   return (
     <div
@@ -167,6 +174,28 @@ export function ArchitectPane({
               borderColor: "var(--steel-blue)",
             }}
           />
+          {isSupported && (
+            <button
+              type="button"
+              onClick={toggleListening}
+              title={isListening ? "Stop recording" : "Speak your instruction"}
+              className={`btn flex h-9 w-9 items-center justify-center rounded-md${isListening ? " mic-listening" : ""}`}
+              style={{
+                background: isListening ? "#E00420" : "transparent",
+                color: isListening ? "#fff" : "#3E806B",
+                border: isListening ? "none" : "1px solid rgba(62,128,107,0.4)",
+                cursor: "pointer",
+                flexShrink: 0,
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </button>
+          )}
           <button
             type="submit"
             disabled={isStreaming || !input.trim()}

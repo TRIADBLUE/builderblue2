@@ -354,3 +354,13 @@ a:hover, button:not(.btn):hover {
 .toast-enter {
   animation: slide-in-right 300ms ease-out forwards;
 }
+
+/* ─── Mic listening pulse ────────────────────────────────────────────────── */
+@keyframes mic-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.75; transform: scale(1.12); }
+}
+
+.mic-listening {
+  animation: mic-pulse 900ms ease-in-out infinite;
+}

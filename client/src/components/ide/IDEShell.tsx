@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import type {
   ActivePane,
   AIProvider,
@@ -17,6 +17,14 @@ import { useConversation } from "../../hooks/useConversation";
 import { useStaging } from "../../hooks/useStaging";
 import { useComputeStatus } from "../../hooks/useComputeStatus";
 import { useAuth } from "../../hooks/useAuth";
+
+type PaneKey = "architect" | "builder" | "runway";
+
+const PANE_CONFIG: Record<PaneKey, { label: string; color: string }> = {
+  architect: { label: "Architect", color: "#3E806B" },
+  builder:   { label: "Builder",   color: "#82323C" },
+  runway:    { label: "Runway",    color: "#14287D" },
+};
 
 interface IDEShellProps {
   projectId: string;
@@ -47,43 +55,42 @@ export function IDEShell({
   const [activePane, setActivePane] = useState<ActivePane>(null);
   const [flashPane, setFlashPane] = useState<"architect" | "builder" | null>(null);
 
-  // Layout customization
+  // Layout preset
   type LayoutPreset = "full" | "focus-build" | "focus-plan" | "focus-review";
   const [layoutPreset, setLayoutPreset] = useState<LayoutPreset>("full");
+
+  // Visibility
   const [showArchitect, setShowArchitect] = useState(true);
   const [showBuilder, setShowBuilder] = useState(true);
   const [showRunway, setShowRunway] = useState(true);
-  const [showLayoutMenu, setShowLayoutMenu] = useState(false);
-  const [reversed, setReversed] = useState(false);
+
+  // Column order — draggable
+  const [colOrder, setColOrder] = useState<PaneKey[]>(["architect", "builder", "runway"]);
+
+  const isVisible = useCallback(
+    (k: PaneKey) =>
+      k === "architect" ? showArchitect : k === "builder" ? showBuilder : showRunway,
+    [showArchitect, showBuilder, showRunway]
+  );
+
+  const setVisible = useCallback((k: PaneKey, v: boolean) => {
+    if (k === "architect") setShowArchitect(v);
+    else if (k === "builder") setShowBuilder(v);
+    else setShowRunway(v);
+  }, []);
 
   // Apply layout presets
   const applyPreset = useCallback((preset: LayoutPreset) => {
     setLayoutPreset(preset);
     switch (preset) {
-      case "full":
-        setShowArchitect(true);
-        setShowBuilder(true);
-        setShowRunway(true);
-        break;
-      case "focus-build":
-        setShowArchitect(false);
-        setShowBuilder(true);
-        setShowRunway(true);  // Builder + Runway
-        break;
-      case "focus-plan":
-        setShowArchitect(true);
-        setShowBuilder(false);
-        setShowRunway(true);  // Architect + Runway
-        break;
-      case "focus-review":
-        setShowArchitect(false);
-        setShowBuilder(false);
-        setShowRunway(true);  // Runway only (full width review)
-        break;
+      case "full":         setShowArchitect(true);  setShowBuilder(true);  setShowRunway(true);  break;
+      case "focus-build":  setShowArchitect(false); setShowBuilder(true);  setShowRunway(true);  break;
+      case "focus-plan":   setShowArchitect(true);  setShowBuilder(false); setShowRunway(true);  break;
+      case "focus-review": setShowArchitect(false); setShowBuilder(false); setShowRunway(true);  break;
     }
   }, []);
 
-  // Architect conversation
+  // Conversations
   const architectConvo = useConversation();
   const [architectProvider, setArchitectProvider] = useState<AIProvider>(
     (defaultArchitectConfig?.provider as AIProvider) ?? "claude"
@@ -92,7 +99,6 @@ export function IDEShell({
     defaultArchitectConfig?.model ?? "claude-opus-4-20250514"
   );
 
-  // Builder conversation
   const builderConvo = useConversation();
   const [builderProvider, setBuilderProvider] = useState<AIProvider>(
     (defaultBuilderConfig?.provider as AIProvider) ?? "claude"
@@ -102,118 +108,108 @@ export function IDEShell({
   );
   const [builderInput, setBuilderInput] = useState("");
 
-  // New staged IDs for animation
   const [newStagedIds, setNewStagedIds] = useState<Set<string>>(new Set());
-
-  // Upgrade toast
   const [showUpgradeToast, setShowUpgradeToast] = useState(false);
 
-  // Load staged changes
-  useEffect(() => {
-    staging.loadChanges(projectId);
-  }, [projectId]);
-
-  // Initialize conversations
+  useEffect(() => { staging.loadChanges(projectId); }, [projectId]);
   useEffect(() => {
     architectConvo.loadConversations(projectId);
     builderConvo.loadConversations(projectId);
   }, [projectId]);
 
-  // Resizable column widths (percentages)
+  // ── Resizable columns ──────────────────────────────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<{
-    handle: "left" | "right";
+  const dragResizeRef = useRef<{
+    handleIdx: number;
     startX: number;
-    startWidths: [number, number, number];
+    startWidths: Record<PaneKey, number>;
   } | null>(null);
 
-  // Default widths: [architect%, builder%, runway%]
-  const [colWidths, setColWidths] = useState<[number, number, number]>([42, 38, 20]);
+  const [colWidths, setColWidths] = useState<Record<PaneKey, number>>({
+    architect: 42,
+    builder:   38,
+    runway:    20,
+  });
 
   // Reset widths when visibility changes
   useEffect(() => {
-    const visible = [showArchitect, showBuilder, showRunway].filter(Boolean).length;
-    if (visible === 3) {
-      setColWidths([42, 38, 20]);
-    } else if (visible === 2) {
-      if (showArchitect && showBuilder) setColWidths([50, 50, 0]);
-      else if (showArchitect && showRunway) setColWidths([55, 0, 45]);
-      else if (showBuilder && showRunway) setColWidths([0, 55, 45]);
+    const visible = (["architect", "builder", "runway"] as PaneKey[]).filter(
+      k => k === "architect" ? showArchitect : k === "builder" ? showBuilder : showRunway
+    );
+    const n = visible.length;
+    if (n === 0) return;
+    if (n === 3) {
+      setColWidths({ architect: 42, builder: 38, runway: 20 });
+    } else if (n === 2) {
+      const [a, b] = visible;
+      const w: Record<PaneKey, number> = { architect: 0, builder: 0, runway: 0 };
+      w[a] = 55; w[b] = 45;
+      setColWidths(w);
     } else {
-      setColWidths([
-        showArchitect ? 100 : 0,
-        showBuilder ? 100 : 0,
-        showRunway ? 100 : 0,
-      ]);
+      const [only] = visible;
+      const w: Record<PaneKey, number> = { architect: 0, builder: 0, runway: 0 };
+      w[only] = 100;
+      setColWidths(w);
     }
   }, [showArchitect, showBuilder, showRunway]);
 
-  // Drag-to-resize handlers
-  const handleResizeStart = useCallback((handle: "left" | "right", e: React.MouseEvent) => {
+  // Visible panes in current order — also kept in a ref for mousemove closure
+  const visibleInOrder = colOrder.filter(isVisible);
+  const visibleOrderRef = useRef<PaneKey[]>(visibleInOrder);
+  visibleOrderRef.current = visibleInOrder;
+
+  const handleResizeStart = useCallback((handleIdx: number, e: React.MouseEvent) => {
     e.preventDefault();
-    dragRef.current = {
-      handle,
-      startX: e.clientX,
-      startWidths: [...colWidths],
-    };
+    dragResizeRef.current = { handleIdx, startX: e.clientX, startWidths: { ...colWidths } };
     document.body.style.cursor = "col-resize";
     document.body.style.userSelect = "none";
   }, [colWidths]);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const drag = dragRef.current;
+    const onMove = (e: MouseEvent) => {
+      const drag = dragResizeRef.current;
       if (!drag || !containerRef.current) return;
-      const containerWidth = containerRef.current.offsetWidth;
-      const deltaPercent = ((e.clientX - drag.startX) / containerWidth) * 100;
-      const [a, b, c] = drag.startWidths;
-      const MIN = 15; // minimum column width %
-
-      if (drag.handle === "left") {
-        // Between architect and builder (or architect and runway if builder hidden)
-        if (showArchitect && showBuilder) {
-          const newA = Math.max(MIN, Math.min(a + deltaPercent, a + b - MIN));
-          const newB = a + b - newA;
-          setColWidths([newA, newB, c]);
-        } else if (showArchitect && showRunway && !showBuilder) {
-          const newA = Math.max(MIN, Math.min(a + deltaPercent, a + c - MIN));
-          const newC = a + c - newA;
-          setColWidths([newA, 0, newC]);
-        }
-      } else {
-        // Between builder and runway (or architect and runway if builder hidden)
-        if (showBuilder && showRunway) {
-          const newB = Math.max(MIN, Math.min(b + deltaPercent, b + c - MIN));
-          const newC = b + c - newB;
-          setColWidths([a, newB, newC]);
-        }
-      }
+      const pct = ((e.clientX - drag.startX) / containerRef.current.offsetWidth) * 100;
+      const vis  = visibleOrderRef.current;
+      const lk   = vis[drag.handleIdx];
+      const rk   = vis[drag.handleIdx + 1];
+      if (!lk || !rk) return;
+      const MIN  = 15;
+      const sum  = drag.startWidths[lk] + drag.startWidths[rk];
+      const newL = Math.max(MIN, Math.min(drag.startWidths[lk] + pct, sum - MIN));
+      setColWidths(prev => ({ ...prev, [lk]: newL, [rk]: sum - newL }));
     };
-
-    const handleMouseUp = () => {
-      if (dragRef.current) {
-        dragRef.current = null;
+    const onUp = () => {
+      if (dragResizeRef.current) {
+        dragResizeRef.current = null;
         document.body.style.cursor = "";
         document.body.style.userSelect = "";
       }
     };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
+  }, []);
 
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [showArchitect, showBuilder, showRunway]);
+  // ── Tab drag-to-reorder ────────────────────────────────────────────────────
+  const dragTabIdx = useRef<number | null>(null);
 
-  const widths = {
-    left: `${colWidths[0]}%`,
-    center: `${colWidths[1]}%`,
-    right: `${colWidths[2]}%`,
-  };
+  const handleTabDragStart = useCallback((orderIdx: number) => {
+    dragTabIdx.current = orderIdx;
+  }, []);
 
-  // Hand-off handlers
-  // Handoff animation state
+  const handleTabDrop = useCallback((orderIdx: number) => {
+    if (dragTabIdx.current === null || dragTabIdx.current === orderIdx) return;
+    setColOrder(prev => {
+      const next = [...prev];
+      const [moved] = next.splice(dragTabIdx.current!, 1);
+      next.splice(orderIdx, 0, moved);
+      return next;
+    });
+    dragTabIdx.current = null;
+  }, []);
+
+  // ── Handoff ────────────────────────────────────────────────────────────────
   const [handoffDirection, setHandoffDirection] = useState<"to-builder" | "to-architect" | null>(null);
 
   const handleHandToBuilder = useCallback((content: string) => {
@@ -227,7 +223,7 @@ export function IDEShell({
     }, 500);
   }, []);
 
-  const handleHandToArchitect = useCallback((content: string) => {
+  const handleHandToArchitect = useCallback((_content: string) => {
     setHandoffDirection("to-architect");
     setTimeout(() => {
       setActivePane("architect");
@@ -237,78 +233,63 @@ export function IDEShell({
     }, 500);
   }, []);
 
-  // Message handlers
-  const handleArchitectMessage = useCallback(
-    async (content: string) => {
-      let convo = architectConvo.conversation;
-      if (!convo) {
-        convo = await architectConvo.createConversation(
-          projectId,
-          "architect",
-          architectProvider,
-          architectModel
-        );
-      }
-      await architectConvo.sendMessage(convo.id, content);
-    },
-    [architectConvo, projectId, architectProvider, architectModel]
-  );
+  // ── Message handlers ───────────────────────────────────────────────────────
+  const handleArchitectMessage = useCallback(async (content: string) => {
+    let convo = architectConvo.conversation;
+    if (!convo) convo = await architectConvo.createConversation(projectId, "architect", architectProvider, architectModel);
+    await architectConvo.sendMessage(convo.id, content);
+  }, [architectConvo, projectId, architectProvider, architectModel]);
 
-  const handleBuilderMessage = useCallback(
-    async (content: string) => {
-      let convo = builderConvo.conversation;
-      if (!convo) {
-        convo = await builderConvo.createConversation(
-          projectId,
-          "builder",
-          builderProvider,
-          builderModel
-        );
-      }
-      await builderConvo.sendMessage(convo.id, content, (ids) => {
-        setNewStagedIds((prev) => new Set([...prev, ...ids]));
-        // Refresh staged changes
-        staging.loadChanges(projectId);
-        // Clear new flags after animation
-        setTimeout(() => {
-          setNewStagedIds(new Set());
-        }, 1000);
-      });
-    },
-    [builderConvo, projectId, builderProvider, builderModel, staging]
-  );
-
-  // Staging handlers
-  const handleCommit = useCallback(
-    async (message: string) => {
-      await staging.commitChanges(projectId);
-    },
-    [staging, projectId]
-  );
-
-  const handleSaveAsProposal = useCallback(
-    async (filePath: string, content: string) => {
-      const { api } = await import("../../lib/api");
-      await api.fetch("/api/staging", {
-        method: "POST",
-        body: {
-          projectId,
-          filePath,
-          proposedContent: content,
-          proposedBy: "user",
-        },
-      });
+  const handleBuilderMessage = useCallback(async (content: string) => {
+    let convo = builderConvo.conversation;
+    if (!convo) convo = await builderConvo.createConversation(projectId, "builder", builderProvider, builderModel);
+    await builderConvo.sendMessage(convo.id, content, (ids) => {
+      setNewStagedIds(prev => new Set([...prev, ...ids]));
       staging.loadChanges(projectId);
-    },
-    [projectId, staging]
-  );
+      setTimeout(() => setNewStagedIds(new Set()), 1000);
+    });
+  }, [builderConvo, projectId, builderProvider, builderModel, staging]);
+
+  const handleCommit = useCallback(async (_message: string) => {
+    await staging.commitChanges(projectId);
+  }, [staging, projectId]);
+
+  const handleSaveAsProposal = useCallback(async (filePath: string, content: string) => {
+    const { api } = await import("../../lib/api");
+    await api.fetch("/api/staging", {
+      method: "POST",
+      body: { projectId, filePath, proposedContent: content, proposedBy: "user" },
+    });
+    staging.loadChanges(projectId);
+  }, [projectId, staging]);
 
   const architectMessages = (architectConvo.conversation?.messages ?? []) as ConversationMessage[];
-  const builderMessages = (builderConvo.conversation?.messages ?? []) as ConversationMessage[];
+  const builderMessages   = (builderConvo.conversation?.messages ?? []) as ConversationMessage[];
 
+  // ── Tab bar split ──────────────────────────────────────────────────────────
+  const activeTabs  = colOrder.filter(k => isVisible(k));
+  const dormantTabs = colOrder.filter(k => !isVisible(k));
+
+  const tabStyle = (k: PaneKey, dormant: boolean): React.CSSProperties => ({
+    fontFamily:      "var(--font-label)",
+    fontSize:        "9px",
+    fontWeight:      600,
+    color:           PANE_CONFIG[k].color,
+    background:      "transparent",
+    border:          `1px solid ${PANE_CONFIG[k].color}`,
+    borderRadius:    "4px",
+    padding:         "2px 8px",
+    cursor:          dormant ? "pointer" : "grab",
+    textTransform:   "uppercase",
+    letterSpacing:   "0.05em",
+    transition:      "all 0.15s",
+    opacity:         dormant ? 0.28 : 1,
+    userSelect:      "none",
+  });
+
+  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div className="flex h-screen flex-col ide-layout">
-      {/* Top Nav */}
       <TopNav
         projectName={projectName}
         branch={branch}
@@ -318,77 +299,69 @@ export function IDEShell({
         onProjectNameChange={onProjectNameChange}
         onDeploy={() => {}}
       />
-
-      {/* Compute warning */}
       <ComputeWarningBanner status={computeStatus} />
 
       {/* Layout controls bar */}
-      <div className="flex items-center justify-between px-3 py-1" style={{ background: "#FFF5ED", borderBottom: "1px solid rgba(9,8,14,0.06)", minHeight: "28px" }}>
-        <div className="flex items-center gap-2">
-          {/* Panel toggles */}
-          {[
-            { key: "architect" as const, label: "Architect", color: "#3E806B", visible: showArchitect, toggle: setShowArchitect },
-            { key: "runway" as const, label: "Runway", color: "#14287D", visible: showRunway, toggle: setShowRunway },
-            { key: "builder" as const, label: "Builder", color: "#82323C", visible: showBuilder, toggle: setShowBuilder },
-          ].map((p) => (
-            <button
-              key={p.key}
-              className="btn"
-              onClick={() => p.toggle(!p.visible)}
-              style={{
-                fontFamily: "var(--font-label)",
-                fontSize: "9px",
-                fontWeight: 600,
-                color: p.visible ? "#FFF5ED" : p.color,
-                background: p.visible ? p.color : "transparent",
-                border: `1px solid ${p.color}`,
-                borderRadius: "4px",
-                padding: "2px 8px",
-                cursor: "pointer",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-                transition: "all 0.15s",
-              }}
-            >
-              {p.label}
-            </button>
-          ))}
-          <button
-            className="btn"
-            onClick={() => setReversed(!reversed)}
-            style={{
-              fontFamily: "var(--font-runway)",
-              fontSize: "9px",
-              color: "var(--steel-blue)",
-              background: "transparent",
-              border: "1px solid rgba(9,8,14,0.1)",
-              borderRadius: "4px",
-              padding: "2px 8px",
-              cursor: "pointer",
-            }}
-          >
-            {reversed ? "⇄ Reversed" : "⇄ Reverse"}
-          </button>
-        </div>
+      <div
+        className="flex items-center justify-between px-3 py-1"
+        style={{ background: "#FFF5ED", borderBottom: "1px solid rgba(9,8,14,0.06)", minHeight: "28px" }}
+      >
         <div className="flex items-center gap-1">
-          {/* Layout presets */}
+          {/* Active tabs — outline style, drag to reorder, click to hide */}
+          {activeTabs.map((k) => {
+            const orderIdx = colOrder.indexOf(k);
+            return (
+              <button
+                key={k}
+                draggable
+                onDragStart={() => handleTabDragStart(orderIdx)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => handleTabDrop(orderIdx)}
+                onClick={() => setVisible(k, false)}
+                title={`Click to hide · Drag to reorder`}
+                style={tabStyle(k, false)}
+              >
+                {PANE_CONFIG[k].label}
+              </button>
+            );
+          })}
+
+          {/* Dormant tabs — faded, click to restore */}
+          {dormantTabs.length > 0 && (
+            <>
+              <div style={{ width: "1px", height: "12px", background: "rgba(9,8,14,0.12)", margin: "0 6px" }} />
+              {dormantTabs.map((k) => (
+                <button
+                  key={k}
+                  onClick={() => setVisible(k, true)}
+                  title={`Click to show ${PANE_CONFIG[k].label}`}
+                  style={tabStyle(k, true)}
+                >
+                  {PANE_CONFIG[k].label}
+                </button>
+              ))}
+            </>
+          )}
+        </div>
+
+        <div className="flex items-center gap-1">
           {([
-            { key: "full" as LayoutPreset, label: "Full IDE" },
-            { key: "focus-build" as LayoutPreset, label: "Build" },
-            { key: "focus-plan" as LayoutPreset, label: "Plan" },
-            { key: "focus-review" as LayoutPreset, label: "Review" },
+            { key: "full"          as LayoutPreset, label: "Full IDE" },
+            { key: "focus-build"   as LayoutPreset, label: "Build"    },
+            { key: "focus-plan"    as LayoutPreset, label: "Plan"     },
+            { key: "focus-review"  as LayoutPreset, label: "Review"   },
           ]).map((p) => (
             <button
               key={p.key}
               onClick={() => applyPreset(p.key)}
               style={{
                 fontFamily: "var(--font-runway)",
-                fontSize: "9px",
-                color: layoutPreset === p.key ? "var(--steel-blue)" : "rgba(9,8,14,0.35)",
+                fontSize:   "9px",
+                color:      layoutPreset === p.key ? "var(--steel-blue)" : "rgba(9,8,14,0.35)",
                 background: "transparent",
-                border: "none",
-                padding: "2px 6px",
-                cursor: "pointer",
+                border:     "none",
+                padding:    "2px 6px",
+                cursor:     "pointer",
                 fontWeight: layoutPreset === p.key ? 600 : 400,
                 transition: "color 0.15s",
               }}
@@ -399,180 +372,124 @@ export function IDEShell({
         </div>
       </div>
 
-      {/* Three panel layout: Architect | Builder | Staging Runway */}
-      <div ref={containerRef} className="flex flex-1 overflow-hidden" style={{ flexDirection: reversed ? "row-reverse" : "row" }}>
-        {/* LEFT: Architect + TODO panel */}
-        {showArchitect && (
-        <div
-          className={`ide-pane flex ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
-          style={{
-            width: widths.left,
-            borderLeft:
-              activePane === "architect"
-                ? "3px solid #3E806B"
-                : "3px solid transparent",
-            overflow: "hidden",
-            flexShrink: 0,
-          }}
-        >
-          <TodoPanel projectId={projectId} />
-          <div className="flex-1 overflow-hidden">
-            <ArchitectPane
-              isActive={activePane === "architect"}
-              messages={architectMessages}
-              isStreaming={architectConvo.isStreaming}
-              streamedText={architectConvo.streamedText}
-              provider={architectProvider}
-              model={architectModel}
-              onProviderChange={setArchitectProvider}
-              onModelChange={setArchitectModel}
-              onSendMessage={handleArchitectMessage}
-              onHandToBuilder={handleHandToBuilder}
-              onFocus={() => setActivePane("architect")}
-            />
-          </div>
-        </div>
-        )}
+      {/* Dynamic pane layout */}
+      <div ref={containerRef} className="flex flex-1 overflow-hidden">
+        {visibleInOrder.map((k, idx) => (
+          <React.Fragment key={k}>
+            {/* ── Architect ── */}
+            {k === "architect" && (
+              <div
+                className={`ide-pane flex ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
+                style={{
+                  width:      `${colWidths.architect}%`,
+                  borderLeft: activePane === "architect" ? `3px solid ${PANE_CONFIG.architect.color}` : "3px solid transparent",
+                  overflow:   "hidden",
+                  flexShrink: 0,
+                }}
+              >
+                <TodoPanel projectId={projectId} />
+                <div className="flex-1 overflow-hidden">
+                  <ArchitectPane
+                    isActive={activePane === "architect"}
+                    messages={architectMessages}
+                    isStreaming={architectConvo.isStreaming}
+                    streamedText={architectConvo.streamedText}
+                    provider={architectProvider}
+                    model={architectModel}
+                    onProviderChange={setArchitectProvider}
+                    onModelChange={setArchitectModel}
+                    onSendMessage={handleArchitectMessage}
+                    onHandToBuilder={handleHandToBuilder}
+                    onFocus={() => setActivePane("architect")}
+                  />
+                </div>
+              </div>
+            )}
 
-        {/* Resize handle: between Architect and Builder (or Runway if Builder hidden) */}
-        {showArchitect && (showBuilder || showRunway) && (
-          <div
-            className="resize-handle"
-            onMouseDown={(e) => handleResizeStart("left", e)}
-            style={{
-              width: "5px",
-              cursor: "col-resize",
-              background: "transparent",
-              position: "relative",
-              flexShrink: 0,
-              zIndex: 20,
-            }}
-          >
-            <div style={{
-              position: "absolute",
-              top: 0,
-              bottom: 0,
-              left: "2px",
-              width: "1px",
-              background: "rgba(9,8,14,0.08)",
-              transition: "background 0.15s, width 0.15s",
-            }} />
-          </div>
-        )}
+            {/* ── Builder ── */}
+            {k === "builder" && (
+              <div
+                className={`ide-pane ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
+                style={{ width: `${colWidths.builder}%`, overflow: "hidden", flexShrink: 0 }}
+              >
+                <BuilderPane
+                  isActive={activePane === "builder"}
+                  messages={builderMessages}
+                  isStreaming={builderConvo.isStreaming}
+                  streamedText={builderConvo.streamedText}
+                  provider={builderProvider}
+                  model={builderModel}
+                  inputValue={builderInput}
+                  onProviderChange={setBuilderProvider}
+                  onModelChange={setBuilderModel}
+                  onSendMessage={handleBuilderMessage}
+                  onHandToArchitect={handleHandToArchitect}
+                  onFocus={() => setActivePane("builder")}
+                  onInputChange={setBuilderInput}
+                />
+              </div>
+            )}
 
-        {/* CENTER: Builder */}
-        {showBuilder && (
-        <div
-          className={`ide-pane ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
-          style={{
-            width: widths.center,
-            overflow: "hidden",
-            flexShrink: 0,
-          }}
-        >
-          <BuilderPane
-            isActive={activePane === "builder"}
-            messages={builderMessages}
-            isStreaming={builderConvo.isStreaming}
-            streamedText={builderConvo.streamedText}
-            provider={builderProvider}
-            model={builderModel}
-            inputValue={builderInput}
-            onProviderChange={setBuilderProvider}
-            onModelChange={setBuilderModel}
-            onSendMessage={handleBuilderMessage}
-            onHandToArchitect={handleHandToArchitect}
-            onFocus={() => setActivePane("builder")}
-            onInputChange={setBuilderInput}
-          />
-        </div>
-        )}
+            {/* ── Runway ── */}
+            {k === "runway" && (
+              <div
+                className="ide-pane ide-pane-active"
+                style={{
+                  width:       `${colWidths.runway}%`,
+                  borderRight: activePane === "builder" ? `3px solid ${PANE_CONFIG.runway.color}` : "3px solid transparent",
+                  flexShrink:  0,
+                }}
+              >
+                <CenterPanel
+                  projectId={projectId}
+                  projectName={projectName}
+                  branch={branch}
+                  repoName={repoName}
+                  files={files}
+                  stagedChanges={staging.changes}
+                  newStagedIds={newStagedIds}
+                  onApproveChange={staging.approveChange}
+                  onRejectChange={staging.rejectChange}
+                  onApproveAll={() => staging.approveAll(projectId)}
+                  onCommit={handleCommit}
+                  onSaveAsProposal={handleSaveAsProposal}
+                  onRetryReview={staging.retryReview}
+                  onCollapse={() => setShowRunway(false)}
+                />
+              </div>
+            )}
 
-        {/* Resize handle: between Builder and Runway */}
-        {showBuilder && showRunway && (
-          <div
-            className="resize-handle"
-            onMouseDown={(e) => handleResizeStart("right", e)}
-            style={{
-              width: "5px",
-              cursor: "col-resize",
-              background: "transparent",
-              position: "relative",
-              flexShrink: 0,
-              zIndex: 20,
-            }}
-          >
-            <div style={{
-              position: "absolute",
-              top: 0,
-              bottom: 0,
-              left: "2px",
-              width: "1px",
-              background: "rgba(9,8,14,0.08)",
-              transition: "background 0.15s, width 0.15s",
-            }} />
-          </div>
-        )}
-
-        {/* RIGHT: Staging Runway (with Files, Preview, Git tabs) */}
-        {showRunway && (
-        <div
-          style={{
-            width: widths.right,
-            borderRight:
-              activePane === "builder"
-                ? "3px solid #14287D"
-                : "3px solid transparent",
-            flexShrink: 0,
-          }}
-          className="ide-pane ide-pane-active"
-        >
-          <CenterPanel
-            projectId={projectId}
-            projectName={projectName}
-            branch={branch}
-            repoName={repoName}
-            files={files}
-            stagedChanges={staging.changes}
-            newStagedIds={newStagedIds}
-            onApproveChange={staging.approveChange}
-            onRejectChange={staging.rejectChange}
-            onApproveAll={() => staging.approveAll(projectId)}
-            onCommit={handleCommit}
-            onSaveAsProposal={handleSaveAsProposal}
-            onRetryReview={staging.retryReview}
-            onCollapse={() => setShowRunway(false)}
-          />
-        </div>
-        )}
+            {/* Resize handle after every pane except the last */}
+            {idx < visibleInOrder.length - 1 && (
+              <div
+                className="resize-handle"
+                onMouseDown={(e) => handleResizeStart(idx, e)}
+                style={{ width: "5px", cursor: "col-resize", background: "transparent", position: "relative", flexShrink: 0, zIndex: 20 }}
+              >
+                <div style={{
+                  position: "absolute", top: 0, bottom: 0, left: "2px",
+                  width: "1px", background: "rgba(9,8,14,0.08)",
+                  transition: "background 0.15s, width 0.15s",
+                }} />
+              </div>
+            )}
+          </React.Fragment>
+        ))}
       </div>
 
-      {/* Handoff animation overlay */}
+      {/* Handoff overlay */}
       {handoffDirection && (
-        <div
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: handoffDirection === "to-builder" ? "45%" : "15%",
-            transform: "translate(-50%, -50%)",
-            zIndex: 100,
-            pointerEvents: "none",
-          }}
-        >
-          <div
-            className={handoffDirection === "to-builder" ? "handoff-enter" : "handoff-enter"}
-            style={{
-              background: "var(--deep-blue)",
-              color: "var(--cream)",
-              padding: "8px 20px",
-              borderRadius: "20px",
-              fontFamily: "var(--font-label)",
-              fontSize: "13px",
-              fontWeight: 600,
-              boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-              whiteSpace: "nowrap",
-            }}
-          >
+        <div style={{
+          position: "fixed", top: "50%",
+          left: handoffDirection === "to-builder" ? "45%" : "15%",
+          transform: "translate(-50%, -50%)", zIndex: 100, pointerEvents: "none",
+        }}>
+          <div style={{
+            background: "var(--deep-blue)", color: "var(--cream)",
+            padding: "8px 20px", borderRadius: "20px",
+            fontFamily: "var(--font-label)", fontSize: "13px", fontWeight: 600,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.3)", whiteSpace: "nowrap",
+          }}>
             {handoffDirection === "to-builder"
               ? "📋 Handing plan to Builder →"
               : "← 🔍 Sending to Architect for review"}
@@ -580,19 +497,14 @@ export function IDEShell({
         </div>
       )}
 
-      {/* Depleted modal */}
       {computeStatus.level === "depleted" && (
         <ComputeDepletedModal
-          onPurchase={(block) => {
-            // Purchase API call
-            console.log("Purchase block:", block);
-          }}
+          onPurchase={(block) => { console.log("Purchase block:", block); }}
           onSaveAndWait={() => {}}
           resetDate="April 1, 2026"
         />
       )}
 
-      {/* Upgrade toast */}
       {showUpgradeToast && (
         <UpgradeToast
           consecutiveMonths={3}
