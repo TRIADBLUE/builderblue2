@@ -26,6 +26,48 @@ const PANE_CONFIG: Record<PaneKey, { label: string; color: string }> = {
   runway:    { label: "Runway",    color: "#14287D" },
 };
 
+function ColDragHandle({
+  paneKey,
+  colOrder,
+  onDragStart,
+  onDrop,
+}: {
+  paneKey: PaneKey;
+  colOrder: PaneKey[];
+  onDragStart: (idx: number) => void;
+  onDrop: (idx: number) => void;
+}) {
+  const { color } = PANE_CONFIG[paneKey];
+  return (
+    <div
+      draggable
+      onDragStart={() => onDragStart(colOrder.indexOf(paneKey))}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={() => onDrop(colOrder.indexOf(paneKey))}
+      title="Drag to reorder column"
+      style={{
+        height: "16px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "4px",
+        cursor: "grab",
+        flexShrink: 0,
+        background: "transparent",
+        borderBottom: `1px solid ${color}22`,
+        userSelect: "none",
+      }}
+    >
+      {[0, 1, 2].map((i) => (
+        <div key={i} style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+          <div style={{ width: "3px", height: "3px", borderRadius: "50%", background: color, opacity: 0.25 }} />
+          <div style={{ width: "3px", height: "3px", borderRadius: "50%", background: color, opacity: 0.25 }} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 interface IDEShellProps {
   projectId: string;
   projectName: string;
@@ -326,10 +368,11 @@ export function IDEShell({
             );
           })}
 
-          {/* Dormant tabs — faded, click to restore */}
+        </div>
+
+        <div className="flex items-center gap-2">
           {dormantTabs.length > 0 && (
             <>
-              <div style={{ width: "1px", height: "12px", background: "rgba(9,8,14,0.12)", margin: "0 6px" }} />
               {dormantTabs.map((k) => (
                 <button
                   key={k}
@@ -340,11 +383,9 @@ export function IDEShell({
                   {PANE_CONFIG[k].label}
                 </button>
               ))}
+              <div style={{ width: "1px", height: "12px", background: "rgba(9,8,14,0.12)" }} />
             </>
           )}
-        </div>
-
-        <div className="flex items-center gap-1">
           {([
             { key: "full"          as LayoutPreset, label: "Full IDE" },
             { key: "focus-build"   as LayoutPreset, label: "Build"    },
@@ -379,7 +420,7 @@ export function IDEShell({
             {/* ── Architect ── */}
             {k === "architect" && (
               <div
-                className={`ide-pane flex ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
+                className={`ide-pane flex flex-col ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
                 style={{
                   width:      `${colWidths.architect}%`,
                   borderLeft: activePane === "architect" ? `3px solid ${PANE_CONFIG.architect.color}` : "3px solid transparent",
@@ -387,6 +428,8 @@ export function IDEShell({
                   flexShrink: 0,
                 }}
               >
+                <ColDragHandle paneKey="architect" colOrder={colOrder} onDragStart={handleTabDragStart} onDrop={handleTabDrop} />
+                <div className="flex flex-1 overflow-hidden">
                 <TodoPanel projectId={projectId} />
                 <div className="flex-1 overflow-hidden">
                   <ArchitectPane
@@ -403,15 +446,18 @@ export function IDEShell({
                     onFocus={() => setActivePane("architect")}
                   />
                 </div>
+                </div>
               </div>
             )}
 
             {/* ── Builder ── */}
             {k === "builder" && (
               <div
-                className={`ide-pane ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
+                className={`ide-pane flex flex-col ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
                 style={{ width: `${colWidths.builder}%`, overflow: "hidden", flexShrink: 0 }}
               >
+                <ColDragHandle paneKey="builder" colOrder={colOrder} onDragStart={handleTabDragStart} onDrop={handleTabDrop} />
+                <div className="flex-1 overflow-hidden">
                 <BuilderPane
                   isActive={activePane === "builder"}
                   messages={builderMessages}
@@ -427,19 +473,22 @@ export function IDEShell({
                   onFocus={() => setActivePane("builder")}
                   onInputChange={setBuilderInput}
                 />
+                </div>
               </div>
             )}
 
             {/* ── Runway ── */}
             {k === "runway" && (
               <div
-                className="ide-pane ide-pane-active"
+                className="ide-pane ide-pane-active flex flex-col"
                 style={{
                   width:       `${colWidths.runway}%`,
                   borderRight: activePane === "builder" ? `3px solid ${PANE_CONFIG.runway.color}` : "3px solid transparent",
                   flexShrink:  0,
                 }}
               >
+                <ColDragHandle paneKey="runway" colOrder={colOrder} onDragStart={handleTabDragStart} onDrop={handleTabDrop} />
+                <div className="flex-1 overflow-hidden">
                 <CenterPanel
                   projectId={projectId}
                   projectName={projectName}
@@ -456,6 +505,7 @@ export function IDEShell({
                   onRetryReview={staging.retryReview}
                   onCollapse={() => setShowRunway(false)}
                 />
+                </div>
               </div>
             )}
 
