@@ -199,8 +199,12 @@ export function ArchitectPane({
           <button
             type="submit"
             disabled={isStreaming || !input.trim()}
-            className="btn flex h-9 w-9 items-center justify-center rounded-md"
+            className="btn flex h-9 items-center justify-center rounded-md px-4"
             style={{
+              fontFamily: "var(--font-label)",
+              fontSize: "11px",
+              fontWeight: 600,
+              letterSpacing: "0.04em",
               background: "#3E806B",
               color: "#E9ECF0",
               border: "none",
@@ -208,23 +212,13 @@ export function ArchitectPane({
               opacity: isStreaming || !input.trim() ? 0.5 : 1,
             }}
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="22" y1="2" x2="11" y2="13" />
-              <polygon points="22 2 15 22 11 13 2 9 22 2" />
-            </svg>
+            Send
           </button>
         </form>
+      </div>
 
-        {/* Hand to Builder */}
+      {/* Hand to Builder — separate bottom bar */}
+      <div style={{ padding: "8px 12px", borderTop: "1px solid rgba(62, 128, 107, 0.15)", background: "rgba(62, 128, 107, 0.04)" }}>
         <button
           onClick={() => {
             const lastAssistant = [...messages]
@@ -232,14 +226,16 @@ export function ArchitectPane({
               .find((m) => m.role === "assistant");
             if (lastAssistant) onHandToBuilder(lastAssistant.content);
           }}
-          className="btn mt-2 w-full rounded py-1.5 text-center transition-colors"
+          className="btn w-full rounded py-2 text-center transition-colors"
           style={{
-            fontFamily: "var(--font-architect)",
-            fontWeight: "bold",
-            fontSize: "12px",
-            background: "#3E806B",
-            color: "#E9ECF0",
-            border: "none",
+            fontFamily: "var(--font-label)",
+            fontWeight: 600,
+            fontSize: "11px",
+            letterSpacing: "0.04em",
+            background: "transparent",
+            color: "#82323C",
+            textShadow: "2px 2px 0 #fff, 1px 1px 0 #fff",
+            border: "1px solid rgba(130, 50, 60, 0.3)",
             cursor: "pointer",
           }}
         >
