@@ -82,12 +82,12 @@ export function CenterPanel({
   }, [activeTab]);
 
   return (
-    <div className="flex h-full flex-col runway" style={{ zIndex: 10 }}>
+    <div className="flex h-full flex-col runway glass-bg" style={{ zIndex: 10 }}>
       {/* Tab bar — always visible */}
       <div
         className="flex items-center"
         style={{
-          background: "#FFF5ED",
+          background: "inherit",
           borderBottom: "1px solid rgba(9, 8, 14, 0.08)",
           flexShrink: 0,
         }}
@@ -183,7 +183,7 @@ export function CenterPanel({
 
       {/* Tab content */}
       <div
-        className="flex-1 overflow-hidden"
+        className="flex-1 overflow-hidden glass-bg"
         style={{ background: "#FFF5ED" }}
       >
         {activeTab === "tools" && (

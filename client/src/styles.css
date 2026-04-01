@@ -74,6 +74,12 @@
   --shadow-sm: 0 1px 3px rgba(9, 8, 14, 0.06);
   --shadow-md: 0 4px 12px rgba(9, 8, 14, 0.08);
   --shadow-lg: 0 12px 40px rgba(9, 8, 14, 0.12);
+  --glass-bg: rgba(255, 245, 237, 0.42);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-edge: rgba(255, 255, 255, 0.6);
+  --glass-shadow: rgba(9, 8, 14, 0.25);
+  --glass-backdrop: #1a1a2e;
+  --glass-sheen: rgba(255, 255, 255, 0.12);
   color-scheme: light;
 }
 
@@ -96,6 +102,12 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
+  --glass-bg: rgba(13, 13, 18, 0.50);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-edge: rgba(255, 255, 255, 0.15);
+  --glass-shadow: rgba(0, 0, 0, 0.5);
+  --glass-backdrop: #08080c;
+  --glass-sheen: rgba(255, 255, 255, 0.04);
   color-scheme: dark;
 }
 
@@ -178,6 +190,7 @@ a:hover, button:not(.btn):hover {
 
 /* ─── IDE Pane transitions ───────────────────────────────────────────────── */
 .ide-pane {
+  position: relative;
   transition: opacity 400ms ease-in-out, filter 400ms ease-in-out;
 }
 
@@ -196,6 +209,72 @@ a:hover, button:not(.btn):hover {
 .ide-pane-active {
   opacity: 1;
   filter: saturate(1);
+}
+
+/* ─── Glass mode: Computer Lab (CSI-style glass panels) ──────────────────── */
+
+/* Dark backdrop behind the glass panels — entire IDE goes dark */
+[data-glass="lab"] .ide-layout {
+  background: var(--glass-backdrop);
+}
+
+/* Each panel becomes a glass slab */
+[data-glass="lab"] .ide-pane {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border-left: 1px solid var(--glass-border) !important;
+  border-right: 1px solid var(--glass-border) !important;
+  box-shadow:
+    0 8px 32px var(--glass-shadow),
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 var(--glass-edge),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Glass sheen — diagonal light reflection across each panel */
+[data-glass="lab"] .ide-pane::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    linear-gradient(165deg,
+      var(--glass-sheen) 0%,
+      transparent 35%,
+      transparent 75%,
+      rgba(255, 255, 255, 0.03) 100%
+    );
+  pointer-events: none;
+  z-index: 40;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+/* Override child component solid backgrounds in glass mode */
+[data-glass="lab"] .ide-layout .glass-bg {
+  background: transparent !important;
+}
+
+/* TopNav & controls bar — frosted glass strip */
+[data-glass="lab"] .ide-layout > nav.glass-bg,
+[data-glass="lab"] .ide-layout > .glass-bg:not(.ide-panel-container) {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border-bottom-color: var(--glass-border) !important;
+}
+
+/* Flat mode — no glass, no overlay */
+[data-glass="flat"] .ide-pane::after {
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  transition: opacity 0.4s ease;
 }
 
 /* ─── Runway glow ────────────────────────────────────────────────────────── */

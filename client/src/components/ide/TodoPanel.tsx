@@ -79,7 +79,7 @@ export function TodoPanel({ projectId }: TodoPanelProps) {
   const done = todos.filter((t) => t.status === "done");
 
   return (
-    <div className="flex h-full flex-col" style={{ background: "#FFF5ED", borderRight: "1px solid rgba(9,8,14,0.08)", width: "220px", minWidth: "220px" }}>
+    <div className="flex h-full flex-col glass-bg" style={{ background: "#FFF5ED", borderRight: "1px solid rgba(9,8,14,0.08)", width: "220px", minWidth: "220px" }}>
       {/* Header */}
       <div
         className="flex items-center justify-between px-3 py-2"

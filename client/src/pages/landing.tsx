@@ -97,6 +97,8 @@ function useTypingEffect(messages: { role: string; text: string }[], delay: numb
 /* ── Mouse parallax hook ───────────────────────────────────────────── */
 function useMouseParallax(ref: React.RefObject<HTMLDivElement | null>, intensity = 8) {
   const [transform, setTransform] = useState("rotateX(3deg) rotateY(0deg)");
+  const [glareX, setGlareX] = useState(0.5);
+  const [glareY, setGlareY] = useState(0.3);
 
   useEffect(() => {
     const el = ref.current;
@@ -109,10 +111,15 @@ function useMouseParallax(ref: React.RefObject<HTMLDivElement | null>, intensity
       const rotateY = ((e.clientX - centerX) / rect.width) * intensity;
       const rotateX = ((centerY - e.clientY) / rect.height) * intensity + 2;
       setTransform(`rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
+      // Inverted coords — glare moves opposite to tilt (overhead light on tilted glass)
+      setGlareX(1 - (e.clientX - rect.left) / rect.width);
+      setGlareY(1 - (e.clientY - rect.top) / rect.height);
     };
 
     const handleLeave = () => {
       setTransform("rotateX(3deg) rotateY(0deg)");
+      setGlareX(0.5);
+      setGlareY(0.3);
     };
 
     el.addEventListener("mousemove", handleMove);
@@ -123,7 +130,7 @@ function useMouseParallax(ref: React.RefObject<HTMLDivElement | null>, intensity
     };
   }, [ref, intensity]);
 
-  return transform;
+  return { transform, glareX, glareY };
 }
 
 /* ── Scroll fade-in hook ───────────────────────────────────────────── */
@@ -153,7 +160,7 @@ export default function Landing() {
   const [stagedVisible, setStagedVisible] = useState(0);
   const [rightTab, setRightTab] = useState<RightTab>("staging");
   const demoRef = useRef<HTMLDivElement>(null);
-  const demoTransform = useMouseParallax(demoRef, 6);
+  const { transform: demoTransform, glareX, glareY } = useMouseParallax(demoRef, 6);
   const tagline = useScrollReveal();
 
   // Reveal staged files progressively
@@ -282,7 +289,7 @@ export default function Landing() {
             transformStyle: "preserve-3d",
           }}
         >
-          {/* Glass glare overlay */}
+          {/* Glass glare overlay — tracks mouse (inverted) for realistic light reflection */}
           <div
             className="glass-glare"
             style={{
@@ -291,10 +298,11 @@ export default function Landing() {
               left: 0,
               right: 0,
               bottom: 0,
-              background: "linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 40%, transparent 60%, rgba(255,255,255,0.05) 100%)",
+              background: `radial-gradient(ellipse 80% 60% at ${glareX * 100}% ${glareY * 100}%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.08) 30%, transparent 70%)`,
               pointerEvents: "none",
               zIndex: 50,
               borderRadius: "inherit",
+              transition: "background 0.15s ease-out",
             }}
           />
 

@@ -98,7 +98,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
   };
 
   return (
-    <div className="h-full overflow-y-auto" style={{ background: "#FFF5ED" }}>
+    <div className="h-full overflow-y-auto glass-bg" style={{ background: "#FFF5ED" }}>
       <div style={{ maxWidth: "480px", margin: "0 auto", padding: "24px 20px" }}>
 
         {/* Tools section */}

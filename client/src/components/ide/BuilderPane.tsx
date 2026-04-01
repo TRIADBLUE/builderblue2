@@ -114,7 +114,7 @@ export function BuilderPane({
 
   return (
     <div
-      className="flex h-full flex-col"
+      className="flex h-full flex-col glass-bg"
       style={{ background: "#FFF5ED" }}
       onClick={onFocus}
     >

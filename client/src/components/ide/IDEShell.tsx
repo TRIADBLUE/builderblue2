@@ -345,7 +345,7 @@ export function IDEShell({
 
       {/* Layout controls bar */}
       <div
-        className="flex items-center justify-between px-3 py-1"
+        className="flex items-center justify-between px-3 py-1 glass-bg"
         style={{ background: "#FFF5ED", borderBottom: "1px solid rgba(9,8,14,0.06)", minHeight: "28px" }}
       >
         <div className="flex items-center gap-1">
@@ -414,7 +414,7 @@ export function IDEShell({
       </div>
 
       {/* Dynamic pane layout */}
-      <div ref={containerRef} className="flex flex-1 overflow-hidden">
+      <div ref={containerRef} className="flex flex-1 overflow-hidden ide-panel-container">
         {visibleInOrder.map((k, idx) => (
           <React.Fragment key={k}>
             {/* ── Architect ── */}

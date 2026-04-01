@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import type { ComputeStatus } from "@shared/types";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
+import { useGlassMode } from "../../hooks/useGlassMode";
 
 interface TopNavProps {
   projectName: string;
@@ -34,9 +35,11 @@ export function TopNav({
   const [, setLocation] = useLocation();
   const { logout } = useAuth();
   const { theme, cycleTheme } = useTheme();
+  const { mode: glassMode, toggleMode: toggleGlass } = useGlassMode();
 
   const themeIcon = theme === "light" ? "☀️" : theme === "dark" ? "🌙" : "🔄";
   const themeLabel = theme === "light" ? "Light" : theme === "dark" ? "Dark" : "Auto";
+  const glassLabel = glassMode === "lab" ? "Computer Lab" : "Flat";
 
   const computeColor =
     computeStatus.level === "normal"
@@ -86,7 +89,7 @@ export function TopNav({
 
   return (
     <nav
-      className="flex h-12 items-center justify-between px-4"
+      className="flex h-12 items-center justify-between px-4 glass-bg"
       style={{
         background: "#FFF5ED",
         borderBottom: "1px solid rgba(9, 8, 14, 0.1)",
@@ -269,6 +272,14 @@ export function TopNav({
                   onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
                 >
                   {themeIcon} Theme: {themeLabel}
+                </button>
+                <button
+                  onClick={() => { toggleGlass(); }}
+                  style={menuItemStyle}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(9,8,14,0.04)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+                >
+                  {glassMode === "lab" ? "🖥" : "◻"} Style: {glassLabel}
                 </button>
               </div>
 
