@@ -74,6 +74,7 @@ export function ArchitectPane({
         style={{ borderBottom: "1px solid rgba(9, 8, 14, 0.1)" }}
       >
         <span
+          className="accent-outlined"
           style={{
             fontFamily: "var(--font-label)",
             fontWeight: "bold",
@@ -234,7 +235,6 @@ export function ArchitectPane({
             letterSpacing: "0.04em",
             background: "transparent",
             color: "#82323C",
-            textShadow: "2px 2px 0 #fff, 1px 1px 0 #fff",
             border: "1px solid rgba(130, 50, 60, 0.3)",
             cursor: "pointer",
           }}

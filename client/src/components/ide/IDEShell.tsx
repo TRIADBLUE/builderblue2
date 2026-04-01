@@ -106,6 +106,10 @@ export function IDEShell({
   const [showBuilder, setShowBuilder] = useState(true);
   const [showRunway, setShowRunway] = useState(true);
 
+  // Runway display mode: architect ideation vs builder construction
+  const [runwayMode, setRunwayMode] = useState<"architect" | "builder">("architect");
+  const [runwayAutoSwitch, setRunwayAutoSwitch] = useState(true);
+
   // Column order — draggable
   const [colOrder, setColOrder] = useState<PaneKey[]>(["architect", "builder", "runway"]);
 
@@ -158,6 +162,18 @@ export function IDEShell({
     architectConvo.loadConversations(projectId);
     builderConvo.loadConversations(projectId);
   }, [projectId]);
+
+  // Auto-switch runway mode based on who's streaming
+  useEffect(() => {
+    if (!runwayAutoSwitch) return;
+    if (architectConvo.isStreaming) setRunwayMode("architect");
+    else if (builderConvo.isStreaming) setRunwayMode("builder");
+  }, [architectConvo.isStreaming, builderConvo.isStreaming, runwayAutoSwitch]);
+
+  const handleRunwayToggle = useCallback((mode: "architect" | "builder") => {
+    setRunwayMode(mode);
+    setRunwayAutoSwitch(false);
+  }, []);
 
   // ── Resizable columns ──────────────────────────────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null);
@@ -504,6 +520,11 @@ export function IDEShell({
                   onSaveAsProposal={handleSaveAsProposal}
                   onRetryReview={staging.retryReview}
                   onCollapse={() => setShowRunway(false)}
+                  runwayMode={runwayMode}
+                  onRunwayToggle={handleRunwayToggle}
+                  architectMessages={architectMessages}
+                  architectIsStreaming={architectConvo.isStreaming}
+                  architectStreamedText={architectConvo.streamedText}
                 />
                 </div>
               </div>

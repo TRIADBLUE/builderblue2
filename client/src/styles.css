@@ -74,12 +74,12 @@
   --shadow-sm: 0 1px 3px rgba(9, 8, 14, 0.06);
   --shadow-md: 0 4px 12px rgba(9, 8, 14, 0.08);
   --shadow-lg: 0 12px 40px rgba(9, 8, 14, 0.12);
-  --glass-bg: rgba(255, 245, 237, 0.42);
-  --glass-border: rgba(255, 255, 255, 0.45);
-  --glass-edge: rgba(255, 255, 255, 0.6);
-  --glass-shadow: rgba(9, 8, 14, 0.25);
-  --glass-backdrop: #1a1a2e;
-  --glass-sheen: rgba(255, 255, 255, 0.12);
+  --glass-bg: rgba(233, 236, 240, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-edge: rgba(255, 255, 255, 0.7);
+  --glass-shadow: rgba(9, 8, 14, 0.18);
+  --glass-backdrop: #2a2a3a;
+  --glass-sheen: rgba(255, 255, 255, 0.08);
   color-scheme: light;
 }
 
@@ -209,6 +209,12 @@ a:hover, button:not(.btn):hover {
 .ide-pane-active {
   opacity: 1;
   filter: saturate(1);
+}
+
+/* ─── Accent text with black outline for glass readability ───────────────── */
+[data-glass="lab"] .accent-outlined {
+  -webkit-text-stroke: 0.4px #09080E;
+  paint-order: stroke fill;
 }
 
 /* ─── Glass mode: Computer Lab (CSI-style glass panels) ──────────────────── */

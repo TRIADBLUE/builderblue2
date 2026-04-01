@@ -124,6 +124,7 @@ export function BuilderPane({
         style={{ borderBottom: "1px solid rgba(9, 8, 14, 0.1)" }}
       >
         <span
+          className="accent-outlined"
           style={{
             fontFamily: "var(--font-label)",
             fontWeight: 600,
@@ -286,7 +287,6 @@ export function BuilderPane({
             letterSpacing: "0.04em",
             background: "transparent",
             color: "#3E806B",
-            textShadow: "2px 2px 0 #fff, 1px 1px 0 #fff",
             border: "1px solid rgba(62, 128, 107, 0.3)",
             cursor: "pointer",
           }}

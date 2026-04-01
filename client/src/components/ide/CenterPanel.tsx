@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import type { CenterTab, StagedChange, ProjectFile } from "@shared/types";
+import type { CenterTab, StagedChange, ProjectFile, ConversationMessage } from "@shared/types";
 import { StagingTab } from "./tabs/StagingTab";
 import { FilesTab } from "./tabs/FilesTab";
 import { TerminalTab } from "./tabs/TerminalTab";
@@ -11,6 +11,8 @@ import { ServicesTab } from "./tabs/ServicesTab";
 import { ThreadTab } from "./tabs/ThreadTab";
 import { StyleGuideTab } from "./tabs/StyleGuideTab";
 import { ToolsFilesTab } from "./tabs/ToolsFilesTab";
+import { RunwayToggle } from "./RunwayToggle";
+import { ArchitectIdeationView } from "./ArchitectIdeationView";
 
 interface CenterPanelProps {
   projectId: string;
@@ -27,6 +29,11 @@ interface CenterPanelProps {
   onSaveAsProposal: (filePath: string, content: string) => void;
   onRetryReview?: (id: string) => void;
   onCollapse?: () => void;
+  runwayMode?: "architect" | "builder";
+  onRunwayToggle?: (mode: "architect" | "builder") => void;
+  architectMessages?: ConversationMessage[];
+  architectIsStreaming?: boolean;
+  architectStreamedText?: string;
 }
 
 const TAB_LABELS: Record<string, string> = {
@@ -58,6 +65,11 @@ export function CenterPanel({
   onSaveAsProposal,
   onRetryReview,
   onCollapse,
+  runwayMode = "builder",
+  onRunwayToggle,
+  architectMessages = [],
+  architectIsStreaming = false,
+  architectStreamedText = "",
 }: CenterPanelProps) {
   const [activeTab, setActiveTab] = useState<CenterTab>("tools");
   const [openTabs, setOpenTabs] = useState<CenterTab[]>(["tools"]);
@@ -83,7 +95,23 @@ export function CenterPanel({
 
   return (
     <div className="flex h-full flex-col runway glass-bg" style={{ zIndex: 10 }}>
-      {/* Tab bar — always visible */}
+      {/* Runway mode toggle: Architect Ideation / Builder Construction */}
+      {onRunwayToggle && (
+        <RunwayToggle mode={runwayMode} onToggle={onRunwayToggle} />
+      )}
+
+      {/* Architect Ideation mode */}
+      {runwayMode === "architect" && (
+        <ArchitectIdeationView
+          messages={architectMessages}
+          isStreaming={architectIsStreaming}
+          streamedText={architectStreamedText}
+        />
+      )}
+
+      {/* Builder Construction mode — tab bar + content */}
+      {runwayMode === "builder" && (
+      <>
       <div
         className="flex items-center"
         style={{
@@ -226,6 +254,8 @@ export function CenterPanel({
         {activeTab === "thread" && <ThreadTab projectId={projectId} />}
         {activeTab === "style-guide" && <StyleGuideTab projectId={projectId} />}
       </div>
+      </>
+      )}
     </div>
   );
 }
