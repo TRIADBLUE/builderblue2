@@ -38,7 +38,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             width: "calc(50% - 2px)",
             height: "22px",
             borderRadius: "18px",
-            background: mode === "architect" ? "#3E806B" : "#82323C",
+            background: mode === "architect" ? "#043B40" : "#520322",
             transition: "left 0.25s ease, background 0.25s ease",
           }}
         />

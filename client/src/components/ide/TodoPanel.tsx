@@ -16,8 +16,8 @@ interface TodoPanelProps {
 
 const SOURCE_COLORS: Record<string, string> = {
   user: "#09080E",
-  architect: "#3E806B",
-  builder: "#82323C",
+  architect: "#043B40",
+  builder: "#520322",
 };
 
 export function TodoPanel({ projectId }: TodoPanelProps) {
@@ -85,7 +85,7 @@ export function TodoPanel({ projectId }: TodoPanelProps) {
         className="flex items-center justify-between px-3 py-2"
         style={{ borderBottom: "1px solid rgba(9,8,14,0.06)" }}
       >
-        <span style={{ fontFamily: "var(--font-label)", fontSize: "10px", fontWeight: 700, color: "#3E806B", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+        <span style={{ fontFamily: "var(--font-label)", fontSize: "10px", fontWeight: 700, color: "#043B40", textTransform: "uppercase", letterSpacing: "0.08em" }}>
           Notes & TODOs
         </span>
         <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "var(--steel-blue)", opacity: 0.5 }}>
@@ -118,7 +118,7 @@ export function TodoPanel({ projectId }: TodoPanelProps) {
             onClick={handleAdd}
             disabled={!newContent.trim()}
             style={{
-              background: newContent.trim() ? "#3E806B" : "rgba(62,128,107,0.3)",
+              background: newContent.trim() ? "#043B40" : "rgba(4,59,64,0.3)",
               color: "#E9ECF0",
               border: "none",
               borderRadius: "4px",
@@ -137,7 +137,7 @@ export function TodoPanel({ projectId }: TodoPanelProps) {
       <div className="flex-1 overflow-y-auto px-2 py-1">
         {isLoading ? (
           <div className="flex items-center justify-center py-4">
-            <div className="h-4 w-4 animate-spin rounded-full border-b-2" style={{ borderColor: "#3E806B" }} />
+            <div className="h-4 w-4 animate-spin rounded-full border-b-2" style={{ borderColor: "#043B40" }} />
           </div>
         ) : pending.length === 0 && done.length === 0 ? (
           <div className="py-6 text-center" style={{ opacity: 0.3 }}>
@@ -160,15 +160,15 @@ export function TodoPanel({ projectId }: TodoPanelProps) {
                     width: "14px",
                     height: "14px",
                     borderRadius: "3px",
-                    border: `1.5px solid ${todo.status === "in_progress" ? "#3E806B" : "rgba(9,8,14,0.2)"}`,
-                    background: todo.status === "in_progress" ? "rgba(62,128,107,0.15)" : "transparent",
+                    border: `1.5px solid ${todo.status === "in_progress" ? "#043B40" : "rgba(9,8,14,0.2)"}`,
+                    background: todo.status === "in_progress" ? "rgba(4,59,64,0.15)" : "transparent",
                     cursor: "pointer",
                     marginTop: "2px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontSize: "8px",
-                    color: "#3E806B",
+                    color: "#043B40",
                   }}
                 >
                   {todo.status === "in_progress" ? "●" : ""}

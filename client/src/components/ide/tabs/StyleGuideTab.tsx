@@ -188,7 +188,7 @@ export function StyleGuideTab({ projectId }: StyleGuideTabProps) {
             setNewVal("");
           }}
           style={{
-            background: "#14287D",
+            background: "#00203A",
             color: "#FFF5ED",
             border: "none",
             borderRadius: "4px",

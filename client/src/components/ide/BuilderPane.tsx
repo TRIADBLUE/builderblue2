@@ -129,7 +129,7 @@ export function BuilderPane({
             fontFamily: "var(--font-label)",
             fontWeight: 600,
             fontSize: "13px",
-            color: "#82323C",
+            color: "#520322",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
           }}
@@ -140,7 +140,7 @@ export function BuilderPane({
           <ModelPicker
             provider={provider}
             model={model}
-            panelColor="#82323C"
+            panelColor="#520322"
             onProviderChange={onProviderChange}
             onModelChange={onModelChange}
           />
@@ -220,8 +220,8 @@ export function BuilderPane({
               className={`btn flex h-9 w-9 items-center justify-center rounded-md${isListening ? " mic-listening" : ""}`}
               style={{
                 background: isListening ? "#E00420" : "transparent",
-                color: isListening ? "#fff" : "#82323C",
-                border: isListening ? "none" : "1px solid rgba(130,50,60,0.4)",
+                color: isListening ? "#fff" : "#520322",
+                border: isListening ? "none" : "1px solid rgba(82,3,34,0.4)",
                 cursor: "pointer",
                 flexShrink: 0,
               }}
@@ -243,7 +243,7 @@ export function BuilderPane({
               fontSize: "11px",
               fontWeight: 600,
               letterSpacing: "0.04em",
-              background: "#82323C",
+              background: "#520322",
               color: "#FFF5ED",
               border: "none",
               cursor: isStreaming ? "not-allowed" : "pointer",
@@ -256,7 +256,7 @@ export function BuilderPane({
       </div>
 
       {/* Hand to Architect — separate bottom bar */}
-      <div style={{ padding: "8px 12px", borderTop: "1px solid rgba(62, 128, 107, 0.15)", background: "rgba(62, 128, 107, 0.04)" }}>
+      <div style={{ padding: "8px 12px", borderTop: "1px solid rgba(4, 59, 64, 0.15)", background: "rgba(4, 59, 64, 0.04)" }}>
         <button
           onClick={() => {
             const lastAssistant = [...messages]
@@ -271,8 +271,8 @@ export function BuilderPane({
             fontSize: "11px",
             letterSpacing: "0.04em",
             background: "transparent",
-            color: "#3E806B",
-            border: "1px solid rgba(62, 128, 107, 0.3)",
+            color: "#043B40",
+            border: "1px solid rgba(4, 59, 64, 0.3)",
             cursor: "pointer",
           }}
         >

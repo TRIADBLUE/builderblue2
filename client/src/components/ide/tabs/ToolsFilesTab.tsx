@@ -107,7 +107,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
             fontFamily: "var(--font-label)",
             fontSize: "10px",
             fontWeight: 700,
-            color: "#14287D",
+            color: "#00203A",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
             marginBottom: "12px",
@@ -160,7 +160,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
             fontFamily: "var(--font-label)",
             fontSize: "10px",
             fontWeight: 700,
-            color: "#14287D",
+            color: "#00203A",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
             marginBottom: "12px",
@@ -199,7 +199,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               style={{
                 fontFamily: "var(--font-content)",
                 fontSize: "12px",
-                color: "#14287D",
+                color: "#00203A",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -213,7 +213,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               style={{
                 fontFamily: "var(--font-content)",
                 fontSize: "12px",
-                color: "#14287D",
+                color: "#00203A",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -227,7 +227,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               style={{
                 fontFamily: "var(--font-content)",
                 fontSize: "12px",
-                color: "#14287D",
+                color: "#00203A",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -268,7 +268,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                 style={{
                   fontFamily: "var(--font-content)",
                   fontSize: "12px",
-                  color: "#14287D",
+                  color: "#00203A",
                   background: "none",
                   border: "none",
                   cursor: "pointer",

@@ -112,7 +112,7 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
             style={{
               fontFamily: "var(--font-runway)",
               color: "var(--ruby-red)",
-              background: "rgba(130, 50, 60, 0.1)",
+              background: "rgba(82, 3, 34, 0.1)",
             }}
           >
             {error}

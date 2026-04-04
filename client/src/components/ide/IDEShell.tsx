@@ -21,9 +21,9 @@ import { useAuth } from "../../hooks/useAuth";
 type PaneKey = "architect" | "builder" | "runway";
 
 const PANE_CONFIG: Record<PaneKey, { label: string; color: string }> = {
-  architect: { label: "Architect", color: "#3E806B" },
-  builder:   { label: "Builder",   color: "#82323C" },
-  runway:    { label: "Runway",    color: "#14287D" },
+  architect: { label: "Architect", color: "#043B40" },
+  builder:   { label: "Builder",   color: "#520322" },
+  runway:    { label: "Runway",    color: "#00203A" },
 };
 
 function ColDragHandle({

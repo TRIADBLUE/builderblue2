@@ -208,6 +208,29 @@ These restrictions apply to ALL work on **BUILDERBLUE2.COM**. Violations will be
 
 ---
 
+## IDE COLUMN IDENTITY COLORS (Updated 2026-04-04)
+
+Each IDE column has ONE primary identity color used everywhere — headers, buttons, labels, message text, cursors, borders, and accents:
+- Architect: #043B40 (dark teal)
+- Builder: #520322 (dark burgundy)
+- Staging/Runway: #00203A (dark navy)
+
+These are defined in styles.css as --architect-color, --builder-color, --staging-color.
+
+Message styling:
+- No message bubbles — messages are grouped text with no backgrounds or rounded corners
+- AI messages use their column's identity color as solid fill text
+- User messages in both columns: #E9ECF0 fill, outlined 2px in Triad Black #09080E (or solid #09080E if outline proved unreadable)
+- Staging area general font color: #00203A
+
+Glass mode:
+- Light theme backdrop: #808080
+- Dark theme backdrop: #08080c (unchanged)
+
+CSS classes: .text-ai-architect, .text-ai-builder, .text-ai-staging, .text-user-message
+
+---
+
 # Unique Features & Capabilities
 
 ## BUILDERBLUE2.COM — Unique Features

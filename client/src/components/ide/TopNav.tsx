@@ -288,7 +288,7 @@ export function TopNav({
                 <button
                   onClick={handleLogout}
                   style={{ ...menuItemStyle, color: "var(--ruby-red)" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(130,50,60,0.04)"; }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(82,3,34,0.04)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
                 >
                   Log out

@@ -73,7 +73,7 @@ function renderMarkdown(text: string) {
     if (line.match(/^[-*] /)) {
       elements.push(
         <div key={elements.length} style={{ display: "flex", gap: "8px", margin: "3px 0", paddingLeft: "4px" }}>
-          <span style={{ color: "#3E806B", flexShrink: 0 }}>-</span>
+          <span style={{ color: "#043B40", flexShrink: 0 }}>-</span>
           <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#09080E", lineHeight: 1.6 }}>
             {renderInline(line.slice(2))}
           </span>
@@ -89,7 +89,7 @@ function renderMarkdown(text: string) {
       const rest = line.replace(/^\d+\. /, "");
       elements.push(
         <div key={elements.length} style={{ display: "flex", gap: "8px", margin: "3px 0", paddingLeft: "4px" }}>
-          <span style={{ color: "#3E806B", flexShrink: 0, fontWeight: 600, fontSize: "12px" }}>{num}.</span>
+          <span style={{ color: "#043B40", flexShrink: 0, fontWeight: 600, fontSize: "12px" }}>{num}.</span>
           <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#09080E", lineHeight: 1.6 }}>
             {renderInline(rest)}
           </span>
@@ -175,12 +175,12 @@ export function ArchitectIdeationView({ messages, isStreaming, streamedText }: A
           style={{
             marginBottom: "16px",
             padding: "16px 18px",
-            background: "rgba(62, 128, 107, 0.04)",
+            background: "rgba(4, 59, 64, 0.04)",
             borderRadius: "8px",
-            borderLeft: "3px solid #3E806B",
+            borderLeft: "3px solid #043B40",
           }}
         >
-          <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#3E806B", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px", fontWeight: 600 }}>
+          <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#043B40", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px", fontWeight: 600 }}>
             Architect {idx === assistantMessages.length - 1 ? "— Latest" : `— Step ${idx + 1}`}
           </div>
           {renderMarkdown(msg.content)}
@@ -193,13 +193,13 @@ export function ArchitectIdeationView({ messages, isStreaming, streamedText }: A
           style={{
             marginBottom: "16px",
             padding: "16px 18px",
-            background: "rgba(62, 128, 107, 0.06)",
+            background: "rgba(4, 59, 64, 0.06)",
             borderRadius: "8px",
-            borderLeft: "3px solid #3E806B",
+            borderLeft: "3px solid #043B40",
             opacity: 0.9,
           }}
         >
-          <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#3E806B", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px", fontWeight: 600 }}>
+          <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#043B40", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px", fontWeight: 600 }}>
             Architect — Thinking...
           </div>
           {renderMarkdown(streamedText)}

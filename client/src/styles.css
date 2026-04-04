@@ -40,9 +40,9 @@
   --ruby-red: #82323C;
   --pure-blue: #0000FF;
   --yellow: #FFFF00;
-  --architect-color: #3E806B;
-  --builder-color: #82323C;
-  --staging-color: #14287D;
+  --architect-color: #043B40;
+  --builder-color: #520322;
+  --staging-color: #00203A;
 
   /* Fonts — sitewide roles */
   --font-heading: 'QTEraType', 'Georgia', serif;
@@ -78,7 +78,7 @@
   --glass-border: rgba(255, 255, 255, 0.5);
   --glass-edge: rgba(255, 255, 255, 0.7);
   --glass-shadow: rgba(9, 8, 14, 0.18);
-  --glass-backdrop: #8A89A6;
+  --glass-backdrop: #808080;
   --glass-sheen: rgba(255, 255, 255, 0.08);
   color-scheme: light;
 }
@@ -183,8 +183,9 @@ a:hover, button:not(.btn):hover {
 /* ─── User message text — outlined in Triad Black ────────────────────────── */
 .text-user-message {
   color: #E9ECF0;
-  -webkit-text-stroke: 0.5px #09080E;
-  text-stroke: 0.5px #09080E;
+  -webkit-text-stroke: 2px #09080E;
+  text-stroke: 2px #09080E;
+  paint-order: stroke fill;
 }
 
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */
@@ -368,11 +369,11 @@ a:hover, button:not(.btn):hover {
 }
 
 .streaming-cursor-architect {
-  background-color: var(--steel-blue);
+  background-color: var(--architect-color);
 }
 
 .streaming-cursor-builder {
-  background-color: var(--deep-blue);
+  background-color: var(--builder-color);
 }
 
 /* ─── Hand-off flash ─────────────────────────────────────────────────────── */

@@ -131,7 +131,7 @@ export function CenterPanel({
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "11px",
-                color: activeTab === tab ? "#14287D" : "rgba(9, 8, 14, 0.45)",
+                color: activeTab === tab ? "#00203A" : "rgba(9, 8, 14, 0.45)",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
