@@ -160,7 +160,7 @@ router.post("/refresh", async (req, res) => {
     }
 
     res.cookie(REFRESH_COOKIE, result.refreshToken, COOKIE_OPTIONS);
-    res.json({ accessToken: result.accessToken });
+    res.json({ accessToken: result.accessToken, user: result.user });
   } catch (error) {
     console.error("Refresh error:", error);
     res.status(500).json({ message: "Internal server error" });
