@@ -169,26 +169,27 @@ a:hover, button:not(.btn):hover {
   display: none;
 }
 
-/* ─── AI message text — solid fills, no outlines ─────────────────────────── */
+/* ─── AI message text — solid fills with white shadow ────────────────────── */
 .text-ai-architect {
   color: #043B40;
   font-variant: small-caps;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7), 0 2px 8px rgba(255, 255, 255, 0.4);
 }
 .text-ai-builder {
   color: #520322;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7), 0 2px 8px rgba(255, 255, 255, 0.4);
 }
 .text-ai-staging {
   color: #00203A;
   font-variant: small-caps;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7), 0 2px 8px rgba(255, 255, 255, 0.4);
 }
 
-/* ─── User message text — outlined in Triad Black ────────────────────────── */
+/* ─── User message text — light with dark shadow ─────────────────────────── */
 .text-user-message {
   color: #E9ECF0;
-  -webkit-text-stroke: 3px #09080E;
-  text-stroke: 3px #09080E;
-  paint-order: stroke fill;
   letter-spacing: 0.03em;
+  text-shadow: 0 1px 4px rgba(9, 8, 14, 0.8), 0 2px 10px rgba(9, 8, 14, 0.5);
 }
 
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */
