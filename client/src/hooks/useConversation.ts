@@ -69,14 +69,16 @@ export function useConversation(): UseConversationReturn {
       setIsStreaming(true);
       setStreamedText("");
 
-      // Add the user message to state immediately so it stays visible during streaming
+      // Show user message immediately — don't wait for server
       setConversation((prev) => {
         if (!prev) return prev;
-        const messages = [
-          ...((prev.messages ?? []) as ConversationMessage[]),
-          { role: "user" as const, content, timestamp: new Date().toISOString() },
-        ];
-        return { ...prev, messages };
+        return {
+          ...prev,
+          messages: [
+            ...((prev.messages ?? []) as ConversationMessage[]),
+            { role: "user" as const, content, timestamp: new Date().toISOString() },
+          ],
+        };
       });
 
       abortRef.current = new AbortController();
@@ -129,18 +131,15 @@ export function useConversation(): UseConversationReturn {
               } else if (parsed.type === "staged" && onStagedIds) {
                 onStagedIds(parsed.ids);
               } else if (parsed.type === "done") {
-                // Add only the assistant message — user message was already added above
                 setConversation((prev) => {
                   if (!prev) return prev;
-                  const messages = [
-                    ...((prev.messages ?? []) as ConversationMessage[]),
-                    {
-                      role: "assistant" as const,
-                      content: accumulated,
-                      timestamp: new Date().toISOString(),
-                    },
-                  ];
-                  return { ...prev, messages };
+                  return {
+                    ...prev,
+                    messages: [
+                      ...((prev.messages ?? []) as ConversationMessage[]),
+                      { role: "assistant" as const, content: accumulated, timestamp: new Date().toISOString() },
+                    ],
+                  };
                 });
               } else if (parsed.type === "error") {
                 console.error("Stream error:", parsed.message);
@@ -153,18 +152,15 @@ export function useConversation(): UseConversationReturn {
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
           console.error("Send message error:", error);
-          // Add only the error assistant message — user message was already added above
           setConversation((prev) => {
             if (!prev) return prev;
-            const messages = [
-              ...((prev.messages ?? []) as ConversationMessage[]),
-              {
-                role: "assistant" as const,
-                content: `⚠️ Message failed to send. ${(error as Error)?.message ?? "Check your API key configuration."}`,
-                timestamp: new Date().toISOString(),
-              },
-            ];
-            return { ...prev, messages };
+            return {
+              ...prev,
+              messages: [
+                ...((prev.messages ?? []) as ConversationMessage[]),
+                { role: "assistant" as const, content: `Message failed: ${(error as Error)?.message ?? "Check your API key configuration."}`, timestamp: new Date().toISOString() },
+              ],
+            };
           });
         }
       } finally {
