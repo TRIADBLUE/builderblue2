@@ -169,6 +169,18 @@ a:hover, button:not(.btn):hover {
   display: none;
 }
 
+/* ─── Outlined text for AI pane messages ─────────────────────────────────── */
+.text-outlined-architect {
+  color: transparent;
+  -webkit-text-stroke: 1px #3E806B;
+  text-stroke: 1px #3E806B;
+}
+.text-outlined-builder {
+  color: transparent;
+  -webkit-text-stroke: 1px #82323C;
+  text-stroke: 1px #82323C;
+}
+
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;

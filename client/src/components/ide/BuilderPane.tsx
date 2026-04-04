@@ -155,7 +155,7 @@ export function BuilderPane({
             className={`max-w-[85%] ${msg.role === "user" ? "ml-auto" : "mr-auto"}`}
           >
             <div
-              className="rounded-xl px-3 py-2"
+              className={`rounded-xl px-3 py-2 ${msg.role === "assistant" ? "text-outlined-builder" : ""}`}
               style={{
                 fontFamily: "var(--font-builder)",
                 fontSize: "13px",
