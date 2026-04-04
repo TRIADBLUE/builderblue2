@@ -69,6 +69,16 @@ export function useConversation(): UseConversationReturn {
       setIsStreaming(true);
       setStreamedText("");
 
+      // Add the user message to state immediately so it stays visible during streaming
+      setConversation((prev) => {
+        if (!prev) return prev;
+        const messages = [
+          ...((prev.messages ?? []) as ConversationMessage[]),
+          { role: "user" as const, content, timestamp: new Date().toISOString() },
+        ];
+        return { ...prev, messages };
+      });
+
       abortRef.current = new AbortController();
       const token = getAccessToken();
 
@@ -119,16 +129,11 @@ export function useConversation(): UseConversationReturn {
               } else if (parsed.type === "staged" && onStagedIds) {
                 onStagedIds(parsed.ids);
               } else if (parsed.type === "done") {
-                // Update conversation messages locally
+                // Add only the assistant message — user message was already added above
                 setConversation((prev) => {
                   if (!prev) return prev;
                   const messages = [
                     ...((prev.messages ?? []) as ConversationMessage[]),
-                    {
-                      role: "user" as const,
-                      content,
-                      timestamp: new Date().toISOString(),
-                    },
                     {
                       role: "assistant" as const,
                       content: accumulated,
@@ -148,16 +153,11 @@ export function useConversation(): UseConversationReturn {
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
           console.error("Send message error:", error);
-          // Show the error to the user in the conversation
+          // Add only the error assistant message — user message was already added above
           setConversation((prev) => {
             if (!prev) return prev;
             const messages = [
               ...((prev.messages ?? []) as ConversationMessage[]),
-              {
-                role: "user" as const,
-                content,
-                timestamp: new Date().toISOString(),
-              },
               {
                 role: "assistant" as const,
                 content: `⚠️ Message failed to send. ${(error as Error)?.message ?? "Check your API key configuration."}`,
