@@ -65,7 +65,7 @@ export function ArchitectPane({
   return (
     <div
       className="flex h-full flex-col glass-bg"
-      style={{ background: "#FFF5ED" }}
+      style={{ background: "var(--bg-primary)" }}
       onClick={onFocus}
     >
       {/* Header */}
@@ -102,26 +102,15 @@ export function ArchitectPane({
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`max-w-[85%] ${msg.role === "user" ? "ml-auto" : "mr-auto"}`}
+            className={`${msg.role === "user" ? "text-user-message" : "text-ai-architect"}`}
+            style={{
+              fontFamily: "var(--font-architect)",
+              fontSize: "13px",
+              lineHeight: 1.5,
+              padding: "2px 0",
+            }}
           >
-            <div
-              className={`rounded-xl px-3 py-2 ${msg.role === "assistant" ? "text-outlined-architect" : ""}`}
-              style={{
-                fontFamily: "var(--font-architect)",
-                fontSize: "13px",
-                lineHeight: 1.5,
-                background:
-                  msg.role === "user" ? "var(--steel-blue)" : "white",
-                color:
-                  msg.role === "user" ? "var(--cream)" : "var(--triad-black)",
-                borderRadius:
-                  msg.role === "user"
-                    ? "12px 12px 2px 12px"
-                    : "12px 12px 12px 2px",
-              }}
-            >
-              {msg.content}
-            </div>
+            {msg.content}
           </div>
         ))}
 
@@ -130,21 +119,17 @@ export function ArchitectPane({
         )}
 
         {isStreaming && streamedText && (
-          <div className="mr-auto max-w-[85%]">
-            <div
-              className="rounded-xl px-3 py-2"
-              style={{
-                fontFamily: "var(--font-architect)",
-                fontSize: "13px",
-                lineHeight: 1.5,
-                background: "white",
-                color: "var(--triad-black)",
-                borderRadius: "12px 12px 12px 2px",
-              }}
-            >
-              {streamedText}
-              <span className="streaming-cursor streaming-cursor-architect" />
-            </div>
+          <div
+            className="text-ai-architect"
+            style={{
+              fontFamily: "var(--font-architect)",
+              fontSize: "13px",
+              lineHeight: 1.5,
+              padding: "2px 0",
+            }}
+          >
+            {streamedText}
+            <span className="streaming-cursor streaming-cursor-architect" />
           </div>
         )}
         <div ref={messagesEndRef} />

@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Nav } from "../components/layout/nav";
+import { Footer } from "../components/layout/footer";
 import { useState, useEffect, useRef } from "react";
 
 /**
@@ -625,17 +626,7 @@ export default function Landing() {
       </div>
 
       {/* ── Footer ─────────────────────────────────────────────────────── */}
-      <div className="py-8 text-center" style={{ borderTop: "1px solid rgba(9,8,14,0.06)" }}>
-        <img
-          src="/builderblue2_header.png"
-          alt="BuilderBlue²"
-          className="mx-auto mb-3"
-          style={{ height: "20px", opacity: 0.4 }}
-        />
-        <p style={{ fontFamily: "var(--font-content)", fontSize: "12px", color: "var(--steel-blue)", opacity: 0.4 }}>
-          A TRIADBLUE platform
-        </p>
-      </div>
+      <Footer />
 
       <style>{`
         @keyframes fadeSlideIn {

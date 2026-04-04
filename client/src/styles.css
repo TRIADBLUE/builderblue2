@@ -78,7 +78,7 @@
   --glass-border: rgba(255, 255, 255, 0.5);
   --glass-edge: rgba(255, 255, 255, 0.7);
   --glass-shadow: rgba(9, 8, 14, 0.18);
-  --glass-backdrop: #2a2a3a;
+  --glass-backdrop: #8A89A6;
   --glass-sheen: rgba(255, 255, 255, 0.08);
   color-scheme: light;
 }
@@ -169,16 +169,22 @@ a:hover, button:not(.btn):hover {
   display: none;
 }
 
-/* ─── Outlined text for AI pane messages ─────────────────────────────────── */
-.text-outlined-architect {
-  color: transparent;
-  -webkit-text-stroke: 1px #09080E;
-  text-stroke: 1px #09080E;
+/* ─── AI message text — solid fills, no outlines ─────────────────────────── */
+.text-ai-architect {
+  color: #043B40;
 }
-.text-outlined-builder {
-  color: transparent;
-  -webkit-text-stroke: 1px #09080E;
-  text-stroke: 1px #09080E;
+.text-ai-builder {
+  color: #520322;
+}
+.text-ai-staging {
+  color: #00203A;
+}
+
+/* ─── User message text — outlined in Triad Black ────────────────────────── */
+.text-user-message {
+  color: #E9ECF0;
+  -webkit-text-stroke: 0.5px #09080E;
+  text-stroke: 0.5px #09080E;
 }
 
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */

@@ -115,7 +115,7 @@ export function BuilderPane({
   return (
     <div
       className="flex h-full flex-col glass-bg"
-      style={{ background: "#FFF5ED" }}
+      style={{ background: "var(--bg-primary)" }}
       onClick={onFocus}
     >
       {/* Header */}
@@ -152,28 +152,17 @@ export function BuilderPane({
         {messages.map((msg, i) => (
           <div
             key={i}
-            className={`max-w-[85%] ${msg.role === "user" ? "ml-auto" : "mr-auto"}`}
+            className={`${msg.role === "user" ? "text-user-message" : "text-ai-builder"}`}
+            style={{
+              fontFamily: "var(--font-builder)",
+              fontSize: "13px",
+              lineHeight: 1.5,
+              padding: "2px 0",
+            }}
           >
-            <div
-              className={`rounded-xl px-3 py-2 ${msg.role === "assistant" ? "text-outlined-builder" : ""}`}
-              style={{
-                fontFamily: "var(--font-builder)",
-                fontSize: "13px",
-                lineHeight: 1.5,
-                background:
-                  msg.role === "user" ? "var(--steel-blue)" : "white",
-                color:
-                  msg.role === "user" ? "var(--cream)" : "var(--triad-black)",
-                borderRadius:
-                  msg.role === "user"
-                    ? "12px 12px 2px 12px"
-                    : "12px 12px 12px 2px",
-              }}
-            >
-              {msg.role === "assistant"
-                ? renderContent(msg.content)
-                : msg.content}
-            </div>
+            {msg.role === "assistant"
+              ? renderContent(msg.content)
+              : msg.content}
           </div>
         ))}
 
@@ -182,21 +171,17 @@ export function BuilderPane({
         )}
 
         {isStreaming && streamedText && (
-          <div className="mr-auto max-w-[85%]">
-            <div
-              className="rounded-xl px-3 py-2"
-              style={{
-                fontFamily: "var(--font-builder)",
-                fontSize: "13px",
-                lineHeight: 1.5,
-                background: "white",
-                color: "var(--triad-black)",
-                borderRadius: "12px 12px 12px 2px",
-              }}
-            >
-              {renderContent(streamedText)}
-              <span className="streaming-cursor streaming-cursor-builder" />
-            </div>
+          <div
+            className="text-ai-builder"
+            style={{
+              fontFamily: "var(--font-builder)",
+              fontSize: "13px",
+              lineHeight: 1.5,
+              padding: "2px 0",
+            }}
+          >
+            {renderContent(streamedText)}
+            <span className="streaming-cursor streaming-cursor-builder" />
           </div>
         )}
         <div ref={messagesEndRef} />
