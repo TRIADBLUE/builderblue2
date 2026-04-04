@@ -69,6 +69,25 @@ export function useConversation(): UseConversationReturn {
       setIsStreaming(true);
       setStreamedText("");
 
+      // ─── FIX: Show user message IMMEDIATELY ───────────────────────
+      // Don't wait for the server "done" event — add to state now so
+      // it renders in the chat pane right away.
+      setConversation((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          messages: [
+            ...((prev.messages ?? []) as ConversationMessage[]),
+            {
+              role: "user" as const,
+              content,
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        };
+      });
+      // ──────────────────────────────────────────────────────────────
+
       abortRef.current = new AbortController();
       const token = getAccessToken();
 
@@ -119,24 +138,24 @@ export function useConversation(): UseConversationReturn {
               } else if (parsed.type === "staged" && onStagedIds) {
                 onStagedIds(parsed.ids);
               } else if (parsed.type === "done") {
-                // Update conversation messages locally
+                // ─── FIX: Only add ASSISTANT message here ────────────
+                // The user message was already added above. Only append
+                // the AI response.
                 setConversation((prev) => {
                   if (!prev) return prev;
-                  const messages = [
-                    ...((prev.messages ?? []) as ConversationMessage[]),
-                    {
-                      role: "user" as const,
-                      content,
-                      timestamp: new Date().toISOString(),
-                    },
-                    {
-                      role: "assistant" as const,
-                      content: accumulated,
-                      timestamp: new Date().toISOString(),
-                    },
-                  ];
-                  return { ...prev, messages };
+                  return {
+                    ...prev,
+                    messages: [
+                      ...((prev.messages ?? []) as ConversationMessage[]),
+                      {
+                        role: "assistant" as const,
+                        content: accumulated,
+                        timestamp: new Date().toISOString(),
+                      },
+                    ],
+                  };
                 });
+                // ────────────────────────────────────────────────────
               } else if (parsed.type === "error") {
                 console.error("Stream error:", parsed.message);
               }
@@ -148,24 +167,24 @@ export function useConversation(): UseConversationReturn {
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
           console.error("Send message error:", error);
-          // Show the error to the user in the conversation
+          // ─── FIX: Only add ERROR message here ──────────────────────
+          // The user message was already added above. Only append
+          // the error response.
           setConversation((prev) => {
             if (!prev) return prev;
-            const messages = [
-              ...((prev.messages ?? []) as ConversationMessage[]),
-              {
-                role: "user" as const,
-                content,
-                timestamp: new Date().toISOString(),
-              },
-              {
-                role: "assistant" as const,
-                content: `⚠️ Message failed to send. ${(error as Error)?.message ?? "Check your API key configuration."}`,
-                timestamp: new Date().toISOString(),
-              },
-            ];
-            return { ...prev, messages };
+            return {
+              ...prev,
+              messages: [
+                ...((prev.messages ?? []) as ConversationMessage[]),
+                {
+                  role: "assistant" as const,
+                  content: `Message failed: ${(error as Error)?.message ?? "Check your API key configuration."}`,
+                  timestamp: new Date().toISOString(),
+                },
+              ],
+            };
           });
+          // ──────────────────────────────────────────────────────────
         }
       } finally {
         setIsStreaming(false);
