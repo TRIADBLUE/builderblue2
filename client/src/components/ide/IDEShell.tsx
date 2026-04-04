@@ -99,7 +99,7 @@ export function IDEShell({
   const [flashPane, setFlashPane] = useState<"architect" | "builder" | null>(null);
 
   // Layout preset
-  type LayoutPreset = "full" | "focus-build" | "focus-plan" | "focus-review";
+  type LayoutPreset = "full" | "prototype" | "staging" | "preview";
   const [layoutPreset, setLayoutPreset] = useState<LayoutPreset>("full");
 
   // Visibility
@@ -130,10 +130,10 @@ export function IDEShell({
   const applyPreset = useCallback((preset: LayoutPreset) => {
     setLayoutPreset(preset);
     switch (preset) {
-      case "full":         setShowArchitect(true);  setShowBuilder(true);  setShowRunway(true);  break;
-      case "focus-build":  setShowArchitect(false); setShowBuilder(true);  setShowRunway(true);  break;
-      case "focus-plan":   setShowArchitect(true);  setShowBuilder(false); setShowRunway(true);  break;
-      case "focus-review": setShowArchitect(false); setShowBuilder(false); setShowRunway(true);  break;
+      case "full":       setShowArchitect(true);  setShowBuilder(true);  setShowRunway(true);  break;
+      case "prototype":  setShowArchitect(true);  setShowBuilder(false); setShowRunway(true);  setRunwayMode("architect"); break;
+      case "staging":    setShowArchitect(false); setShowBuilder(true);  setShowRunway(true);  setRunwayMode("builder"); break;
+      case "preview":    setShowArchitect(false); setShowBuilder(false); setShowRunway(true);  break;
     }
   }, []);
 
@@ -444,21 +444,21 @@ export function IDEShell({
             </>
           )}
           {([
-            { key: "full"          as LayoutPreset, label: "Full IDE" },
-            { key: "focus-build"   as LayoutPreset, label: "Build"    },
-            { key: "focus-plan"    as LayoutPreset, label: "Plan"     },
-            { key: "focus-review"  as LayoutPreset, label: "Review"   },
+            { key: "full"       as LayoutPreset, label: "Full IDE",   color: "rgba(9,8,14,0.5)" },
+            { key: "prototype"  as LayoutPreset, label: "Prototype",  color: "#043B40" },
+            { key: "staging"    as LayoutPreset, label: "Staging",    color: "#520322" },
+            { key: "preview"    as LayoutPreset, label: "Preview",    color: "#00203A" },
           ]).map((p) => (
             <button
               key={p.key}
               onClick={() => applyPreset(p.key)}
+              className="btn"
               style={{
-                fontFamily: "var(--font-runway)",
-                fontSize:   "9px",
-                color:      layoutPreset === p.key ? "var(--steel-blue)" : "rgba(9,8,14,0.35)",
+                fontFamily: "var(--font-label)",
+                fontSize:   "11px",
+                color:      layoutPreset === p.key ? p.color : "rgba(9,8,14,0.35)",
                 background: "transparent",
                 border:     "none",
-                padding:    "2px 6px",
                 cursor:     "pointer",
                 fontWeight: layoutPreset === p.key ? 600 : 400,
                 transition: "color 0.15s",

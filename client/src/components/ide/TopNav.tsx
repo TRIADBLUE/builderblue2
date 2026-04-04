@@ -145,23 +145,8 @@ export function TopNav({
         )}
       </div>
 
-      {/* Right — compute, deploy, avatar */}
+      {/* Right — deploy, avatar */}
       <div className="flex items-center gap-3">
-        <span
-          className="rounded-full px-2.5 py-1"
-          style={{
-            fontFamily: "var(--font-runway)",
-            fontSize: "11px",
-            color: "var(--triad-black)",
-            border: `1px solid ${computeColor}`,
-          }}
-        >
-          <span style={{ color: computeColor, fontWeight: 600 }}>
-            {computeStatus.sessionsUsed}
-          </span>{" "}
-          / {computeStatus.sessionsAllowed} sessions
-        </span>
-
         <button
           onClick={onDeploy}
           className="btn rounded px-3 py-1.5 text-xs font-bold transition-colors"

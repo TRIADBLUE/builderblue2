@@ -32,16 +32,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<PublicUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Silent refresh on mount
+  // Silent refresh on mount — restore session after page refresh
   useEffect(() => {
     silentRefresh()
       .then((result) => {
-        if (result) {
-          // Fetch user info from a refresh — we need to decode
-          // For now, do another call or trust the token
-          // The refresh endpoint returns accessToken, we need user data
+        if (result?.user) {
+          setUser(result.user);
+        } else if (result?.accessToken) {
+          // Token refreshed but no user in response — fetch user data
           api
-            .fetch<AuthResponse>("/api/auth/refresh", { method: "POST" })
+            .fetch<{ user: PublicUser }>("/api/auth/me")
             .then((data) => setUser(data.user))
             .catch(() => setUser(null));
         }

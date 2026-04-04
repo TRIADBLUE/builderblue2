@@ -208,6 +208,31 @@ These restrictions apply to ALL work on **BUILDERBLUE2.COM**. Violations will be
 
 ---
 
+## NEW PROJECT FLOW (Updated 2026-04-04)
+
+4 entry points — NEVER use the word "template" anywhere:
+1. Guided Start — questions → recommendation brief with storyboard visuals → user picks elements
+2. Blank Start — name and go, no questions
+3. Import — GitHub, GitLab, Bitbucket, or ZIP upload
+4. Design Import — upload image/design file or Figma URL → Architect converts to prototype
+
+AI model selection removed from project creation — users pick models inside the IDE.
+
+## LAYOUT PRESETS (Updated 2026-04-04)
+
+Top-right buttons in the IDE, color-coded:
+- Full IDE (neutral) — all 3 columns
+- Prototype (#043B40) — Architect + Runway (Architect mode)
+- Staging (#520322) — Builder + Runway (Builder mode)
+- Preview (#00203A) — Runway only
+
+Session counter removed from top nav — compute will live in a center panel tab.
+
+## AUTH
+
+Access token in memory, refresh token in httpOnly cookie.
+Silent refresh on page load prevents logout on Cmd+R.
+
 ## IDE COLUMN IDENTITY COLORS (Updated 2026-04-04)
 
 Each IDE column has ONE primary identity color used everywhere — headers, buttons, labels, message text, cursors, borders, and accents:
