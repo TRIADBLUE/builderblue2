@@ -339,6 +339,18 @@ All TriadBlue projects follow these standard patterns unless explicitly noted:
 - All imports should be explicit (no wildcard imports in production code)
 - Error handling: try/catch with proper error responses, never swallow errors silently
 
+- ## DEPLOYMENT
+Server: root@builderblue2 (Kamatera)
+Database: Neon PostgreSQL
+
+Deploy command (code-only changes):
+cd /var/www/builderblue2 && git pull && npm run build && pm2 restart builderblue2
+
+Deploy command (schema changes — any time shared/schema.ts is modified):
+cd /var/www/builderblue2 && git pull && npm run db:push && npm run build && pm2 restart builderblue2
+
+Always deploy after committing. Always include db:push if schema was touched.
+
 ### Communication with ConsoleBlue
 
 This project's documentation is assembled and pushed from ConsoleBlue. When you need to update onboarding docs:
