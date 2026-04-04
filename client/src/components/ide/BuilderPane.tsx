@@ -79,7 +79,7 @@ export function BuilderPane({
             <pre
               className="overflow-x-auto rounded-md p-3"
               style={{
-                fontFamily: "var(--font-runway)",
+                fontFamily: "'Source Code Pro', monospace",
                 fontSize: "12px",
                 background: "var(--triad-black)",
                 color: "var(--cream)",

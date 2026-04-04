@@ -229,6 +229,20 @@ Glass mode:
 
 CSS classes: .text-ai-architect, .text-ai-builder, .text-ai-staging, .text-user-message
 
+## IDE FONTS (Updated 2026-04-04)
+
+Chat message fonts — each column has its own identity font:
+- Architect: Anybody (small-caps) via --font-architect
+- Builder: Expletus Sans via --font-builder  
+- Staging/Runway: QTEraType (small-caps) via --font-runway
+
+IDE chrome (headers, labels, buttons outside chat): QTEraType via --font-label
+Code blocks: Source Code Pro (hardcoded, not via CSS var)
+Buttons: Acherus Grotesque via --font-button
+Content/body: Source Sans 3 via --font-content
+
+Unauthorized fonts removed: M PLUS Rounded 1c, Datatype, SN Pro
+
 ---
 
 # Unique Features & Capabilities
