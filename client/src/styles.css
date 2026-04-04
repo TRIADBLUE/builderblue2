@@ -172,13 +172,13 @@ a:hover, button:not(.btn):hover {
 /* ─── Outlined text for AI pane messages ─────────────────────────────────── */
 .text-outlined-architect {
   color: transparent;
-  -webkit-text-stroke: 1px #3E806B;
-  text-stroke: 1px #3E806B;
+  -webkit-text-stroke: 1px #09080E;
+  text-stroke: 1px #09080E;
 }
 .text-outlined-builder {
   color: transparent;
-  -webkit-text-stroke: 1px #82323C;
-  text-stroke: 1px #82323C;
+  -webkit-text-stroke: 1px #09080E;
+  text-stroke: 1px #09080E;
 }
 
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */
