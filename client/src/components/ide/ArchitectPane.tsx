@@ -70,8 +70,8 @@ export function ArchitectPane({
     >
       {/* Header */}
       <div
-        className="flex h-8 items-center justify-between px-3"
-        style={{ borderBottom: "1px solid rgba(9, 8, 14, 0.1)" }}
+        className="flex flex-col px-3 py-1"
+        style={{ borderBottom: "1px solid rgba(4, 59, 64, 0.1)" }}
       >
         <span
           className="accent-outlined"
@@ -86,7 +86,7 @@ export function ArchitectPane({
         >
           Architect
         </span>
-        <div className="flex items-center">
+        <div className="flex justify-end">
           <ModelPicker
             provider={provider}
             model={model}
@@ -149,7 +149,7 @@ export function ArchitectPane({
                 handleSubmit(e);
               }
             }}
-            placeholder="Ask the Architect..."
+            placeholder="Describe to the Architect..."
             rows={1}
             className="flex-1 resize-none rounded-md border px-3 py-2 outline-none"
             style={{

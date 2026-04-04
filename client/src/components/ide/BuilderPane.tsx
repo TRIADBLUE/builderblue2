@@ -120,8 +120,8 @@ export function BuilderPane({
     >
       {/* Header */}
       <div
-        className="flex h-8 items-center justify-between px-3"
-        style={{ borderBottom: "1px solid rgba(9, 8, 14, 0.1)" }}
+        className="flex flex-col px-3 py-1"
+        style={{ borderBottom: "1px solid rgba(82, 3, 34, 0.1)" }}
       >
         <span
           className="accent-outlined"
@@ -136,7 +136,7 @@ export function BuilderPane({
         >
           Builder
         </span>
-        <div className="flex items-center">
+        <div className="flex justify-end">
           <ModelPicker
             provider={provider}
             model={model}
