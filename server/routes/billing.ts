@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { eq, and, gte, lte } from "drizzle-orm";
+import { eq, and, gte, lte, desc } from "drizzle-orm";
 import { db } from "../db.js";
 import {
   subscriptions,
   computeUsage,
   computeBlocks,
+  aiUsage,
+  conversations,
 } from "../../shared/schema.js";
 import { authenticate } from "../middleware/authenticate.js";
 
@@ -74,6 +76,63 @@ router.get("/usage", async (req, res) => {
     });
   } catch (error) {
     console.error("Get usage error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// GET /api/billing/project-usage/:projectId — line-item compute costs for a project
+router.get("/project-usage/:projectId", async (req, res) => {
+  try {
+    const userId = req.user!.userId;
+    const projectId = req.params.projectId;
+
+    const items = await db
+      .select({
+        id: aiUsage.id,
+        provider: aiUsage.provider,
+        model: aiUsage.model,
+        inputTokens: aiUsage.inputTokens,
+        outputTokens: aiUsage.outputTokens,
+        costUsd: aiUsage.costUsd,
+        conversationId: aiUsage.conversationId,
+        createdAt: aiUsage.createdAt,
+      })
+      .from(aiUsage)
+      .where(
+        and(
+          eq(aiUsage.userId, userId),
+          eq(aiUsage.projectId, projectId)
+        )
+      )
+      .orderBy(desc(aiUsage.createdAt))
+      .limit(100);
+
+    const enriched = [];
+    for (const item of items) {
+      let role = "unknown";
+      if (item.conversationId) {
+        const [convo] = await db
+          .select({ role: conversations.role })
+          .from(conversations)
+          .where(eq(conversations.id, item.conversationId));
+        role = convo?.role ?? "unknown";
+      }
+      enriched.push({
+        ...item,
+        role,
+        costUsd: item.costUsd.toString(),
+      });
+    }
+
+    const totalCost = enriched.reduce((sum, item) => sum + parseFloat(item.costUsd), 0);
+
+    res.json({
+      items: enriched,
+      totalCost: totalCost.toFixed(4),
+      itemCount: enriched.length,
+    });
+  } catch (error) {
+    console.error("Project usage error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });

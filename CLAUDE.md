@@ -242,6 +242,16 @@ Available in two places:
 2. Inside IDE — "Design Import" section in Tools & Files tab
 Upload images/mockups or paste Figma URLs — Architect converts to clickable prototype
 
+## COMPUTE METERING (Updated 2026-04-04)
+
+Session counter removed from top nav. Compute costs live in a "Compute" tab in the center panel.
+- Real-time line items showing each AI call with role (Architect/Builder), model, tokens, and cost
+- Running total at the top
+- Polls every 5 seconds while the tab is open
+- Color-coded by role: Architect #043B40, Builder #520322, System #00203A
+- API: GET /api/billing/project-usage/:projectId returns enriched line items
+- Data source: aiUsage table (already tracking every call via recordUsage in ai-service.ts)
+
 ## AUTH
 
 Access token in memory, refresh token in httpOnly cookie.

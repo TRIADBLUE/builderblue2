@@ -289,7 +289,20 @@ export interface BillingCycle {
 // ─── IDE ─────────────────────────────────────────────────────────────────────
 
 export type ActivePane = "architect" | "builder" | null;
-export type CenterTab = "tools" | "staging" | "files" | "terminal" | "secrets" | "database" | "preview" | "git" | "services" | "thread" | "style-guide";
+export type CenterTab = "tools" | "staging" | "files" | "terminal" | "secrets" | "database" | "preview" | "git" | "services" | "thread" | "style-guide" | "compute";
+
+// ─── Compute Usage ──────────────────────────────────────────────────────────
+
+export interface UsageLineItem {
+  id: string;
+  provider: string;
+  model: string;
+  role: string;
+  inputTokens: number;
+  outputTokens: number;
+  costUsd: string;
+  createdAt: string;
+}
 
 export interface ComputeStatus {
   sessionsUsed: number;

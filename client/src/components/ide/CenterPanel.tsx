@@ -11,6 +11,7 @@ import { ServicesTab } from "./tabs/ServicesTab";
 import { ThreadTab } from "./tabs/ThreadTab";
 import { StyleGuideTab } from "./tabs/StyleGuideTab";
 import { ToolsFilesTab } from "./tabs/ToolsFilesTab";
+import { ComputeTab } from "./tabs/ComputeTab";
 import { RunwayToggle } from "./RunwayToggle";
 import { ArchitectIdeationView } from "./ArchitectIdeationView";
 
@@ -52,6 +53,7 @@ const TAB_LABELS: Record<string, string> = {
   secrets: "Secrets",
   database: "Database",
   services: "Services",
+  compute: "Compute",
 };
 
 export function CenterPanel({
@@ -265,6 +267,7 @@ export function CenterPanel({
         {activeTab === "services" && <ServicesTab />}
         {activeTab === "thread" && <ThreadTab projectId={projectId} />}
         {activeTab === "style-guide" && <StyleGuideTab projectId={projectId} />}
+        {activeTab === "compute" && <ComputeTab projectId={projectId} />}
       </div>
       </>
       )}
