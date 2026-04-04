@@ -34,6 +34,10 @@ interface CenterPanelProps {
   architectMessages?: ConversationMessage[];
   architectIsStreaming?: boolean;
   architectStreamedText?: string;
+  prototypeVersion?: number;
+  prototypeStatus?: "draft" | "approved" | "superseded";
+  onApprovePrototype?: (htmlContent: string, technicalSpec: string) => void;
+  onIteratePrototype?: () => void;
 }
 
 const TAB_LABELS: Record<string, string> = {
@@ -70,6 +74,10 @@ export function CenterPanel({
   architectMessages = [],
   architectIsStreaming = false,
   architectStreamedText = "",
+  prototypeVersion = 1,
+  prototypeStatus = "draft",
+  onApprovePrototype,
+  onIteratePrototype,
 }: CenterPanelProps) {
   const [activeTab, setActiveTab] = useState<CenterTab>("tools");
   const [openTabs, setOpenTabs] = useState<CenterTab[]>(["tools"]);
@@ -106,6 +114,10 @@ export function CenterPanel({
           messages={architectMessages}
           isStreaming={architectIsStreaming}
           streamedText={architectStreamedText}
+          prototypeVersion={prototypeVersion}
+          prototypeStatus={prototypeStatus}
+          onApprovePrototype={onApprovePrototype ?? (() => {})}
+          onIteratePrototype={onIteratePrototype ?? (() => {})}
         />
       )}
 

@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { z } from "zod";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 import { db } from "../db.js";
 import {
   conversations,
   projects,
   stagedChanges,
   projectFiles,
+  prototypes,
 } from "../../shared/schema.js";
 import { authenticate } from "../middleware/authenticate.js";
 import {
@@ -15,6 +16,8 @@ import {
   reviewStagedCode,
 } from "../services/ai-service.js";
 import { generateDiff } from "../services/diff-service.js";
+import { getArchitectSystemPrompt } from "../services/architect-prompts.js";
+import { getBuilderSystemPrompt } from "../services/builder-prompts.js";
 import type { ConversationMessage, AIProvider } from "../../shared/types.js";
 
 const router = Router();
@@ -23,7 +26,7 @@ router.use(authenticate);
 const createSchema = z.object({
   projectId: z.string().uuid(),
   role: z.enum(["architect", "builder"]),
-  provider: z.enum(["claude", "deepseek", "gemini", "kimi"]),
+  provider: z.enum(["claude", "deepseek", "gemini", "kimi", "groq"]),
   model: z.string().min(1),
 });
 
@@ -152,6 +155,27 @@ router.post("/:id/message", async (req, res) => {
     };
     currentMessages.push(userMessage);
 
+    // Get approved prototype for this project (if any)
+    const approvedProto = await db
+      .select()
+      .from(prototypes)
+      .where(
+        and(
+          eq(prototypes.projectId, convo.projectId),
+          eq(prototypes.status, "approved")
+        )
+      )
+      .orderBy(desc(prototypes.version))
+      .limit(1);
+
+    const protoHtml = approvedProto[0]?.htmlContent;
+    const protoSpec = approvedProto[0]?.technicalSpec;
+
+    // Build role-specific system prompt
+    const systemPrompt = convo.role === "architect"
+      ? getArchitectSystemPrompt(protoHtml)
+      : getBuilderSystemPrompt(protoHtml, protoSpec);
+
     // Set up SSE
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
@@ -231,7 +255,9 @@ router.post("/:id/message", async (req, res) => {
                 original,
                 block.content,
                 diff,
-                { userId: req.user!.userId, projectId: convo.projectId }
+                { userId: req.user!.userId, projectId: convo.projectId },
+                protoHtml,
+                protoSpec
               ).then(async (result) => {
                 await db
                   .update(stagedChanges)
@@ -283,7 +309,8 @@ router.post("/:id/message", async (req, res) => {
         userId: req.user!.userId,
         projectId: convo.projectId,
         conversationId: convo.id,
-      }
+      },
+      systemPrompt
     );
   } catch (error) {
     console.error("Message error:", error);

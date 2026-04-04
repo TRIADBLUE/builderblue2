@@ -21,6 +21,7 @@ import memoryRoutes from "./routes/memory.js";
 import threadRoutes from "./routes/thread.js";
 import todosRoutes from "./routes/todos.js";
 import sessionsRoutes from "./routes/sessions.js";
+import prototypeRoutes from "./routes/prototypes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -53,6 +54,7 @@ app.use("/api/todos", todosRoutes);
 app.use("/api/sessions", sessionsRoutes);
 app.use("/api/collaborators", collaboratorRoutes);
 app.use("/api/folders", folderRoutes);
+app.use("/api/prototypes", prototypeRoutes);
 
 // ─── Health Check ────────────────────────────────────────────────────────────
 

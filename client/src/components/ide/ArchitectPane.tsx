@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
+import { useRef, useEffect, useCallback, type FormEvent } from "react";
 import type { ConversationMessage, AIProvider, ActivePane } from "@shared/types";
 import { ThinkingIndicator } from "./ThinkingIndicator";
 import { ModelPicker } from "./ModelPicker";
@@ -11,11 +11,13 @@ interface ArchitectPaneProps {
   streamedText: string;
   provider: AIProvider;
   model: string;
+  inputValue: string;
   onProviderChange: (provider: AIProvider) => void;
   onModelChange: (model: string) => void;
   onSendMessage: (content: string) => void;
   onHandToBuilder: (content: string) => void;
   onFocus: () => void;
+  onInputChange: (value: string) => void;
 }
 
 // Model selection is handled by ModelPicker component
@@ -27,13 +29,14 @@ export function ArchitectPane({
   streamedText,
   provider,
   model,
+  inputValue,
   onProviderChange,
   onModelChange,
   onSendMessage,
   onHandToBuilder,
   onFocus,
+  onInputChange,
 }: ArchitectPaneProps) {
-  const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -43,13 +46,13 @@ export function ArchitectPane({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isStreaming) return;
-    onSendMessage(input.trim());
-    setInput("");
+    if (!inputValue.trim() || isStreaming) return;
+    onSendMessage(inputValue.trim());
+    onInputChange("");
   };
 
   const handleTextareaChange = (value: string) => {
-    setInput(value);
+    onInputChange(value);
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 160)}px`;
@@ -57,8 +60,8 @@ export function ArchitectPane({
   };
 
   const handleVoiceTranscript = useCallback((text: string) => {
-    setInput(prev => (prev ? `${prev} ${text}` : text));
-  }, []);
+    onInputChange(inputValue ? `${inputValue} ${text}` : text);
+  }, [inputValue, onInputChange]);
 
   const { isListening, isSupported, toggleListening } = useVoiceInput(handleVoiceTranscript);
 
@@ -140,7 +143,7 @@ export function ArchitectPane({
         <form onSubmit={handleSubmit} className="flex gap-2">
           <textarea
             ref={textareaRef}
-            value={input}
+            value={inputValue}
             onChange={(e) => handleTextareaChange(e.target.value)}
             onFocus={onFocus}
             onKeyDown={(e) => {
@@ -184,7 +187,7 @@ export function ArchitectPane({
           )}
           <button
             type="submit"
-            disabled={isStreaming || !input.trim()}
+            disabled={isStreaming || !inputValue.trim()}
             className="btn flex h-9 items-center justify-center rounded-md px-4"
             style={{
               fontFamily: "var(--font-label)",
@@ -195,7 +198,7 @@ export function ArchitectPane({
               color: "#E9ECF0",
               border: "none",
               cursor: isStreaming ? "not-allowed" : "pointer",
-              opacity: isStreaming || !input.trim() ? 0.5 : 1,
+              opacity: isStreaming || !inputValue.trim() ? 0.5 : 1,
             }}
           >
             Send

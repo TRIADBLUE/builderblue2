@@ -4,6 +4,7 @@ import type {
   AIProvider,
   ConversationMessage,
   ProjectFile,
+  Prototype,
 } from "@shared/types";
 import { TopNav } from "./TopNav";
 import { ArchitectPane } from "./ArchitectPane";
@@ -153,14 +154,33 @@ export function IDEShell({
     defaultBuilderConfig?.model ?? "claude-opus-4-20250514"
   );
   const [builderInput, setBuilderInput] = useState("");
+  const [architectInput, setArchitectInput] = useState("");
 
   const [newStagedIds, setNewStagedIds] = useState<Set<string>>(new Set());
   const [showUpgradeToast, setShowUpgradeToast] = useState(false);
+
+  // Prototype state
+  const [currentPrototype, setCurrentPrototype] = useState<Prototype | null>(null);
+  const [prototypeVersion, setPrototypeVersion] = useState(1);
 
   useEffect(() => { staging.loadChanges(projectId); }, [projectId]);
   useEffect(() => {
     architectConvo.loadConversations(projectId);
     builderConvo.loadConversations(projectId);
+  }, [projectId]);
+
+  // Load approved prototype on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const { api } = await import("../../lib/api");
+        const proto = await api.fetch<Prototype | null>(`/api/prototypes/${projectId}/latest`);
+        if (proto) {
+          setCurrentPrototype(proto);
+          setPrototypeVersion(proto.version);
+        }
+      } catch { /* no prototype yet */ }
+    })();
   }, [projectId]);
 
   // Auto-switch runway mode based on who's streaming
@@ -281,14 +301,35 @@ export function IDEShell({
     }, 500);
   }, []);
 
-  const handleHandToArchitect = useCallback((_content: string) => {
+  const handleHandToArchitect = useCallback((content: string) => {
     setHandoffDirection("to-architect");
     setTimeout(() => {
+      setArchitectInput(content);
       setActivePane("architect");
       setFlashPane("architect");
       setHandoffDirection(null);
       setTimeout(() => setFlashPane(null), 400);
     }, 500);
+  }, []);
+
+  const handleApprovePrototype = useCallback(async (htmlContent: string, technicalSpec: string) => {
+    const { api } = await import("../../lib/api");
+    const proto = await api.fetch<Prototype>("/api/prototypes", {
+      method: "POST",
+      body: {
+        projectId,
+        conversationId: architectConvo.conversation?.id,
+        htmlContent,
+        technicalSpec,
+        status: "approved",
+      },
+    });
+    setCurrentPrototype(proto);
+    setPrototypeVersion(proto.version);
+  }, [projectId, architectConvo.conversation]);
+
+  const handleIteratePrototype = useCallback(() => {
+    setActivePane("architect");
   }, []);
 
   // ── Message handlers ───────────────────────────────────────────────────────
@@ -455,11 +496,13 @@ export function IDEShell({
                     streamedText={architectConvo.streamedText}
                     provider={architectProvider}
                     model={architectModel}
+                    inputValue={architectInput}
                     onProviderChange={setArchitectProvider}
                     onModelChange={setArchitectModel}
                     onSendMessage={handleArchitectMessage}
                     onHandToBuilder={handleHandToBuilder}
                     onFocus={() => setActivePane("architect")}
+                    onInputChange={setArchitectInput}
                   />
                 </div>
                 </div>
@@ -525,6 +568,10 @@ export function IDEShell({
                   architectMessages={architectMessages}
                   architectIsStreaming={architectConvo.isStreaming}
                   architectStreamedText={architectConvo.streamedText}
+                  prototypeVersion={prototypeVersion}
+                  prototypeStatus={currentPrototype?.status as "draft" | "approved" | "superseded" ?? "draft"}
+                  onApprovePrototype={handleApprovePrototype}
+                  onIteratePrototype={handleIteratePrototype}
                 />
                 </div>
               </div>

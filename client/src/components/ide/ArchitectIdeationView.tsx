@@ -1,10 +1,43 @@
 import { useRef, useEffect } from "react";
 import type { ConversationMessage } from "@shared/types";
+import { PrototypeRenderer } from "./PrototypeRenderer";
 
 interface ArchitectIdeationViewProps {
   messages: ConversationMessage[];
   isStreaming: boolean;
   streamedText: string;
+  prototypeVersion: number;
+  prototypeStatus: "draft" | "approved" | "superseded";
+  onApprovePrototype: (htmlContent: string, technicalSpec: string) => void;
+  onIteratePrototype: () => void;
+}
+
+interface ContentSegment {
+  type: "text" | "prototype" | "spec";
+  content: string;
+}
+
+function splitContent(content: string): ContentSegment[] {
+  const segments: ContentSegment[] = [];
+  const blockRegex = /```(prototype|spec)\s*\n([\s\S]*?)```/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = blockRegex.exec(content)) !== null) {
+    if (match.index > lastIndex) {
+      const text = content.slice(lastIndex, match.index).trim();
+      if (text) segments.push({ type: "text", content: text });
+    }
+    segments.push({ type: match[1] as "prototype" | "spec", content: match[2].trim() });
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < content.length) {
+    const text = content.slice(lastIndex).trim();
+    if (text) segments.push({ type: "text", content: text });
+  }
+
+  return segments;
 }
 
 /** Minimal markdown-to-JSX: headers, bold, code blocks, lists, paragraphs */
@@ -140,7 +173,15 @@ function renderInline(text: string): (string | JSX.Element)[] {
   return parts;
 }
 
-export function ArchitectIdeationView({ messages, isStreaming, streamedText }: ArchitectIdeationViewProps) {
+export function ArchitectIdeationView({
+  messages,
+  isStreaming,
+  streamedText,
+  prototypeVersion,
+  prototypeStatus,
+  onApprovePrototype,
+  onIteratePrototype,
+}: ArchitectIdeationViewProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom on new content
@@ -164,28 +205,89 @@ export function ArchitectIdeationView({ messages, isStreaming, streamedText }: A
             Architect Ideation
           </div>
           <div style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "rgba(9,8,14,0.3)", lineHeight: 1.6 }}>
-            Start a conversation with the Architect. Research, wireframes, and prompt drafts will appear here.
+            Describe what you want to build to the Architect. After a brief conversation, a live clickable prototype will appear here.
           </div>
         </div>
       )}
 
-      {assistantMessages.map((msg, idx) => (
-        <div
-          key={idx}
-          style={{
-            marginBottom: "16px",
-            padding: "16px 18px",
-            background: "rgba(4, 59, 64, 0.04)",
-            borderRadius: "8px",
-            borderLeft: "3px solid #043B40",
-          }}
-        >
-          <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#043B40", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px", fontWeight: 600 }}>
-            Architect {idx === assistantMessages.length - 1 ? "— Latest" : `— Step ${idx + 1}`}
+      {assistantMessages.map((msg, idx) => {
+        const segments = splitContent(msg.content);
+        return (
+          <div key={idx} style={{ marginBottom: "16px" }}>
+            {segments.map((seg, si) => {
+              if (seg.type === "prototype") {
+                return (
+                  <PrototypeRenderer
+                    key={si}
+                    htmlContent={seg.content}
+                    version={prototypeVersion}
+                    status={idx === assistantMessages.length - 1 ? prototypeStatus : "superseded"}
+                    onApprove={() => {
+                      const specSeg = segments.find(s => s.type === "spec");
+                      onApprovePrototype(seg.content, specSeg?.content ?? "");
+                    }}
+                    onIterate={onIteratePrototype}
+                  />
+                );
+              }
+              if (seg.type === "spec") {
+                return (
+                  <div
+                    key={si}
+                    style={{
+                      padding: "16px 18px",
+                      background: "rgba(0, 32, 58, 0.04)",
+                      borderRadius: "8px",
+                      borderLeft: "3px solid #00203A",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    <div style={{
+                      fontFamily: "var(--font-label)",
+                      fontSize: "9px",
+                      color: "#00203A",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                      marginBottom: "8px",
+                      fontWeight: 600,
+                    }}>
+                      Technical Specification
+                    </div>
+                    {renderMarkdown(seg.content)}
+                  </div>
+                );
+              }
+              return (
+                <div
+                  key={si}
+                  style={{
+                    padding: "16px 18px",
+                    background: "rgba(4, 59, 64, 0.04)",
+                    borderRadius: "8px",
+                    borderLeft: "3px solid #043B40",
+                    marginBottom: "8px",
+                  }}
+                >
+                  {idx === assistantMessages.length - 1 && si === 0 && (
+                    <div style={{
+                      fontFamily: "var(--font-label)",
+                      fontSize: "9px",
+                      color: "#043B40",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                      marginBottom: "8px",
+                      fontWeight: 600,
+                    }}>
+                      Architect
+                    </div>
+                  )}
+                  {renderMarkdown(seg.content)}
+                </div>
+              );
+            })}
           </div>
-          {renderMarkdown(msg.content)}
-        </div>
-      ))}
+        );
+      })}
 
       {/* Streaming content */}
       {isStreaming && streamedText && (

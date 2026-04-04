@@ -298,6 +298,21 @@ export interface ComputeStatus {
   level: "normal" | "warning" | "critical" | "depleted";
 }
 
+// ─── Prototypes ─────────────────────────────────────────────────────────────
+
+export interface Prototype {
+  id: string;
+  projectId: string;
+  conversationId: string;
+  version: number;
+  htmlContent: string;
+  technicalSpec: string;
+  status: "draft" | "approved" | "superseded";
+  approvedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // ─── API ─────────────────────────────────────────────────────────────────────
 
 export interface ApiError {

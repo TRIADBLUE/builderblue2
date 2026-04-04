@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { db } from "../db.js";
 import { aiUsage } from "../../shared/schema.js";
 import type { AIProvider, ConversationMessage } from "../../shared/types.js";
+import { getArchitectReviewPrompt } from "./architect-prompts.js";
 
 interface StreamCallbacks {
   onChunk: (text: string) => void;
@@ -30,7 +31,8 @@ async function streamClaude(
   model: string,
   messages: ConversationMessage[],
   callbacks: StreamCallbacks,
-  options: StreamOptions
+  options: StreamOptions,
+  systemPrompt?: string
 ): Promise<void> {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -48,7 +50,7 @@ async function streamClaude(
       model,
       max_tokens: 4096,
       messages: formattedMessages,
-      system: "You are an expert software engineer working in BuilderBlue², an AI-powered IDE. When proposing code changes, always include a filepath comment on the first line of each code block: // filepath: path/to/file.ext",
+      system: systemPrompt ?? "You are an expert software engineer working in BuilderBlue², an AI-powered IDE. When proposing code changes, always include a filepath comment on the first line of each code block: // filepath: path/to/file.ext",
     });
 
     for await (const event of stream) {
@@ -80,7 +82,8 @@ async function streamOpenAICompatible(
   model: string,
   messages: ConversationMessage[],
   callbacks: StreamCallbacks,
-  options: StreamOptions
+  options: StreamOptions,
+  systemPrompt?: string
 ): Promise<void> {
   const config = PROVIDER_ENDPOINTS[provider];
   if (!config) {
@@ -97,7 +100,7 @@ async function streamOpenAICompatible(
   const formattedMessages = [
     {
       role: "system",
-      content: "You are an expert software engineer working in BuilderBlue², an AI-powered IDE. When proposing code changes, always include a filepath comment on the first line of each code block: // filepath: path/to/file.ext",
+      content: systemPrompt ?? "You are an expert software engineer working in BuilderBlue², an AI-powered IDE. When proposing code changes, always include a filepath comment on the first line of each code block: // filepath: path/to/file.ext",
     },
     ...messages.map((m) => ({ role: m.role, content: m.content })),
   ];
@@ -216,12 +219,13 @@ export async function streamCompletion(
   model: string,
   messages: ConversationMessage[],
   callbacks: StreamCallbacks,
-  options: StreamOptions
+  options: StreamOptions,
+  systemPrompt?: string
 ): Promise<void> {
   if (provider === "claude") {
-    return streamClaude(model, messages, callbacks, options);
+    return streamClaude(model, messages, callbacks, options, systemPrompt);
   }
-  return streamOpenAICompatible(provider, model, messages, callbacks, options);
+  return streamOpenAICompatible(provider, model, messages, callbacks, options, systemPrompt);
 }
 
 // ─── Architect code review ──────────────────────────────────────────────────
@@ -236,11 +240,15 @@ export async function reviewStagedCode(
   originalContent: string | null,
   proposedContent: string,
   diff: string,
-  options: StreamOptions
+  options: StreamOptions,
+  approvedPrototypeHtml?: string,
+  technicalSpec?: string
 ): Promise<ArchitectReviewResult> {
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-  const prompt = `You are the Architect in BuilderBlue², an AI-powered IDE. Your job is to review code proposed by the Builder before it reaches the user.
+  const prompt = approvedPrototypeHtml
+    ? getArchitectReviewPrompt(approvedPrototypeHtml, technicalSpec ?? "") + `\n\n**File:** ${filePath}\n\n**Proposed content:**\n\`\`\`\n${proposedContent}\n\`\`\`\n\n**Diff:**\n\`\`\`diff\n${diff}\n\`\`\``
+    : `You are the Architect in BuilderBlue², an AI-powered IDE. Your job is to review code proposed by the Builder before it reaches the user.
 
 Review this staged change and decide whether to APPROVE or REJECT it.
 

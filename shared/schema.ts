@@ -358,6 +358,27 @@ export const threadEntries = pgTable("thread_entries", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// ─── Prototypes ─────────────────────────────────────────────────────────────
+
+export const prototypes = pgTable("prototypes", {
+  id: uuid("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  projectId: uuid("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  conversationId: uuid("conversation_id")
+    .notNull()
+    .references(() => conversations.id),
+  version: integer("version").notNull().default(1),
+  htmlContent: text("html_content").notNull(),
+  technicalSpec: text("technical_spec").notNull().default(""),
+  status: text("status").notNull().default("draft"),
+  approvedAt: timestamp("approved_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 // ─── Session Summaries ───────────────────────────────────────────────────────
 
 export const sessionSummaries = pgTable("session_summaries", {

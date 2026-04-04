@@ -229,6 +229,35 @@ Glass mode:
 
 CSS classes: .text-ai-architect, .text-ai-builder, .text-ai-staging, .text-user-message
 
+## ARCHITECT PROTOTYPE SYSTEM (Updated 2026-04-04)
+
+Core feature: Architect generates live clickable HTML prototypes on the Runway.
+Users see and interact with their app before real code is written.
+"See it before you build it."
+
+Architect handoff = prototype (visual spec) + technical spec (implementation plan) bundled together.
+
+Flow:
+1. User describes idea → Architect asks clarifying questions
+2. Architect generates prototype + spec on the Runway
+3. User clicks through prototype, gives feedback
+4. Architect iterates (cheap — plan mode)
+5. User approves → stored in prototypes table
+6. Builder receives both prototype + spec as its build instructions
+7. Builder CANNOT enter build mode without an approved prototype
+8. Architect auto-reviews each build turn against prototype + spec
+
+Prototype marker: ```prototype ... ``` in Architect responses
+Spec marker: ```spec ... ``` in Architect responses
+Renderer: PrototypeRenderer.tsx — sandboxed iframe with blob URL
+System prompts: architect-prompts.ts, builder-prompts.ts
+Storage: prototypes table (version, htmlContent, technicalSpec, status)
+API: /api/prototypes — CRUD + latest approved lookup
+
+Bug fixes included:
+- Groq added to provider enum validation
+- Hand to Architect handler now passes content to architect input
+
 ## IDE FONTS (Updated 2026-04-04)
 
 Chat message fonts — each column has its own identity font:
