@@ -228,6 +228,20 @@ Top-right buttons in the IDE, color-coded:
 
 Session counter removed from top nav — compute will live in a center panel tab.
 
+## NOTES PANEL (Updated 2026-04-04)
+
+- Collapsible via toggle button — collapses to a thin vertical tab
+- Contains: user notes, AI-generated notes (architect/builder), import context
+- Import Context dropdown: Upload Reference File, Paste Notion/Google Docs Link, Paste Brief/PRD (stubs — UI present, handlers TODO)
+- Future integrations: Notion, Google Docs, Trello, reference images — all feed context to the AI
+
+## DESIGN IMPORT (Updated 2026-04-04)
+
+Available in two places:
+1. Project creation — "Design Import" entry point card
+2. Inside IDE — "Design Import" section in Tools & Files tab
+Upload images/mockups or paste Figma URLs — Architect converts to clickable prototype
+
 ## AUTH
 
 Access token in memory, refresh token in httpOnly cookie.

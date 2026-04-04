@@ -154,6 +154,81 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
         {/* Divider */}
         <div style={{ height: "1px", background: "rgba(9,8,14,0.06)", marginBottom: "24px" }} />
 
+        {/* Design Import */}
+        <div style={{ marginBottom: "32px" }}>
+          <div style={{
+            fontFamily: "var(--font-label)",
+            fontSize: "10px",
+            fontWeight: 700,
+            color: "#043B40",
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            marginBottom: "8px",
+          }}>
+            Design Import
+          </div>
+          <div className="space-y-2">
+            <label
+              className="flex items-center gap-2 rounded-md px-3 py-2 transition-all"
+              style={{
+                border: "1px solid rgba(9,8,14,0.08)",
+                cursor: "pointer",
+                background: "rgba(4,59,64,0.02)",
+              }}
+            >
+              <span style={{ fontSize: "16px" }}>🎨</span>
+              <div>
+                <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", fontWeight: 600, color: "#09080E" }}>
+                  Upload Design
+                </div>
+                <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)" }}>
+                  Screenshot, mockup, or design file — Architect converts to prototype
+                </div>
+              </div>
+              <input
+                type="file"
+                accept="image/*,.pdf,.fig"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    // TODO: Upload file, add to architect conversation as image
+                    console.log("Design file selected:", file.name);
+                  }
+                }}
+              />
+            </label>
+            <div
+              className="flex items-center gap-2 rounded-md px-3 py-2 transition-all"
+              style={{
+                border: "1px solid rgba(9,8,14,0.08)",
+                cursor: "pointer",
+                background: "rgba(4,59,64,0.02)",
+              }}
+              onClick={() => {
+                const url = window.prompt("Paste Figma share URL:");
+                if (url) {
+                  // TODO: Process Figma URL, pass to Architect
+                  console.log("Figma URL:", url);
+                }
+              }}
+            >
+              <span style={{ fontSize: "16px" }}>📐</span>
+              <div>
+                <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", fontWeight: 600, color: "#09080E" }}>
+                  Figma Import
+                </div>
+                <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)" }}>
+                  Paste a Figma share link — Architect converts to clickable prototype
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div style={{ height: "1px", background: "rgba(9,8,14,0.06)", marginBottom: "24px" }} />
+
         {/* Files section */}
         <div>
           <div style={{

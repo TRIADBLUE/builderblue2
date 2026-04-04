@@ -279,7 +279,7 @@ export default function Dashboard() {
               Welcome back{user?.name ? `, ${user.name}` : ""}.
             </p>
           </div>
-          <button
+          {!showAddProject && <button
             onClick={() => setShowAddProject(true)}
             className="btn rounded-md px-5 py-2.5 text-sm font-semibold transition-all hover:scale-105"
             style={{
@@ -291,7 +291,7 @@ export default function Dashboard() {
             }}
           >
             + Add Project
-          </button>
+          </button>}
         </div>
 
         {/* Add Project form */}

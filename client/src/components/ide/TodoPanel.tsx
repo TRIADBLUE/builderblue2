@@ -12,6 +12,7 @@ interface Todo {
 
 interface TodoPanelProps {
   projectId: string;
+  onCollapse?: () => void;
 }
 
 const SOURCE_COLORS: Record<string, string> = {
@@ -20,7 +21,7 @@ const SOURCE_COLORS: Record<string, string> = {
   builder: "#520322",
 };
 
-export function TodoPanel({ projectId }: TodoPanelProps) {
+export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newContent, setNewContent] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -88,9 +89,29 @@ export function TodoPanel({ projectId }: TodoPanelProps) {
         <span style={{ fontFamily: "var(--font-label)", fontSize: "10px", fontWeight: 700, color: "#043B40", textTransform: "uppercase", letterSpacing: "0.08em" }}>
           Notes & TODOs
         </span>
-        <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "var(--steel-blue)", opacity: 0.5 }}>
-          {pending.length} open
-        </span>
+        <div className="flex items-center gap-2">
+          <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "var(--steel-blue)", opacity: 0.5 }}>
+            {pending.length} open
+          </span>
+          {onCollapse && (
+            <button
+              onClick={onCollapse}
+              className="btn"
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "12px",
+                color: "rgba(9,8,14,0.3)",
+                padding: "0 2px",
+                lineHeight: 1,
+              }}
+              title="Collapse panel"
+            >
+              ◁
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Add todo */}
@@ -131,6 +152,71 @@ export function TodoPanel({ projectId }: TodoPanelProps) {
             +
           </button>
         </div>
+      </div>
+
+      {/* Import context */}
+      <div className="px-2 py-1" style={{ borderBottom: "1px solid rgba(9,8,14,0.04)" }}>
+        <details style={{ cursor: "pointer" }}>
+          <summary
+            style={{
+              fontFamily: "var(--font-label)",
+              fontSize: "9px",
+              color: "rgba(9,8,14,0.35)",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              listStyle: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <span style={{ fontSize: "10px" }}>↓</span> Import Context
+          </summary>
+          <div className="mt-1 space-y-1">
+            <button
+              className="btn w-full text-left rounded px-2 py-1"
+              style={{
+                fontFamily: "var(--font-content)",
+                fontSize: "10px",
+                color: "var(--steel-blue)",
+                background: "rgba(9,8,14,0.02)",
+                border: "none",
+                cursor: "pointer",
+              }}
+              onClick={() => {/* TODO: file upload for reference docs */}}
+            >
+              Upload Reference File
+            </button>
+            <button
+              className="btn w-full text-left rounded px-2 py-1"
+              style={{
+                fontFamily: "var(--font-content)",
+                fontSize: "10px",
+                color: "var(--steel-blue)",
+                background: "rgba(9,8,14,0.02)",
+                border: "none",
+                cursor: "pointer",
+              }}
+              onClick={() => {/* TODO: paste URL for Notion/Google Docs */}}
+            >
+              Paste Notion / Google Docs Link
+            </button>
+            <button
+              className="btn w-full text-left rounded px-2 py-1"
+              style={{
+                fontFamily: "var(--font-content)",
+                fontSize: "10px",
+                color: "var(--steel-blue)",
+                background: "rgba(9,8,14,0.02)",
+                border: "none",
+                cursor: "pointer",
+              }}
+              onClick={() => {/* TODO: paste brief or PRD */}}
+            >
+              Paste a Brief or PRD
+            </button>
+          </div>
+        </details>
       </div>
 
       {/* Todo list */}

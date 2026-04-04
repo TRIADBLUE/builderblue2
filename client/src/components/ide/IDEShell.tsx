@@ -97,6 +97,7 @@ export function IDEShell({
   // Active pane state
   const [activePane, setActivePane] = useState<ActivePane>(null);
   const [flashPane, setFlashPane] = useState<"architect" | "builder" | null>(null);
+  const [showNotes, setShowNotes] = useState(true);
 
   // Layout preset
   type LayoutPreset = "full" | "prototype" | "staging" | "preview";
@@ -487,7 +488,31 @@ export function IDEShell({
               >
                 <ColDragHandle paneKey="architect" colOrder={colOrder} onDragStart={handleTabDragStart} onDrop={handleTabDrop} />
                 <div className="flex flex-1 overflow-hidden">
-                <TodoPanel projectId={projectId} />
+                {showNotes && <TodoPanel projectId={projectId} onCollapse={() => setShowNotes(false)} />}
+                {!showNotes && (
+                  <button
+                    onClick={() => setShowNotes(true)}
+                    className="btn"
+                    style={{
+                      writingMode: "vertical-rl",
+                      textOrientation: "mixed",
+                      padding: "12px 4px",
+                      background: "transparent",
+                      border: "none",
+                      borderRight: "1px solid rgba(9,8,14,0.08)",
+                      cursor: "pointer",
+                      fontFamily: "var(--font-label)",
+                      fontSize: "9px",
+                      fontWeight: 600,
+                      color: "rgba(9,8,14,0.3)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                    }}
+                    title="Show Notes"
+                  >
+                    Notes & TODOs
+                  </button>
+                )}
                 <div className="flex-1 overflow-hidden">
                   <ArchitectPane
                     isActive={activePane === "architect"}
