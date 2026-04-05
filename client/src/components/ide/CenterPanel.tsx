@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { PanelRightClose } from "lucide-react";
 import type { CenterTab, StagedChange, ProjectFile, ConversationMessage } from "@shared/types";
 import { StagingTab } from "./tabs/StagingTab";
 import { FilesTab } from "./tabs/FilesTab";
@@ -218,7 +219,7 @@ export function CenterPanel({
             onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.6)")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.25)")}
           >
-            ▷
+            <PanelRightClose size={14} />
           </button>
         )}
       </div>

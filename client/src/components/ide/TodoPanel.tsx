@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { PanelLeftClose } from "lucide-react";
 import { api } from "../../lib/api";
 
 interface Todo {
@@ -108,7 +109,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
               }}
               title="Collapse panel"
             >
-              ◁
+              <PanelLeftClose size={14} />
             </button>
           )}
         </div>

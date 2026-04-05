@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
+import { PanelLeftOpen } from "lucide-react";
 import type {
   ActivePane,
   AIProvider,
@@ -494,23 +495,18 @@ export function IDEShell({
                     onClick={() => setShowNotes(true)}
                     className="btn"
                     style={{
-                      writingMode: "vertical-rl",
-                      textOrientation: "mixed",
-                      padding: "12px 4px",
+                      padding: "8px 4px",
                       background: "transparent",
                       border: "none",
                       borderRight: "1px solid rgba(9,8,14,0.08)",
                       cursor: "pointer",
-                      fontFamily: "var(--font-label)",
-                      fontSize: "9px",
-                      fontWeight: 600,
                       color: "rgba(9,8,14,0.3)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.06em",
+                      display: "flex",
+                      alignItems: "flex-start",
                     }}
                     title="Show Notes"
                   >
-                    Notes & TODOs
+                    <PanelLeftOpen size={14} />
                   </button>
                 )}
                 <div className="flex-1 overflow-hidden">
