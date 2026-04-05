@@ -166,8 +166,8 @@ export function IDEShell({
 
   useEffect(() => { staging.loadChanges(projectId); }, [projectId]);
   useEffect(() => {
-    architectConvo.loadConversations(projectId);
-    builderConvo.loadConversations(projectId);
+    architectConvo.loadConversations(projectId, "architect");
+    builderConvo.loadConversations(projectId, "builder");
   }, [projectId]);
 
   // Load approved prototype on mount

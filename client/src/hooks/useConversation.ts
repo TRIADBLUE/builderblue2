@@ -13,7 +13,7 @@ interface UseConversationReturn {
   conversations: Conversation[];
   isStreaming: boolean;
   streamedText: string;
-  loadConversations: (projectId: string) => Promise<void>;
+  loadConversations: (projectId: string, role?: string) => Promise<void>;
   createConversation: (
     projectId: string,
     role: ConversationRole,
@@ -35,12 +35,22 @@ export function useConversation(): UseConversationReturn {
   const [streamedText, setStreamedText] = useState("");
   const abortRef = useRef<AbortController | null>(null);
 
-  const loadConversations = useCallback(async (projectId: string) => {
+  const loadConversations = useCallback(async (projectId: string, role?: string) => {
     const data = await api.fetch<Conversation[]>(
       `/api/conversations/${projectId}`
     );
     setConversations(data);
-  }, []);
+
+    // Auto-restore: find the most recent conversation for the given role
+    if (role && !conversation) {
+      const matching = data
+        .filter((c) => c.role === role)
+        .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+      if (matching.length > 0) {
+        setConversation(matching[0]);
+      }
+    }
+  }, [conversation]);
 
   const createConversation = useCallback(
     async (
