@@ -173,23 +173,23 @@ a:hover, button:not(.btn):hover {
 .text-ai-architect {
   color: #043B40;
   font-variant: small-caps;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7), 0 2px 8px rgba(255, 255, 255, 0.4);
+  text-shadow: 18px 18px 10px rgba(255, 255, 255, 0.9);
 }
 .text-ai-builder {
   color: #520322;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7), 0 2px 8px rgba(255, 255, 255, 0.4);
+  text-shadow: 18px 18px 10px rgba(255, 255, 255, 0.9);
 }
 .text-ai-staging {
   color: #00203A;
   font-variant: small-caps;
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7), 0 2px 8px rgba(255, 255, 255, 0.4);
+  text-shadow: 18px 18px 10px rgba(255, 255, 255, 0.9);
 }
 
-/* ─── User message text — light with dark shadow ─────────────────────────── */
+/* ─── User message text — light with black shadow ─────────────────────────── */
 .text-user-message {
   color: #E9ECF0;
   letter-spacing: 0.03em;
-  text-shadow: 0 1px 4px rgba(9, 8, 14, 0.8), 0 2px 10px rgba(9, 8, 14, 0.5);
+  text-shadow: 18px 18px 10px rgba(0, 0, 0, 0.9);
 }
 
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */

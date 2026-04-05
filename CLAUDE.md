@@ -269,9 +269,9 @@ These are defined in styles.css as --architect-color, --builder-color, --staging
 Message styling:
 - No message bubbles — messages are grouped text with no backgrounds or rounded corners
 - AI messages use their column's identity color as solid fill text
-- No outlines. Text shadow instead.
-- AI text (dark colors): white shadow — rgba(255,255,255,0.7) close + rgba(255,255,255,0.4) far
-- User text (#E9ECF0 light): dark shadow — rgba(9,8,14,0.8) close + rgba(9,8,14,0.5) far
+- No outlines. Directional text shadow — 18px right, 18px down, 10px blur (~25px diagonal distance).
+- AI text (dark colors): white shadow — rgba(255,255,255,0.9)
+- User text (#E9ECF0 light): black shadow — rgba(0,0,0,0.9)
 - Architect: #043B40 small-caps, Builder: #520322, Staging: #00203A small-caps
 - User: #E9ECF0 with 0.03em letter-spacing
 - Staging area general font color: #00203A
