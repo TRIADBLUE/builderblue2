@@ -16,6 +16,7 @@ interface TopNavProps {
   avatarUrl?: string | null;
   onProjectNameChange: (name: string) => void;
   onDeploy: () => void;
+  deployedUrl?: string | null;
 }
 
 export function TopNav({
@@ -29,6 +30,7 @@ export function TopNav({
   avatarUrl,
   onProjectNameChange,
   onDeploy,
+  deployedUrl,
 }: TopNavProps) {
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -147,6 +149,24 @@ export function TopNav({
 
       {/* Right — deploy, avatar */}
       <div className="flex items-center gap-3">
+        {deployedUrl && (
+          <a
+            href={deployedUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontFamily: "var(--font-runway)",
+              fontSize: "11px",
+              color: "#008060",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            ● Live
+          </a>
+        )}
         <button
           onClick={onDeploy}
           className="btn rounded px-3 py-1.5 text-xs font-bold transition-colors"

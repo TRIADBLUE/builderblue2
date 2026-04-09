@@ -14,6 +14,7 @@ import { CenterPanel } from "./CenterPanel";
 import { TodoPanel } from "./TodoPanel";
 import { ComputeWarningBanner } from "./ComputeWarningBanner";
 import { ComputeDepletedModal } from "./ComputeDepletedModal";
+import { DeployModal } from "./DeployModal";
 import { UpgradeToast } from "./UpgradeToast";
 import { useConversation } from "../../hooks/useConversation";
 import { useStaging } from "../../hooks/useStaging";
@@ -94,6 +95,10 @@ export function IDEShell({
   const { user } = useAuth();
   const { status: computeStatus } = useComputeStatus();
   const staging = useStaging();
+
+  // Deploy state
+  const [showDeployModal, setShowDeployModal] = useState(false);
+  const [deployedUrl, setDeployedUrl] = useState<string | null>(null);
 
   // Active pane state
   const [activePane, setActivePane] = useState<ActivePane>(null);
@@ -398,8 +403,21 @@ export function IDEShell({
         computeStatus={computeStatus}
         userName={user?.name ?? ""}
         onProjectNameChange={onProjectNameChange}
-        onDeploy={() => {}}
+        onDeploy={() => setShowDeployModal(true)}
+        deployedUrl={deployedUrl}
       />
+      {showDeployModal && (
+        <DeployModal
+          projectId={projectId}
+          projectName={projectName}
+          files={files}
+          onClose={() => setShowDeployModal(false)}
+          onDeployComplete={(url) => {
+            setDeployedUrl(url);
+            setShowDeployModal(false);
+          }}
+        />
+      )}
       <ComputeWarningBanner status={computeStatus} />
 
       {/* Layout controls bar */}
