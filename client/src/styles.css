@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ─── Google Fonts ────────────────────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Anybody:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Expletus+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Anybody:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Expletus+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Oregano&family=Sirin+Stencil&display=swap');
 
 /* ─── Acherus Grotesque — buttons ────────────────────────────────────────── */
 @font-face {
@@ -52,6 +52,8 @@
   --font-runway: 'QTEraType', 'Georgia', serif;
   --font-builder: 'Expletus Sans', 'Source Sans 3', sans-serif;
   --font-content: 'Source Sans 3', sans-serif;
+  --font-user-chat: 'Oregano', cursive;
+  --font-ai-chat: 'Sirin Stencil', sans-serif;
 }
 
 /* ─── Light theme (default) ──────────────────────────────────────────────── */
@@ -171,25 +173,29 @@ a:hover, button:not(.btn):hover {
 
 /* ─── AI message text — solid fills with white shadow ────────────────────── */
 .text-ai-architect {
+  font-family: 'Sirin Stencil', sans-serif;
   color: #043B40;
   font-variant: small-caps;
-  text-shadow: .5px .5px 0px #09080E;
+  text-shadow: 2px 2px 0px #09080E;
 }
 .text-ai-builder {
+  font-family: 'Sirin Stencil', sans-serif;
   color: #520322;
-  text-shadow: .5px .5px 0px #09080E;
+  text-shadow: 2px 2px 0px #09080E;
 }
 .text-ai-staging {
+  font-family: 'Sirin Stencil', sans-serif;
   color: #00203A;
   font-variant: small-caps;
-  text-shadow: .5px .5px 0px #09080E;
+  text-shadow: 2px 2px 0px #09080E;
 }
 
 /* ─── User message text — light with black shadow ─────────────────────────── */
 .text-user-message {
+  font-family: 'Oregano', cursive;
   color: #7A86A4;
   letter-spacing: 0.03em;
-  text-shadow: .5px .5px 0px #09080E;
+  text-shadow: 2px 2px 0px #09080E;
 }
 
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */
