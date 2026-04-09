@@ -187,7 +187,7 @@ a:hover, button:not(.btn):hover {
 
 /* ─── User message text — light with black shadow ─────────────────────────── */
 .text-user-message {
-  color: #E9ECF0;
+  color: #7A86A4;
   letter-spacing: 0.03em;
   text-shadow: .5px .5px 0px #09080E;
 }

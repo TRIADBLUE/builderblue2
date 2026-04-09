@@ -108,7 +108,7 @@ export function ArchitectPane({
             className={`${msg.role === "user" ? "text-user-message" : "text-ai-architect"}`}
             style={{
               fontFamily: "var(--font-architect)",
-              fontSize: "13px",
+              fontSize: "15px",
               lineHeight: 1.5,
               padding: "2px 0",
             }}
@@ -126,7 +126,7 @@ export function ArchitectPane({
             className="text-ai-architect"
             style={{
               fontFamily: "var(--font-architect)",
-              fontSize: "13px",
+              fontSize: "15px",
               lineHeight: 1.5,
               padding: "2px 0",
             }}
