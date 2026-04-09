@@ -323,7 +323,7 @@ export default function Landing() {
           <div className="flex" style={{ height: "440px", position: "relative", zIndex: 1 }}>
 
             {/* ── LEFT: Architect ──────────────────────────────────────── */}
-            <div className="flex flex-col" style={{ flex: "1 1 0%", background: "rgba(62, 128, 107, 0.04)", borderRight: "1px solid rgba(62, 128, 107, 0.12)" }}>
+            <div className="flex flex-col dotgrid-architect" style={{ flex: "1 1 0%", backgroundColor: "rgba(62, 128, 107, 0.04)", borderRight: "1px solid rgba(62, 128, 107, 0.12)" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.06)" }}>
                 <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#3E806B", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Architect
@@ -386,7 +386,7 @@ export default function Landing() {
             </div>
 
             {/* ── CENTER: Builder ──────────────────────────────────────── */}
-            <div className="flex flex-col" style={{ flex: "1 1 0%", background: "rgba(130, 50, 60, 0.04)", borderRight: "1px solid rgba(130, 50, 60, 0.12)" }}>
+            <div className="flex flex-col dotgrid-builder" style={{ flex: "1 1 0%", backgroundColor: "rgba(130, 50, 60, 0.04)", borderRight: "1px solid rgba(130, 50, 60, 0.12)" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.06)" }}>
                 <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#82323C", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Builder
@@ -450,7 +450,7 @@ export default function Landing() {
             </div>
 
             {/* ── RIGHT: Staging Runway (with interactive tabs) ─────── */}
-            <div className="flex flex-col" style={{ flex: "1.2 1 0%", background: "rgba(20, 40, 125, 0.04)" }}>
+            <div className="flex flex-col dotgrid-staging" style={{ flex: "1.2 1 0%", backgroundColor: "rgba(20, 40, 125, 0.04)" }}>
               <div className="flex items-center justify-between px-4 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.08)" }}>
                 <span style={{ fontFamily: "var(--font-label)", fontSize: "11px", fontWeight: 700, color: "#14287D", textTransform: "uppercase", letterSpacing: "0.1em" }}>
                   Staging Runway

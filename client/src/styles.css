@@ -472,3 +472,60 @@ a:hover, button:not(.btn):hover {
 .mic-listening {
   animation: mic-pulse 900ms ease-in-out infinite;
 }
+
+/* ─── Railway-style dotted grid backgrounds ──────────────────────────────── */
+
+.dotgrid-architect {
+  background-image: radial-gradient(
+    circle,
+    rgba(4, 59, 64, 0.25) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+.dotgrid-builder {
+  background-image: radial-gradient(
+    circle,
+    rgba(82, 3, 34, 0.25) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+.dotgrid-staging {
+  background-image: radial-gradient(
+    circle,
+    rgba(0, 32, 58, 0.25) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* Dark mode — slightly more visible dots */
+[data-theme="dark"] .dotgrid-architect,
+.dark .dotgrid-architect {
+  background-image: radial-gradient(
+    circle,
+    rgba(4, 59, 64, 0.4) 1px,
+    transparent 1px
+  );
+}
+
+[data-theme="dark"] .dotgrid-builder,
+.dark .dotgrid-builder {
+  background-image: radial-gradient(
+    circle,
+    rgba(82, 3, 34, 0.4) 1px,
+    transparent 1px
+  );
+}
+
+[data-theme="dark"] .dotgrid-staging,
+.dark .dotgrid-staging {
+  background-image: radial-gradient(
+    circle,
+    rgba(0, 32, 58, 0.4) 1px,
+    transparent 1px
+  );
+}

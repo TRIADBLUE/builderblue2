@@ -67,8 +67,8 @@ export function ArchitectPane({
 
   return (
     <div
-      className="flex h-full flex-col glass-bg"
-      style={{ background: "var(--bg-primary)" }}
+      className="flex h-full flex-col glass-bg dotgrid-architect"
+      style={{ backgroundColor: "var(--bg-primary)" }}
       onClick={onFocus}
     >
       {/* Header */}

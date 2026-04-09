@@ -105,7 +105,7 @@ export function CenterPanel({
   }, [activeTab]);
 
   return (
-    <div className="flex h-full flex-col runway glass-bg" style={{ zIndex: 10 }}>
+    <div className="flex h-full flex-col runway glass-bg dotgrid-staging" style={{ zIndex: 10 }}>
       {/* Runway mode toggle: Architect Ideation / Builder Construction */}
       {onRunwayToggle && (
         <RunwayToggle mode={runwayMode} onToggle={onRunwayToggle} />
