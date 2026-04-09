@@ -234,31 +234,34 @@ router.post("/import/github", async (req, res) => {
       // Read all files
       const files = readDirRecursive(path.join(tmpDir, "repo"));
 
-      // Create project
-      const [project] = await db
-        .insert(projects)
-        .values({
-          userId: req.user!.userId,
-          name: projectName,
-          description: parsed.data.description ?? null,
-          repoName: `${urlParts[urlParts.length - 2]}/${repoName}`,
-        })
-        .returning();
+      // TRANSACTION: project + files created atomically
+      const result = await db.transaction(async (tx) => {
+        const [project] = await tx
+          .insert(projects)
+          .values({
+            userId: req.user!.userId,
+            name: projectName,
+            description: parsed.data.description ?? null,
+            repoName: `${urlParts[urlParts.length - 2]}/${repoName}`,
+          })
+          .returning();
 
-      // Insert files
-      if (files.length > 0) {
-        await db.insert(projectFiles).values(
-          files.map((f) => ({
-            projectId: project.id,
-            path: f.path,
-            content: f.content,
-            language: inferLanguage(f.path),
-            lastModifiedBy: "import",
-          }))
-        );
-      }
+        if (files.length > 0) {
+          await tx.insert(projectFiles).values(
+            files.map((f) => ({
+              projectId: project.id,
+              path: f.path,
+              content: f.content,
+              language: inferLanguage(f.path),
+              lastModifiedBy: "import",
+            }))
+          );
+        }
 
-      res.status(201).json({ ...project, fileCount: files.length });
+        return { ...project, fileCount: files.length };
+      });
+
+      res.status(201).json(result);
     } finally {
       // Cleanup
       fs.rmSync(tmpDir, { recursive: true, force: true });
@@ -311,28 +314,34 @@ router.post("/import/upload", async (req, res) => {
     }
 
     const projectName = name || "Imported Project";
-    const [project] = await db
-      .insert(projects)
-      .values({
-        userId: req.user!.userId,
-        name: projectName,
-        description: description ?? null,
-      })
-      .returning();
 
-    if (files.length > 0) {
-      await db.insert(projectFiles).values(
-        files.map((f) => ({
-          projectId: project.id,
-          path: f.path,
-          content: f.content,
-          language: inferLanguage(f.path),
-          lastModifiedBy: "import",
-        }))
-      );
-    }
+    // TRANSACTION: project + files created atomically
+    const result = await db.transaction(async (tx) => {
+      const [project] = await tx
+        .insert(projects)
+        .values({
+          userId: req.user!.userId,
+          name: projectName,
+          description: description ?? null,
+        })
+        .returning();
 
-    res.status(201).json({ ...project, fileCount: files.length });
+      if (files.length > 0) {
+        await tx.insert(projectFiles).values(
+          files.map((f) => ({
+            projectId: project.id,
+            path: f.path,
+            content: f.content,
+            language: inferLanguage(f.path),
+            lastModifiedBy: "import",
+          }))
+        );
+      }
+
+      return { ...project, fileCount: files.length };
+    });
+
+    res.status(201).json(result);
   } catch (error) {
     console.error("Import upload error:", error);
     res.status(500).json({ message: "Import failed" });
@@ -458,35 +467,91 @@ router.post("/from-template", async (req, res) => {
       return;
     }
 
-    const [project] = await db
-      .insert(projects)
-      .values({
-        userId: req.user!.userId,
-        name: parsed.data.name,
-        description: parsed.data.description ?? null,
-        defaultArchitectConfig: parsed.data.defaultArchitectConfig ?? null,
-        defaultBuilderConfig: parsed.data.defaultBuilderConfig ?? null,
-      })
-      .returning();
-
-    // Seed with template files if provided
     const template = parsed.data.templateId ? TEMPLATES[parsed.data.templateId] : null;
-    if (template && template.files.length > 0) {
-      await db.insert(projectFiles).values(
-        template.files.map((f) => ({
-          projectId: project.id,
-          path: f.path,
-          content: f.content,
-          language: f.language,
-          lastModifiedBy: "template",
-        }))
-      );
-    }
 
-    res.status(201).json({ ...project, fileCount: template?.files.length ?? 0 });
+    // TRANSACTION: project + template files created atomically
+    const result = await db.transaction(async (tx) => {
+      const [project] = await tx
+        .insert(projects)
+        .values({
+          userId: req.user!.userId,
+          name: parsed.data.name,
+          description: parsed.data.description ?? null,
+          defaultArchitectConfig: parsed.data.defaultArchitectConfig ?? null,
+          defaultBuilderConfig: parsed.data.defaultBuilderConfig ?? null,
+        })
+        .returning();
+
+      if (template && template.files.length > 0) {
+        await tx.insert(projectFiles).values(
+          template.files.map((f) => ({
+            projectId: project.id,
+            path: f.path,
+            content: f.content,
+            language: f.language,
+            lastModifiedBy: "template",
+          }))
+        );
+      }
+
+      return { ...project, fileCount: template?.files.length ?? 0 };
+    });
+
+    res.status(201).json(result);
   } catch (error) {
     console.error("Create from template error:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// ─── Import from Local Folder ───────────────────────────────────────────────
+
+const importLocalSchema = z.object({
+  files: z.array(z.object({
+    path: z.string().min(1),
+    content: z.string(),
+  })).min(1, "No files provided"),
+  name: z.string().min(1, "Name is required"),
+  description: z.string().nullable().optional(),
+});
+
+router.post("/import/local", async (req, res) => {
+  try {
+    const parsed = importLocalSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({ message: parsed.error.errors[0].message });
+      return;
+    }
+
+    const { files, name, description } = parsed.data;
+
+    const result = await db.transaction(async (tx) => {
+      const [project] = await tx
+        .insert(projects)
+        .values({
+          userId: req.user!.userId,
+          name,
+          description: description ?? null,
+        })
+        .returning();
+
+      await tx.insert(projectFiles).values(
+        files.map((f) => ({
+          projectId: project.id,
+          path: f.path,
+          content: f.content,
+          language: inferLanguage(f.path),
+          lastModifiedBy: "import",
+        }))
+      );
+
+      return { ...project, fileCount: files.length };
+    });
+
+    res.status(201).json(result);
+  } catch (error) {
+    console.error("Import local error:", error);
+    res.status(500).json({ message: "Import failed" });
   }
 });
 

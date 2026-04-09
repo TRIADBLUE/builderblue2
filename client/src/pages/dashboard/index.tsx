@@ -7,7 +7,7 @@ import type { Project } from "@shared/types";
 
 type SortKey = "name" | "created" | "updated";
 type EntryPoint = null | "guided" | "blank" | "import" | "design";
-type ImportSource = "github" | "gitlab" | "bitbucket" | "zip";
+type ImportSource = "github" | "gitlab" | "bitbucket" | "zip" | "local";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -30,8 +30,10 @@ export default function Dashboard() {
   // File uploads
   const [zipFile, setZipFile] = useState<File | null>(null);
   const [designFile, setDesignFile] = useState<File | null>(null);
+  const [localFiles, setLocalFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const designInputRef = useRef<HTMLInputElement>(null);
+  const folderInputRef = useRef<HTMLInputElement>(null);
 
   // Filter and sort projects
   const filteredProjects = useMemo(() => {
@@ -83,6 +85,7 @@ export default function Dashboard() {
     setRepoUrl("");
     setZipFile(null);
     setDesignFile(null);
+    setLocalFiles([]);
     setError("");
   }, []);
 
@@ -155,6 +158,59 @@ export default function Dashboard() {
     }
   }, [zipFile, newProjectName, newProjectDesc, setLocation]);
 
+  // Upload local folder
+  const handleUploadLocal = useCallback(async () => {
+    if (localFiles.length === 0) return;
+    setIsCreating(true);
+    setError("");
+
+    try {
+      const SKIP_DIRS = new Set(["node_modules", ".git", ".next", "dist", "build", ".cache", "__pycache__"]);
+      const BINARY_EXTS = new Set([".png", ".jpg", ".jpeg", ".gif", ".ico", ".woff", ".woff2", ".ttf", ".eot", ".mp3", ".mp4", ".zip", ".tar", ".gz", ".pdf"]);
+
+      const fileEntries: { path: string; content: string }[] = [];
+
+      for (const file of localFiles) {
+        const relativePath = file.webkitRelativePath;
+        if (!relativePath) continue;
+
+        const parts = relativePath.split("/");
+        const strippedPath = parts.slice(1).join("/");
+        if (!strippedPath) continue;
+
+        if (parts.some((p) => SKIP_DIRS.has(p) || (p.startsWith(".") && p !== "."))) continue;
+        const ext = "." + (strippedPath.split(".").pop()?.toLowerCase() ?? "");
+        if (BINARY_EXTS.has(ext)) continue;
+        if (file.size > 500_000) continue;
+
+        try {
+          const content = await file.text();
+          fileEntries.push({ path: strippedPath, content });
+        } catch {
+          // skip unreadable
+        }
+      }
+
+      const rootFolder = localFiles[0]?.webkitRelativePath?.split("/")[0] ?? "Imported Project";
+      const projectName = newProjectName.trim() || rootFolder;
+
+      const project = await api.fetch<Project>("/api/projects/import/local", {
+        method: "POST",
+        body: {
+          files: fileEntries,
+          name: projectName,
+          description: newProjectDesc.trim() || null,
+        },
+      });
+
+      setLocation(`/ide/${project.id}`);
+    } catch (err: any) {
+      setError(err?.message ?? "Failed to import folder");
+    } finally {
+      setIsCreating(false);
+    }
+  }, [localFiles, newProjectName, newProjectDesc, setLocation]);
+
   // Design import — create project, then open IDE with Architect active
   const handleDesignImport = useCallback(async () => {
     if (!newProjectName.trim()) return;
@@ -184,10 +240,11 @@ export default function Dashboard() {
       case "blank": return handleCreateProject();
       case "import":
         if (importSource === "zip") return handleUploadZip();
+        if (importSource === "local") return handleUploadLocal();
         return handleImportRepo();
       case "design": return handleDesignImport();
     }
-  }, [entryPoint, importSource, handleCreateProject, handleImportRepo, handleUploadZip, handleDesignImport]);
+  }, [entryPoint, importSource, handleCreateProject, handleImportRepo, handleUploadZip, handleUploadLocal, handleDesignImport]);
 
   // Archive project
   const handleArchive = useCallback(async (id: string) => {
@@ -205,6 +262,7 @@ export default function Dashboard() {
     if (entryPoint === "blank" || entryPoint === "guided" || entryPoint === "design") return !!newProjectName.trim();
     if (entryPoint === "import") {
       if (importSource === "zip") return !!zipFile;
+      if (importSource === "local") return localFiles.length > 0;
       return !!repoUrl.trim();
     }
     return false;
@@ -318,7 +376,7 @@ export default function Dashboard() {
                   {([
                     { key: "guided" as EntryPoint, icon: "✨", title: "Guided Start", desc: "Answer a few questions and get a curated recommendation with visuals." },
                     { key: "blank" as EntryPoint, icon: "◻", title: "Blank Start", desc: "Name it and go. For those who know what they want." },
-                    { key: "import" as EntryPoint, icon: "📂", title: "Import", desc: "GitHub, GitLab, Bitbucket, or upload a ZIP of your code." },
+                    { key: "import" as EntryPoint, icon: "📂", title: "Import", desc: "GitHub, GitLab, Bitbucket, upload a ZIP, or select a local folder." },
                     { key: "design" as EntryPoint, icon: "🎨", title: "Design Import", desc: "Images or design files converted to a working prototype." },
                   ]).map((entry) => (
                     <div
@@ -388,6 +446,7 @@ export default function Dashboard() {
                   <button style={importTabStyle(importSource === "gitlab")} onClick={() => setImportSource("gitlab")}>GitLab</button>
                   <button style={importTabStyle(importSource === "bitbucket")} onClick={() => setImportSource("bitbucket")}>Bitbucket</button>
                   <button style={importTabStyle(importSource === "zip")} onClick={() => setImportSource("zip")}>Upload ZIP</button>
+                  <button style={importTabStyle(importSource === "local")} onClick={() => setImportSource("local")}>Local Folder</button>
                 </div>
 
                 {importSource !== "zip" && (
@@ -405,6 +464,55 @@ export default function Dashboard() {
                       <span style={{ fontFamily: "var(--font-content)", fontSize: "14px", color: zipFile ? "var(--deep-blue)" : "var(--steel-blue)" }}>
                         {zipFile ? `Selected: ${zipFile.name}` : "Click to select a .zip file or drag and drop"}
                       </span>
+                    </div>
+                  </div>
+                )}
+
+                {importSource === "local" && (
+                  <div className="mb-3">
+                    <label style={labelStyle}>Select Project Folder</label>
+                    <input
+                      ref={folderInputRef}
+                      type="file"
+                      /* @ts-ignore — webkitdirectory is non-standard but widely supported */
+                      webkitdirectory=""
+                      directory=""
+                      multiple
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files ?? []);
+                        setLocalFiles(files);
+                      }}
+                      style={{ display: "none" }}
+                    />
+                    <div
+                      onClick={() => folderInputRef.current?.click()}
+                      className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 transition-all hover:border-solid"
+                      style={{
+                        borderColor: localFiles.length > 0 ? "var(--deep-blue)" : "var(--steel-blue)",
+                        cursor: "pointer",
+                        background: localFiles.length > 0 ? "rgba(26, 61, 143, 0.03)" : "transparent",
+                      }}
+                    >
+                      <span style={{
+                        fontFamily: "var(--font-content)",
+                        fontSize: "14px",
+                        color: localFiles.length > 0 ? "var(--deep-blue)" : "var(--steel-blue)",
+                      }}>
+                        {localFiles.length > 0
+                          ? `Selected: ${localFiles.length} files`
+                          : "Click to select a project folder"}
+                      </span>
+                      {localFiles.length > 0 && (
+                        <span style={{
+                          fontFamily: "var(--font-content)",
+                          fontSize: "11px",
+                          color: "var(--steel-blue)",
+                          marginTop: "4px",
+                          opacity: 0.6,
+                        }}>
+                          node_modules, .git, and binary files will be excluded automatically
+                        </span>
+                      )}
                     </div>
                   </div>
                 )}
