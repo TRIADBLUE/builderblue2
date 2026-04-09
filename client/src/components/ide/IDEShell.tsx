@@ -497,7 +497,7 @@ export function IDEShell({
             {/* ── Architect ── */}
             {k === "architect" && (
               <div
-                className={`ide-pane flex flex-col ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
+                className={`ide-pane flex flex-col dotgrid-architect ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
                 style={{
                   width:      `${colWidths.architect}%`,
                   borderLeft: activePane === "architect" ? `3px solid ${PANE_CONFIG.architect.color}` : "3px solid transparent",
@@ -551,7 +551,7 @@ export function IDEShell({
             {/* ── Builder ── */}
             {k === "builder" && (
               <div
-                className={`ide-pane flex flex-col ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
+                className={`ide-pane flex flex-col dotgrid-builder ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
                 style={{ width: `${colWidths.builder}%`, overflow: "hidden", flexShrink: 0 }}
               >
                 <ColDragHandle paneKey="builder" colOrder={colOrder} onDragStart={handleTabDragStart} onDrop={handleTabDrop} />
@@ -578,7 +578,7 @@ export function IDEShell({
             {/* ── Runway ── */}
             {k === "runway" && (
               <div
-                className="ide-pane ide-pane-active flex flex-col"
+                className="ide-pane ide-pane-active flex flex-col dotgrid-staging"
                 style={{
                   width:       `${colWidths.runway}%`,
                   borderRight: activePane === "builder" ? `3px solid ${PANE_CONFIG.runway.color}` : "3px solid transparent",
