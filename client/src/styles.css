@@ -47,12 +47,12 @@
   --font-heading: 'QTEraType', 'Georgia', serif;
   --font-button: 'Acherus Grotesque', 'Source Sans 3', sans-serif;
   --font-label: 'QTEraType', 'Georgia', serif;
-  --font-architect: 'Anybody', 'Source Sans 3', sans-serif;
+  --font-architect: 'Allerta Stencil', sans-serif;
   --font-runway: 'QTEraType', 'Georgia', serif;
-  --font-builder: 'Expletus Sans', 'Source Sans 3', sans-serif;
+  --font-builder: 'Allerta Stencil', sans-serif;
   --font-content: 'Source Sans 3', sans-serif;
   --font-user-chat: 'Crusoe Text', sans-serif;
-  --font-ai-chat: 'Monaco', 'Menlo', 'Consolas', monospace;
+  --font-ai-chat: 'Allerta Stencil', sans-serif;
 }
 
 /* ─── Light theme (default) ──────────────────────────────────────────────── */
@@ -172,18 +172,18 @@ a:hover, button:not(.btn):hover {
 
 /* ─── AI message text — solid fills with white shadow ────────────────────── */
 .text-ai-architect {
-  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-family: 'Allerta Stencil', sans-serif;
   color: #043B40;
   font-variant: small-caps;
   text-shadow: 2px 2px 0px #09080E;
 }
 .text-ai-builder {
-  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-family: 'Allerta Stencil', sans-serif;
   color: #520322;
   text-shadow: 2px 2px 0px #09080E;
 }
 .text-ai-staging {
-  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-family: 'Allerta Stencil', sans-serif;
   color: #00203A;
   font-variant: small-caps;
   text-shadow: 2px 2px 0px #09080E;
@@ -195,6 +195,18 @@ a:hover, button:not(.btn):hover {
   font-weight: 700;
   color: #374151;
   letter-spacing: 0.03em;
+}
+
+/* ─── Chat input styling ────────────────────────────────────────────────── */
+.chat-input {
+  font-family: 'Crusoe Text', sans-serif;
+  font-weight: 700;
+  color: #374151;
+}
+
+.chat-input::placeholder {
+  font-family: 'Allerta Stencil', sans-serif;
+  color: rgba(55, 65, 81, 0.4);
 }
 
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */

@@ -159,10 +159,8 @@ export function ArchitectPane({
             }}
             placeholder="Describe to the Architect..."
             rows={1}
-            className="flex-1 resize-none rounded-md border px-3 py-2 outline-none"
+            className="chat-input flex-1 resize-none rounded-md border px-3 py-2 outline-none"
             style={{
-              fontFamily: "'Crusoe Text', sans-serif",
-              fontWeight: 700,
               fontSize: "11px",
               color: "#043B40",
               background: "#FFF5ED",
