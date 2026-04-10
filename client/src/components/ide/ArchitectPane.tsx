@@ -109,7 +109,14 @@ export function ArchitectPane({
             style={{
               fontSize: msg.role === "user" ? "11px" : "15px",
               lineHeight: 1.5,
-              padding: "2px 0",
+              padding: msg.role === "user" ? "6px 10px" : "2px 0",
+              ...(msg.role === "user" ? {
+                marginLeft: "auto",
+                maxWidth: "85%",
+                background: "rgba(9, 8, 14, 0.06)",
+                borderRadius: "8px",
+                textAlign: "right" as const,
+              } : {}),
             }}
           >
             {msg.content}
@@ -156,7 +163,7 @@ export function ArchitectPane({
             style={{
               fontFamily: "'Crusoe Text', sans-serif",
               fontWeight: 700,
-              fontSize: "13px",
+              fontSize: "11px",
               color: "#043B40",
               background: "#FFF5ED",
               borderColor: "var(--steel-blue)",
