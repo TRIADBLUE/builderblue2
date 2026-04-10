@@ -211,9 +211,9 @@ export function IDEShell({
   } | null>(null);
 
   const [colWidths, setColWidths] = useState<Record<PaneKey, number>>({
-    architect: 42,
-    builder:   38,
-    runway:    20,
+    architect: 35,
+    builder:   25,
+    runway:    40,
   });
 
   // Reset widths when visibility changes
@@ -224,7 +224,7 @@ export function IDEShell({
     const n = visible.length;
     if (n === 0) return;
     if (n === 3) {
-      setColWidths({ architect: 42, builder: 38, runway: 20 });
+      setColWidths({ architect: 35, builder: 25, runway: 40 });
     } else if (n === 2) {
       const [a, b] = visible;
       const w: Record<PaneKey, number> = { architect: 0, builder: 0, runway: 0 };
