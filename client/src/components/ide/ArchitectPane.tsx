@@ -107,7 +107,7 @@ export function ArchitectPane({
             key={i}
             className={`${msg.role === "user" ? "text-user-message" : "text-ai-architect"}`}
             style={{
-              fontSize: msg.role === "user" ? "13px" : "15px",
+              fontSize: msg.role === "user" ? "11px" : "15px",
               lineHeight: 1.5,
               padding: "2px 0",
             }}
@@ -154,9 +154,10 @@ export function ArchitectPane({
             rows={1}
             className="flex-1 resize-none rounded-md border px-3 py-2 outline-none"
             style={{
-              fontFamily: "var(--font-architect)",
+              fontFamily: "'Crusoe Text', sans-serif",
+              fontWeight: 700,
               fontSize: "13px",
-              color: "var(--triad-black)",
+              color: "#043B40",
               background: "#FFF5ED",
               borderColor: "var(--steel-blue)",
             }}

@@ -154,7 +154,7 @@ export function BuilderPane({
             key={i}
             className={`${msg.role === "user" ? "text-user-message" : "text-ai-builder"}`}
             style={{
-              fontSize: "13px",
+              fontSize: msg.role === "user" ? "11px" : "13px",
               lineHeight: 1.5,
               padding: "2px 0",
             }}
@@ -203,9 +203,10 @@ export function BuilderPane({
             rows={1}
             className="flex-1 resize-none rounded-md border px-3 py-2 outline-none"
             style={{
-              fontFamily: "var(--font-builder)",
+              fontFamily: "'Crusoe Text', sans-serif",
+              fontWeight: 700,
               fontSize: "13px",
-              color: "var(--triad-black)",
+              color: "#520322",
               background: "#FFF5ED",
               borderColor: "var(--steel-blue)",
             }}
