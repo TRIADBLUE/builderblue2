@@ -34,19 +34,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Silent refresh on mount — restore session after page refresh
   useEffect(() => {
+    let cancelled = false;
     silentRefresh()
       .then((result) => {
-        if (result?.user) {
+        if (!cancelled && result?.user) {
           setUser(result.user);
-        } else if (result?.accessToken) {
-          // Token refreshed but no user in response — fetch user data
-          api
-            .fetch<{ user: PublicUser }>("/api/auth/me")
-            .then((data) => setUser(data.user))
-            .catch(() => setUser(null));
         }
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => { cancelled = true; };
   }, []);
 
   const login = useCallback(async (input: LoginInput) => {
