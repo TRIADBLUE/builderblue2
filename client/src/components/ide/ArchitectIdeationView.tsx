@@ -19,7 +19,7 @@ interface ContentSegment {
 
 function splitContent(content: string): ContentSegment[] {
   const segments: ContentSegment[] = [];
-  const blockRegex = /```(prototype|spec)\s*\n([\s\S]*?)```/g;
+  const blockRegex = /```(prototype|spec|html)\s*\n([\s\S]*?)```/g;
   let lastIndex = 0;
   let match: RegExpExecArray | null;
 
@@ -28,13 +28,24 @@ function splitContent(content: string): ContentSegment[] {
       const text = content.slice(lastIndex, match.index).trim();
       if (text) segments.push({ type: "text", content: text });
     }
-    segments.push({ type: match[1] as "prototype" | "spec", content: match[2].trim() });
+    const segType = match[1] === "html" ? "prototype" : match[1] as "prototype" | "spec";
+    segments.push({ type: segType, content: match[2].trim() });
     lastIndex = match.index + match[0].length;
   }
 
   if (lastIndex < content.length) {
     const text = content.slice(lastIndex).trim();
     if (text) segments.push({ type: "text", content: text });
+  }
+
+  // Fallback: detect raw HTML documents that weren't wrapped in prototype blocks
+  for (let i = 0; i < segments.length; i++) {
+    if (segments[i].type === "text") {
+      const trimmed = segments[i].content.trim();
+      if (trimmed.startsWith("<!DOCTYPE html>") || trimmed.startsWith("<html") || (trimmed.startsWith("<!") && trimmed.includes("<html"))) {
+        segments[i].type = "prototype";
+      }
+    }
   }
 
   return segments;
