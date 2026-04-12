@@ -41,9 +41,9 @@ export function ServicesTab() {
         <h3
           className="mb-3"
           style={{
-            fontFamily: "var(--font-runway)",
+            fontFamily: "'Source Code Pro', monospace",
             fontSize: "12px",
-            color: "var(--triad-black)",
+            color: "#00FF41",
             opacity: 0.6,
             textTransform: "uppercase",
             letterSpacing: "0.08em",
@@ -72,9 +72,9 @@ export function ServicesTab() {
                 />
                 <span
                   style={{
-                    fontFamily: "var(--font-runway)",
+                    fontFamily: "'Source Code Pro', monospace",
                     fontSize: "12px",
-                    color: "var(--triad-black)",
+                    color: "#00FF41",
                   }}
                 >
                   {service.name}
@@ -82,9 +82,9 @@ export function ServicesTab() {
               </div>
               <span
                 style={{
-                  fontFamily: "var(--font-runway)",
+                  fontFamily: "'Source Code Pro', monospace",
                   fontSize: "11px",
-                  color: "var(--triad-black)",
+                  color: "#00FF41",
                   opacity: 0.3,
                 }}
               >
@@ -103,9 +103,9 @@ export function ServicesTab() {
         <h3
           className="mb-3"
           style={{
-            fontFamily: "var(--font-runway)",
+            fontFamily: "'Source Code Pro', monospace",
             fontSize: "12px",
-            color: "var(--triad-black)",
+            color: "#00FF41",
             opacity: 0.6,
             textTransform: "uppercase",
             letterSpacing: "0.08em",
@@ -121,9 +121,9 @@ export function ServicesTab() {
                 key={tool}
                 className="rounded px-3 py-2 text-left text-xs transition-colors"
                 style={{
-                  fontFamily: "var(--font-runway)",
-                  color: "var(--triad-black)",
-                  background: "rgba(255, 245, 237, 0.5)",
+                  fontFamily: "'Source Code Pro', monospace",
+                  color: "#00FF41",
+                  background: "rgba(0, 255, 65, 0.06)",
                   border: "1px solid rgba(233, 236, 240, 0.1)",
                   cursor: "pointer",
                 }}
@@ -140,9 +140,9 @@ export function ServicesTab() {
         <h3
           className="mb-3"
           style={{
-            fontFamily: "var(--font-runway)",
+            fontFamily: "'Source Code Pro', monospace",
             fontSize: "12px",
-            color: "var(--triad-black)",
+            color: "#00FF41",
             opacity: 0.6,
             textTransform: "uppercase",
             letterSpacing: "0.08em",
@@ -154,22 +154,22 @@ export function ServicesTab() {
         <div
           className="rounded p-3"
           style={{
-            background: "rgba(255, 245, 237, 0.5)",
-            border: "1px solid rgba(233, 236, 240, 0.1)",
+            background: "rgba(0, 255, 65, 0.06)",
+            border: "1px solid rgba(0, 255, 65, 0.15)",
           }}
         >
           <div
             className="flex items-center justify-between"
             style={{
-              fontFamily: "var(--font-runway)",
+              fontFamily: "'Source Code Pro', monospace",
               fontSize: "12px",
-              color: "var(--triad-black)",
+              color: "#00FF41",
             }}
           >
             <span>Payment Status</span>
             <span
               className="rounded-full px-2 py-0.5 text-xs"
-              style={{ background: "#008060", color: "var(--triad-black)" }}
+              style={{ background: "#008060", color: "#09080E" }}
             >
               Active
             </span>

@@ -10,7 +10,6 @@ import fs from "fs";
 import os from "os";
 
 const router = Router();
-router.use(authenticate);
 
 // ─── Preview Project Runner ──────────────────────────────────────────────────
 
@@ -171,15 +170,7 @@ setInterval(() => {
   }
 }, 5 * 60 * 1000);
 
-// GET /api/ide/terminal/:projectId — WebSocket upgrade info
-router.get("/terminal/:projectId", (_req, res) => {
-  res.json({
-    message: "Terminal WebSocket endpoint. Connect via ws:// protocol.",
-    status: "available",
-  });
-});
-
-// GET /api/ide/preview/:projectId — start or proxy to running preview
+// GET /api/ide/preview/:projectId — start or proxy to running preview (no auth — iframe access)
 router.get("/preview/:projectId", async (req, res) => {
   try {
     const { port, status } = await getOrStartPreview(req.params.projectId);
@@ -240,6 +231,17 @@ router.get("/preview/:projectId", async (req, res) => {
     console.error("Preview error:", error);
     res.status(500).json({ message: "Preview error" });
   }
+});
+
+// ─── All routes below require authentication ───────────────────────────────
+router.use(authenticate);
+
+// GET /api/ide/terminal/:projectId — WebSocket upgrade info
+router.get("/terminal/:projectId", (_req, res) => {
+  res.json({
+    message: "Terminal WebSocket endpoint. Connect via ws:// protocol.",
+    status: "available",
+  });
 });
 
 // POST /api/ide/preview/:projectId/refresh — rebuild preview files

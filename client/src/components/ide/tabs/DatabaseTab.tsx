@@ -66,8 +66,8 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
             rows={3}
             className="flex-1 resize-none rounded border bg-transparent p-2 text-xs outline-none"
             style={{
-              fontFamily: "var(--font-runway)",
-              color: "var(--triad-black)",
+              fontFamily: "'Source Code Pro', monospace",
+              color: "#00FF41",
               borderColor: "rgba(233, 236, 240, 0.2)",
             }}
             spellCheck={false}
@@ -78,9 +78,9 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
               disabled={isRunning}
               className="rounded px-3 py-1.5 text-xs"
               style={{
-                fontFamily: "var(--font-runway)",
+                fontFamily: "'Source Code Pro', monospace",
                 background: "var(--steel-blue)",
-                color: "var(--triad-black)",
+                color: "#00FF41",
                 border: "none",
                 cursor: "pointer",
                 opacity: isRunning ? 0.5 : 1,
@@ -93,9 +93,9 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
                 onClick={exportCsv}
                 className="rounded px-3 py-1.5 text-xs"
                 style={{
-                  fontFamily: "var(--font-runway)",
+                  fontFamily: "'Source Code Pro', monospace",
                   background: "transparent",
-                  color: "var(--triad-black)",
+                  color: "#00FF41",
                   border: "1px solid rgba(233, 236, 240, 0.2)",
                   cursor: "pointer",
                 }}
@@ -110,7 +110,7 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
           <div
             className="mt-2 rounded p-2 text-xs"
             style={{
-              fontFamily: "var(--font-runway)",
+              fontFamily: "'Source Code Pro', monospace",
               color: "var(--ruby-red)",
               background: "rgba(82, 3, 34, 0.1)",
             }}
@@ -131,9 +131,9 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
                     key={col}
                     className="border-b px-2 py-1 text-left"
                     style={{
-                      fontFamily: "var(--font-runway)",
+                      fontFamily: "'Source Code Pro', monospace",
                       fontSize: "10px",
-                      color: "var(--triad-black)",
+                      color: "#00FF41",
                       opacity: 0.5,
                       borderColor: "rgba(233, 236, 240, 0.1)",
                     }}
@@ -151,9 +151,9 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
                       key={col}
                       className="border-b px-2 py-1"
                       style={{
-                        fontFamily: "var(--font-runway)",
+                        fontFamily: "'Source Code Pro', monospace",
                         fontSize: "11px",
-                        color: "var(--triad-black)",
+                        color: "#00FF41",
                         borderColor: "rgba(233, 236, 240, 0.05)",
                       }}
                     >
@@ -168,9 +168,9 @@ export function DatabaseTab({ projectId }: DatabaseTabProps) {
           <div
             className="flex h-full items-center justify-center"
             style={{
-              fontFamily: "var(--font-runway)",
+              fontFamily: "'Source Code Pro', monospace",
               fontSize: "13px",
-              color: "var(--triad-black)",
+              color: "#00FF41",
               opacity: 0.3,
             }}
           >

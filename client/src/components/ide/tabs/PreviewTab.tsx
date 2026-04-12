@@ -84,12 +84,12 @@ export function PreviewTab({ projectId }: PreviewTabProps) {
                 onClick={() => setDevice(mode)}
                 className="rounded px-2 py-0.5 text-xs capitalize"
                 style={{
-                  fontFamily: "var(--font-runway)",
+                  fontFamily: "'Source Code Pro', monospace",
                   background:
                     device === mode
                       ? "var(--steel-blue)"
                       : "transparent",
-                  color: "var(--triad-black)",
+                  color: "#00FF41",
                   border: device === mode ? "none" : "1px solid rgba(233, 236, 240, 0.2)",
                   cursor: "pointer",
                 }}
@@ -106,8 +106,8 @@ export function PreviewTab({ projectId }: PreviewTabProps) {
             disabled={isLoading}
             className="rounded px-2 py-0.5 text-xs"
             style={{
-              fontFamily: "var(--font-runway)",
-              color: "var(--triad-black)",
+              fontFamily: "'Source Code Pro', monospace",
+              color: "#00FF41",
               background: isLoading ? "rgba(233, 236, 240, 0.1)" : "transparent",
               border: "1px solid rgba(233, 236, 240, 0.2)",
               cursor: isLoading ? "wait" : "pointer",
@@ -120,8 +120,8 @@ export function PreviewTab({ projectId }: PreviewTabProps) {
             onClick={() => setRefreshKey((k) => k + 1)}
             className="rounded px-2 py-0.5 text-xs"
             style={{
-              fontFamily: "var(--font-runway)",
-              color: "var(--triad-black)",
+              fontFamily: "'Source Code Pro', monospace",
+              color: "#00FF41",
               background: "transparent",
               border: "1px solid rgba(233, 236, 240, 0.2)",
               cursor: "pointer",
@@ -133,8 +133,8 @@ export function PreviewTab({ projectId }: PreviewTabProps) {
             onClick={() => window.open(previewUrl, "_blank")}
             className="rounded px-2 py-0.5 text-xs"
             style={{
-              fontFamily: "var(--font-runway)",
-              color: "var(--triad-black)",
+              fontFamily: "'Source Code Pro', monospace",
+              color: "#00FF41",
               background: "transparent",
               border: "1px solid rgba(233, 236, 240, 0.2)",
               cursor: "pointer",
@@ -147,7 +147,7 @@ export function PreviewTab({ projectId }: PreviewTabProps) {
               onClick={handleStop}
               className="rounded px-2 py-0.5 text-xs"
               style={{
-                fontFamily: "var(--font-runway)",
+                fontFamily: "'Source Code Pro', monospace",
                 color: "var(--ruby-red)",
                 background: "transparent",
                 border: "1px solid rgba(200, 50, 50, 0.3)",

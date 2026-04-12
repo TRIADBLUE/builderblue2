@@ -34,9 +34,9 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
         <div className="flex items-center gap-3">
           <span
             style={{
-              fontFamily: "var(--font-runway)",
+              fontFamily: "'Source Code Pro', monospace",
               fontSize: "11px",
-              color: "var(--cream)",
+              color: "#00FF41",
               opacity: 0.5,
             }}
           >
@@ -45,9 +45,9 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
           <span
             className="rounded-full px-2 py-0.5"
             style={{
-              fontFamily: "var(--font-runway)",
+              fontFamily: "'Source Code Pro', monospace",
               fontSize: "11px",
-              color: "var(--cream)",
+              color: "#00FF41",
               background: "var(--steel-blue)",
             }}
           >
@@ -56,9 +56,9 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
           {repoName && (
             <span
               style={{
-                fontFamily: "var(--font-runway)",
+                fontFamily: "'Source Code Pro', monospace",
                 fontSize: "11px",
-                color: "var(--cream)",
+                color: "#00FF41",
                 opacity: 0.3,
               }}
             >
@@ -70,9 +70,9 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
         <div className="mt-3 flex gap-4">
           <button
             style={{
-              fontFamily: "var(--font-runway)",
+              fontFamily: "'Source Code Pro', monospace",
               fontSize: "12px",
-              color: "var(--cream)",
+              color: "#00FF41",
               background: "none",
               border: "none",
               cursor: "pointer",
@@ -83,9 +83,9 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
           </button>
           <button
             style={{
-              fontFamily: "var(--font-runway)",
+              fontFamily: "'Source Code Pro', monospace",
               fontSize: "12px",
-              color: "var(--cream)",
+              color: "#00FF41",
               background: "none",
               border: "none",
               cursor: "pointer",
@@ -102,9 +102,9 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
         <h3
           className="mb-3"
           style={{
-            fontFamily: "var(--font-runway)",
+            fontFamily: "'Source Code Pro', monospace",
             fontSize: "12px",
-            color: "var(--cream)",
+            color: "#00FF41",
             opacity: 0.6,
             textTransform: "uppercase",
           }}
@@ -120,8 +120,8 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             placeholder="PR title"
             className="w-full rounded border bg-transparent px-3 py-1.5 text-xs outline-none"
             style={{
-              fontFamily: "var(--font-runway)",
-              color: "var(--cream)",
+              fontFamily: "'Source Code Pro', monospace",
+              color: "#00FF41",
               borderColor: "rgba(233, 236, 240, 0.2)",
             }}
           />
@@ -132,17 +132,17 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             rows={4}
             className="w-full resize-none rounded border bg-transparent px-3 py-1.5 text-xs outline-none"
             style={{
-              fontFamily: "var(--font-runway)",
-              color: "var(--cream)",
+              fontFamily: "'Source Code Pro', monospace",
+              color: "#00FF41",
               borderColor: "rgba(233, 236, 240, 0.2)",
             }}
           />
           <div className="flex items-center gap-2">
             <span
               style={{
-                fontFamily: "var(--font-runway)",
+                fontFamily: "'Source Code Pro', monospace",
                 fontSize: "11px",
-                color: "var(--cream)",
+                color: "#00FF41",
                 opacity: 0.5,
               }}
             >
@@ -154,8 +154,8 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
               onChange={(e) => setPrBase(e.target.value)}
               className="w-24 rounded border bg-transparent px-2 py-1 text-xs outline-none"
               style={{
-                fontFamily: "var(--font-runway)",
-                color: "var(--cream)",
+                fontFamily: "'Source Code Pro', monospace",
+                color: "#00FF41",
                 borderColor: "rgba(233, 236, 240, 0.2)",
               }}
             />
@@ -163,10 +163,10 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
           <button
             onClick={handleCreatePR}
             style={{
-              fontFamily: "var(--font-runway)",
+              fontFamily: "'Source Code Pro', monospace",
               fontSize: "12px",
               fontWeight: 600,
-              color: "var(--cream)",
+              color: "#00FF41",
               background: "none",
               border: "none",
               cursor: "pointer",
@@ -179,8 +179,8 @@ export function GitTab({ projectId, branch, repoName }: GitTabProps) {
             <div
               className="mt-2 text-xs"
               style={{
-                fontFamily: "var(--font-runway)",
-                color: "var(--cream)",
+                fontFamily: "'Source Code Pro', monospace",
+                color: "#00FF41",
                 opacity: 0.5,
               }}
             >

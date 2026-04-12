@@ -73,9 +73,9 @@ export function SecretsTab({ projectId, secrets, onRefresh }: SecretsTabProps) {
           <thead>
             <tr
               style={{
-                fontFamily: "var(--font-runway)",
+                fontFamily: "'Source Code Pro', monospace",
                 fontSize: "10px",
-                color: "var(--triad-black)",
+                color: "#00FF41",
                 opacity: 0.5,
                 textTransform: "uppercase",
               }}
@@ -90,9 +90,9 @@ export function SecretsTab({ projectId, secrets, onRefresh }: SecretsTabProps) {
               <tr
                 key={secret.id}
                 style={{
-                  fontFamily: "var(--font-runway)",
+                  fontFamily: "'Source Code Pro', monospace",
                   fontSize: "12px",
-                  color: "var(--triad-black)",
+                  color: "#00FF41",
                   borderBottom: "1px solid rgba(233, 236, 240, 0.05)",
                 }}
               >
@@ -144,9 +144,9 @@ export function SecretsTab({ projectId, secrets, onRefresh }: SecretsTabProps) {
           <div
             className="py-8 text-center"
             style={{
-              fontFamily: "var(--font-runway)",
+              fontFamily: "'Source Code Pro', monospace",
               fontSize: "13px",
-              color: "var(--triad-black)",
+              color: "#00FF41",
               opacity: 0.3,
             }}
           >
@@ -167,8 +167,8 @@ export function SecretsTab({ projectId, secrets, onRefresh }: SecretsTabProps) {
           placeholder="KEY_NAME"
           className="flex-1 rounded border bg-transparent px-2 py-1.5 text-xs outline-none"
           style={{
-            fontFamily: "var(--font-runway)",
-            color: "var(--triad-black)",
+            fontFamily: "'Source Code Pro', monospace",
+            color: "#00FF41",
             borderColor: "rgba(233, 236, 240, 0.2)",
           }}
         />
@@ -179,8 +179,8 @@ export function SecretsTab({ projectId, secrets, onRefresh }: SecretsTabProps) {
           placeholder="Value"
           className="flex-1 rounded border bg-transparent px-2 py-1.5 text-xs outline-none"
           style={{
-            fontFamily: "var(--font-runway)",
-            color: "var(--triad-black)",
+            fontFamily: "'Source Code Pro', monospace",
+            color: "#00FF41",
             borderColor: "rgba(233, 236, 240, 0.2)",
           }}
         />
@@ -188,9 +188,9 @@ export function SecretsTab({ projectId, secrets, onRefresh }: SecretsTabProps) {
           onClick={handleAdd}
           className="rounded px-3 py-1.5 text-xs"
           style={{
-            fontFamily: "var(--font-runway)",
+            fontFamily: "'Source Code Pro', monospace",
             background: "var(--steel-blue)",
-            color: "var(--triad-black)",
+            color: "#00FF41",
             border: "none",
             cursor: "pointer",
           }}
