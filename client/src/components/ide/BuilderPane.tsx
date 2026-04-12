@@ -224,7 +224,7 @@ export function BuilderPane({
             style={{
               fontSize: "11px",
               color: "#520322",
-              background: "#FFF5ED",
+              background: "rgba(251, 246, 238, 0.08)",
               borderColor: "var(--steel-blue)",
             }}
           />

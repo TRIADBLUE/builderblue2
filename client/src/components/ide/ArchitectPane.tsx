@@ -175,7 +175,7 @@ export function ArchitectPane({
             style={{
               fontSize: "11px",
               color: "#043B40",
-              background: "#FFF5ED",
+              background: "rgba(251, 246, 238, 0.08)",
               borderColor: "var(--steel-blue)",
             }}
           />

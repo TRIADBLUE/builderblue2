@@ -239,7 +239,7 @@ export function CenterPanel({
       {/* Tab content */}
       <div
         className="flex-1 overflow-hidden glass-bg"
-        style={{ background: "#FFF5ED", position: "relative" }}
+        style={{ background: "#131F38", position: "relative" }}
       >
         {/* Builder thinking feed overlay */}
         {builderIsStreaming && (

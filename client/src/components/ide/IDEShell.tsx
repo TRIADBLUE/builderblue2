@@ -423,7 +423,7 @@ export function IDEShell({
       {/* Layout controls bar */}
       <div
         className="flex items-center justify-between px-3 py-1 glass-bg"
-        style={{ background: "#FFF5ED", borderBottom: "1px solid rgba(9,8,14,0.06)", minHeight: "28px" }}
+        style={{ background: "#131F38", borderBottom: "1px solid rgba(251,246,238,0.08)", minHeight: "28px" }}
       >
         <div className="flex items-center gap-1">
           {/* Active tabs — outline style, drag to reorder, click to hide */}

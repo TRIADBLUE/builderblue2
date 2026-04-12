@@ -208,7 +208,7 @@ export function ArchitectIdeationView({
     <div
       ref={scrollRef}
       className="flex-1 overflow-y-auto glass-bg"
-      style={{ background: "#FFF5ED", padding: "16px 20px" }}
+      style={{ background: "#131F38", padding: "16px 20px" }}
     >
       {assistantMessages.length === 0 && !isStreaming && (
         <div style={{ textAlign: "center", padding: "40px 20px" }}>
