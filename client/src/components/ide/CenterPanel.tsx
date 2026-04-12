@@ -15,6 +15,7 @@ import { ToolsFilesTab } from "./tabs/ToolsFilesTab";
 import { ComputeTab } from "./tabs/ComputeTab";
 import { RunwayToggle } from "./RunwayToggle";
 import { ArchitectIdeationView } from "./ArchitectIdeationView";
+import { RunwayThinkingFeed } from "./RunwayThinkingFeed";
 
 interface CenterPanelProps {
   projectId: string;
@@ -40,6 +41,7 @@ interface CenterPanelProps {
   prototypeStatus?: "draft" | "approved" | "superseded";
   onApprovePrototype?: (htmlContent: string, technicalSpec: string) => void;
   onIteratePrototype?: () => void;
+  builderIsStreaming?: boolean;
 }
 
 const TAB_LABELS: Record<string, string> = {
@@ -81,6 +83,7 @@ export function CenterPanel({
   prototypeStatus = "draft",
   onApprovePrototype,
   onIteratePrototype,
+  builderIsStreaming = false,
 }: CenterPanelProps) {
   const [activeTab, setActiveTab] = useState<CenterTab>("tools");
   const [openTabs, setOpenTabs] = useState<CenterTab[]>(["tools"]);
@@ -113,15 +116,24 @@ export function CenterPanel({
 
       {/* Architect Ideation mode */}
       {runwayMode === "architect" && (
-        <ArchitectIdeationView
-          messages={architectMessages}
-          isStreaming={architectIsStreaming}
-          streamedText={architectStreamedText}
-          prototypeVersion={prototypeVersion}
-          prototypeStatus={prototypeStatus}
-          onApprovePrototype={onApprovePrototype ?? (() => {})}
-          onIteratePrototype={onIteratePrototype ?? (() => {})}
-        />
+        <>
+          {/* Show thinking feed when streaming and no prototype in stream yet */}
+          {architectIsStreaming && !architectStreamedText.includes("```prototype") && (
+            <RunwayThinkingFeed isActive={true} role="architect" />
+          )}
+          {/* Show ideation view (prototypes, specs, text) when there's content */}
+          {(!architectIsStreaming || architectStreamedText.includes("```prototype")) && (
+            <ArchitectIdeationView
+              messages={architectMessages}
+              isStreaming={architectIsStreaming}
+              streamedText={architectStreamedText}
+              prototypeVersion={prototypeVersion}
+              prototypeStatus={prototypeStatus}
+              onApprovePrototype={onApprovePrototype ?? (() => {})}
+              onIteratePrototype={onIteratePrototype ?? (() => {})}
+            />
+          )}
+        </>
       )}
 
       {/* Builder Construction mode — tab bar + content */}
@@ -227,8 +239,19 @@ export function CenterPanel({
       {/* Tab content */}
       <div
         className="flex-1 overflow-hidden glass-bg"
-        style={{ background: "#FFF5ED" }}
+        style={{ background: "#FFF5ED", position: "relative" }}
       >
+        {/* Builder thinking feed overlay */}
+        {builderIsStreaming && (
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 30,
+            background: "var(--triad-black)",
+          }}>
+            <RunwayThinkingFeed isActive={true} role="builder" />
+          </div>
+        )}
         {activeTab === "tools" && (
           <ToolsFilesTab
             files={files}

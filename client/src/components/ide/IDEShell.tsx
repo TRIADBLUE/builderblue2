@@ -611,6 +611,7 @@ export function IDEShell({
                   prototypeStatus={currentPrototype?.status as "draft" | "approved" | "superseded" ?? "draft"}
                   onApprovePrototype={handleApprovePrototype}
                   onIteratePrototype={handleIteratePrototype}
+                  builderIsStreaming={builderConvo.isStreaming}
                 />
                 </div>
               </div>
