@@ -460,11 +460,11 @@ export function IDEShell({
                   {PANE_CONFIG[k].label}
                 </button>
               ))}
-              <div style={{ width: "1px", height: "12px", background: "rgba(9,8,14,0.12)" }} />
+              <div style={{ width: "1px", height: "12px", background: "rgba(251,246,238,0.12)" }} />
             </>
           )}
           {([
-            { key: "full"       as LayoutPreset, label: "Full IDE",   color: "rgba(9,8,14,0.5)" },
+            { key: "full"       as LayoutPreset, label: "Full IDE",   color: "rgba(251,246,238,0.5)" },
             { key: "prototype"  as LayoutPreset, label: "Prototype",  color: "#043B40" },
             { key: "staging"    as LayoutPreset, label: "Staging",    color: "#520322" },
             { key: "preview"    as LayoutPreset, label: "Preview",    color: "#00203A" },
@@ -477,8 +477,8 @@ export function IDEShell({
                 fontFamily: "var(--font-label)",
                 fontSize:   "14px",
                 padding:    "6px 16px",
-                color:      layoutPreset === p.key ? p.color : "rgba(9,8,14,0.35)",
-                background: layoutPreset === p.key ? "rgba(9,8,14,0.04)" : "transparent",
+                color:      layoutPreset === p.key ? p.color : "rgba(251,246,238,0.35)",
+                background: layoutPreset === p.key ? "rgba(251,246,238,0.04)" : "transparent",
                 border:     "none",
                 borderRadius: "6px",
                 cursor:     "pointer",
@@ -518,9 +518,9 @@ export function IDEShell({
                       padding: "8px 4px",
                       background: "transparent",
                       border: "none",
-                      borderRight: "1px solid rgba(9,8,14,0.08)",
+                      borderRight: "1px solid rgba(251,246,238,0.08)",
                       cursor: "pointer",
-                      color: "rgba(9,8,14,0.3)",
+                      color: "rgba(251,246,238,0.3)",
                       display: "flex",
                       alignItems: "flex-start",
                     }}
@@ -628,7 +628,7 @@ export function IDEShell({
               >
                 <div style={{
                   position: "absolute", top: 0, bottom: 0, left: "2px",
-                  width: "1px", background: "rgba(9,8,14,0.08)",
+                  width: "1px", background: "rgba(251,246,238,0.08)",
                   transition: "background 0.15s, width 0.15s",
                 }} />
               </div>

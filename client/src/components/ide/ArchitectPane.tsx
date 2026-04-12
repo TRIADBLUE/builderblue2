@@ -125,7 +125,7 @@ export function ArchitectPane({
               ...(msg.role === "user" ? {
                 marginLeft: "auto",
                 maxWidth: "85%",
-                background: "rgba(9, 8, 14, 0.06)",
+                background: "rgba(251, 246, 238, 0.06)",
                 borderRadius: "8px",
                 textAlign: "right" as const,
               } : {}),
@@ -156,7 +156,7 @@ export function ArchitectPane({
       </div>
 
       {/* Input */}
-      <div className="border-t p-3" style={{ borderColor: "rgba(9, 8, 14, 0.1)" }}>
+      <div className="border-t p-3" style={{ borderColor: "rgba(251, 246, 238, 0.1)" }}>
         <form onSubmit={handleSubmit} className="flex gap-2">
           <textarea
             ref={textareaRef}

@@ -143,7 +143,7 @@ export function CenterPanel({
         className="flex items-center"
         style={{
           background: "inherit",
-          borderBottom: "1px solid rgba(9, 8, 14, 0.08)",
+          borderBottom: "1px solid rgba(251, 246, 238, 0.08)",
           flexShrink: 0,
         }}
       >
@@ -151,14 +151,14 @@ export function CenterPanel({
           <div
             key={tab}
             className="flex items-center"
-            style={{ borderRight: "1px solid rgba(9, 8, 14, 0.06)" }}
+            style={{ borderRight: "1px solid rgba(251, 246, 238, 0.06)" }}
           >
             <button
               onClick={() => setActiveTab(tab)}
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "11px",
-                color: activeTab === tab ? "#00203A" : "rgba(9, 8, 14, 0.45)",
+                color: activeTab === tab ? "#FBF6EE" : "rgba(251, 246, 238, 0.45)",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
@@ -177,7 +177,7 @@ export function CenterPanel({
                 style={{
                   fontFamily: "var(--font-runway)",
                   fontSize: "10px",
-                  color: "rgba(9,8,14,0.25)",
+                  color: "rgba(251,246,238,0.25)",
                   background: "transparent",
                   border: "none",
                   cursor: "pointer",
@@ -197,7 +197,7 @@ export function CenterPanel({
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "14px",
-            color: "rgba(9,8,14,0.3)",
+            color: "rgba(251,246,238,0.3)",
             background: "transparent",
             border: "none",
             cursor: "pointer",
@@ -218,7 +218,7 @@ export function CenterPanel({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "13px",
-              color: "rgba(9,8,14,0.25)",
+              color: "rgba(251,246,238,0.25)",
               background: "transparent",
               border: "none",
               cursor: "pointer",
@@ -228,8 +228,8 @@ export function CenterPanel({
               flexShrink: 0,
             }}
             title="Collapse panel"
-            onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.6)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.25)")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(251,246,238,0.6)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(251,246,238,0.25)")}
           >
             <PanelRightClose size={14} />
           </button>

@@ -17,7 +17,7 @@ interface TodoPanelProps {
 }
 
 const SOURCE_COLORS: Record<string, string> = {
-  user: "#09080E",
+  user: "#FBF6EE",
   architect: "#043B40",
   builder: "#520322",
 };
@@ -85,7 +85,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
       {/* Header */}
       <div
         className="flex items-center justify-between px-3 py-2"
-        style={{ borderBottom: "1px solid rgba(9,8,14,0.06)" }}
+        style={{ borderBottom: "1px solid rgba(251,246,238,0.06)" }}
       >
         <span style={{ fontFamily: "var(--font-label)", fontSize: "10px", fontWeight: 700, color: "#043B40", textTransform: "uppercase", letterSpacing: "0.08em" }}>
           Notes & TODOs
@@ -103,7 +103,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                 border: "none",
                 cursor: "pointer",
                 fontSize: "12px",
-                color: "rgba(9,8,14,0.3)",
+                color: "rgba(251,246,238,0.3)",
                 padding: "0 2px",
                 lineHeight: 1,
               }}
@@ -116,7 +116,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
       </div>
 
       {/* Add todo */}
-      <div className="px-2 py-2" style={{ borderBottom: "1px solid rgba(9,8,14,0.04)" }}>
+      <div className="px-2 py-2" style={{ borderBottom: "1px solid rgba(251,246,238,0.04)" }}>
         <div className="flex gap-1">
           <input
             type="text"
@@ -126,12 +126,12 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
             style={{
               flex: 1,
               background: "rgba(255,245,237,0.6)",
-              border: "1px solid rgba(9,8,14,0.1)",
+              border: "1px solid rgba(251,246,238,0.1)",
               borderRadius: "4px",
               padding: "4px 6px",
               fontFamily: "var(--font-content)",
               fontSize: "11px",
-              color: "#09080E",
+              color: "#FBF6EE",
               outline: "none",
             }}
             onKeyDown={(e) => { if (e.key === "Enter") handleAdd(); }}
@@ -156,13 +156,13 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
       </div>
 
       {/* Import context */}
-      <div className="px-2 py-1" style={{ borderBottom: "1px solid rgba(9,8,14,0.04)" }}>
+      <div className="px-2 py-1" style={{ borderBottom: "1px solid rgba(251,246,238,0.04)" }}>
         <details style={{ cursor: "pointer" }}>
           <summary
             style={{
               fontFamily: "var(--font-label)",
               fontSize: "9px",
-              color: "rgba(9,8,14,0.35)",
+              color: "rgba(251,246,238,0.35)",
               textTransform: "uppercase",
               letterSpacing: "0.06em",
               listStyle: "none",
@@ -180,7 +180,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                 fontFamily: "var(--font-content)",
                 fontSize: "10px",
                 color: "var(--steel-blue)",
-                background: "rgba(9,8,14,0.02)",
+                background: "rgba(251,246,238,0.02)",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -197,7 +197,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                 fontFamily: "var(--font-content)",
                 fontSize: "10px",
                 color: "var(--steel-blue)",
-                background: "rgba(9,8,14,0.02)",
+                background: "rgba(251,246,238,0.02)",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -214,7 +214,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                 fontFamily: "var(--font-content)",
                 fontSize: "10px",
                 color: "var(--steel-blue)",
-                background: "rgba(9,8,14,0.02)",
+                background: "rgba(251,246,238,0.02)",
                 border: "none",
                 cursor: "pointer",
               }}
@@ -247,7 +247,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
               <div
                 key={todo.id}
                 className="mb-1 flex items-start gap-1.5 rounded px-1.5 py-1"
-                style={{ background: "rgba(9,8,14,0.02)" }}
+                style={{ background: "rgba(251,246,238,0.02)" }}
               >
                 <button
                   onClick={() => handleToggle(todo.id, todo.status)}
@@ -256,7 +256,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                     width: "14px",
                     height: "14px",
                     borderRadius: "3px",
-                    border: `1.5px solid ${todo.status === "in_progress" ? "#043B40" : "rgba(9,8,14,0.2)"}`,
+                    border: `1.5px solid ${todo.status === "in_progress" ? "#043B40" : "rgba(251,246,238,0.2)"}`,
                     background: todo.status === "in_progress" ? "rgba(4,59,64,0.15)" : "transparent",
                     cursor: "pointer",
                     marginTop: "2px",
@@ -273,7 +273,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                   <p style={{
                     fontFamily: "var(--font-content)",
                     fontSize: "11px",
-                    color: "#09080E",
+                    color: "#FBF6EE",
                     lineHeight: 1.4,
                     margin: 0,
                     wordBreak: "break-word",
@@ -311,7 +311,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
 
             {/* Done section */}
             {done.length > 0 && (
-              <div className="mt-2 pt-2" style={{ borderTop: "1px solid rgba(9,8,14,0.04)" }}>
+              <div className="mt-2 pt-2" style={{ borderTop: "1px solid rgba(251,246,238,0.04)" }}>
                 <span style={{ fontFamily: "var(--font-runway)", fontSize: "9px", color: "var(--steel-blue)", opacity: 0.4 }}>
                   Done ({done.length})
                 </span>
@@ -325,7 +325,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                     <span style={{
                       fontFamily: "var(--font-content)",
                       fontSize: "10px",
-                      color: "#09080E",
+                      color: "#FBF6EE",
                       textDecoration: "line-through",
                       flex: 1,
                     }}>

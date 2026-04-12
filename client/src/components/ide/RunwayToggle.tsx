@@ -11,7 +11,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
         alignItems: "center",
         justifyContent: "center",
         padding: "6px 12px",
-        borderBottom: "1px solid rgba(9, 8, 14, 0.06)",
+        borderBottom: "1px solid rgba(251, 246, 238, 0.06)",
         background: "inherit",
         flexShrink: 0,
       }}
@@ -21,7 +21,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
           position: "relative",
           display: "flex",
           borderRadius: "20px",
-          border: "1px solid rgba(9, 8, 14, 0.12)",
+          border: "1px solid rgba(251, 246, 238, 0.12)",
           overflow: "hidden",
           cursor: "pointer",
           userSelect: "none",
@@ -58,7 +58,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             fontWeight: 600,
             letterSpacing: "0.06em",
             textTransform: "uppercase",
-            color: mode === "architect" ? "#E9ECF0" : "rgba(9, 8, 14, 0.55)",
+            color: mode === "architect" ? "#E9ECF0" : "rgba(251, 246, 238, 0.55)",
             fontWeight: mode === "architect" ? 700 : 500,
             transition: "color 0.2s ease",
           }}
@@ -81,7 +81,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             fontWeight: 600,
             letterSpacing: "0.06em",
             textTransform: "uppercase",
-            color: mode === "builder" ? "#E9ECF0" : "rgba(9, 8, 14, 0.55)",
+            color: mode === "builder" ? "#E9ECF0" : "rgba(251, 246, 238, 0.55)",
             fontWeight: mode === "builder" ? 700 : 500,
             transition: "color 0.2s ease",
           }}

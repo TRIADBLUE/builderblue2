@@ -44,14 +44,14 @@ function MiniTreeItem({ node, depth }: { node: TreeNode; depth: number }) {
         onClick={() => node.isDir && setOpen(!open)}
       >
         {node.isDir ? (
-          <span style={{ fontSize: "10px", color: "rgba(9,8,14,0.4)", width: "12px" }}>{open ? "▾" : "▸"}</span>
+          <span style={{ fontSize: "10px", color: "rgba(251,246,238,0.4)", width: "12px" }}>{open ? "▾" : "▸"}</span>
         ) : (
           <span style={{ width: "12px" }} />
         )}
         <span style={{
           fontFamily: "var(--font-runway)",
           fontSize: "11px",
-          color: node.isDir ? "#09080E" : "rgba(9,8,14,0.7)",
+          color: node.isDir ? "#FBF6EE" : "rgba(251,246,238,0.7)",
           fontWeight: node.isDir ? 600 : 400,
         }}>
           {node.name}
@@ -115,7 +115,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
             fontFamily: "var(--font-label)",
             fontSize: "10px",
             fontWeight: 700,
-            color: "#00203A",
+            color: "#FBF6EE",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
             marginBottom: "12px",
@@ -134,14 +134,14 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                   padding: "10px 0",
                   background: "none",
                   border: "none",
-                  borderBottom: "1px solid rgba(9,8,14,0.04)",
+                  borderBottom: "1px solid rgba(251,246,238,0.04)",
                   cursor: "pointer",
                 }}
               >
                 <div style={{
                   fontFamily: "var(--font-runway)",
                   fontSize: "13px",
-                  color: "#09080E",
+                  color: "#FBF6EE",
                   fontWeight: 500,
                 }}>
                   {tool.name}
@@ -149,7 +149,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                 <div style={{
                   fontFamily: "var(--font-content)",
                   fontSize: "11px",
-                  color: "rgba(9,8,14,0.45)",
+                  color: "rgba(251,246,238,0.45)",
                   marginTop: "2px",
                 }}>
                   {tool.description}
@@ -160,7 +160,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
         </div>
 
         {/* Divider */}
-        <div style={{ height: "1px", background: "rgba(9,8,14,0.06)", marginBottom: "24px" }} />
+        <div style={{ height: "1px", background: "rgba(251,246,238,0.06)", marginBottom: "24px" }} />
 
         {/* Design Import */}
         <div style={{ marginBottom: "32px" }}>
@@ -217,7 +217,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                   <img
                     src={df.url}
                     alt={df.name}
-                    style={{ width: "64px", height: "64px", objectFit: "cover", borderRadius: "6px", border: "1px solid rgba(9,8,14,0.1)" }}
+                    style={{ width: "64px", height: "64px", objectFit: "cover", borderRadius: "6px", border: "1px solid rgba(251,246,238,0.1)" }}
                   />
                   <button
                     onClick={(e) => { e.stopPropagation(); setDesignFiles((prev) => prev.filter((_, j) => j !== i)); }}
@@ -231,7 +231,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                   >
                     x
                   </button>
-                  <div style={{ fontFamily: "var(--font-content)", fontSize: "9px", color: "rgba(9,8,14,0.5)", textAlign: "center", marginTop: "2px", maxWidth: "64px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <div style={{ fontFamily: "var(--font-content)", fontSize: "9px", color: "rgba(251,246,238,0.5)", textAlign: "center", marginTop: "2px", maxWidth: "64px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {df.name}
                   </div>
                 </div>
@@ -241,7 +241,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
           <div
             className="flex items-center gap-2 rounded-md px-3 py-2 transition-all"
             style={{
-              border: "1px solid rgba(9,8,14,0.08)",
+              border: "1px solid rgba(251,246,238,0.08)",
               cursor: "pointer",
               background: "rgba(4,59,64,0.02)",
               marginTop: "8px",
@@ -254,7 +254,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
             }}
           >
             <div>
-              <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", fontWeight: 600, color: "#09080E" }}>
+              <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", fontWeight: 600, color: "#FBF6EE" }}>
                 Figma Import
               </div>
               <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)" }}>
@@ -265,7 +265,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
         </div>
 
         {/* Divider */}
-        <div style={{ height: "1px", background: "rgba(9,8,14,0.06)", marginBottom: "24px" }} />
+        <div style={{ height: "1px", background: "rgba(251,246,238,0.06)", marginBottom: "24px" }} />
 
         {/* Files section */}
         <div>
@@ -273,7 +273,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
             fontFamily: "var(--font-label)",
             fontSize: "10px",
             fontWeight: 700,
-            color: "#00203A",
+            color: "#FBF6EE",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
             marginBottom: "12px",
@@ -291,7 +291,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
             <div style={{
               fontFamily: "var(--font-content)",
               fontSize: "12px",
-              color: "rgba(9,8,14,0.4)",
+              color: "rgba(251,246,238,0.4)",
               marginBottom: "12px",
             }}>
               No files yet. Ask the Builder to write code.
@@ -312,7 +312,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               style={{
                 fontFamily: "var(--font-content)",
                 fontSize: "12px",
-                color: "#00203A",
+                color: "#FBF6EE",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -326,7 +326,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               style={{
                 fontFamily: "var(--font-content)",
                 fontSize: "12px",
-                color: "#00203A",
+                color: "#FBF6EE",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -340,7 +340,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               style={{
                 fontFamily: "var(--font-content)",
                 fontSize: "12px",
-                color: "#00203A",
+                color: "#FBF6EE",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -364,10 +364,10 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                   flex: 1,
                   fontFamily: "var(--font-runway)",
                   fontSize: "12px",
-                  color: "#09080E",
+                  color: "#FBF6EE",
                   background: "transparent",
                   border: "none",
-                  borderBottom: "1px solid rgba(9,8,14,0.15)",
+                  borderBottom: "1px solid rgba(251,246,238,0.15)",
                   outline: "none",
                   padding: "4px 0",
                 }}
@@ -381,7 +381,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                 style={{
                   fontFamily: "var(--font-content)",
                   fontSize: "12px",
-                  color: "#00203A",
+                  color: "#FBF6EE",
                   background: "none",
                   border: "none",
                   cursor: "pointer",
