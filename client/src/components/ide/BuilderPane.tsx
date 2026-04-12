@@ -115,7 +115,7 @@ export function BuilderPane({
   return (
     <div
       className="flex h-full flex-col glass-bg"
-      style={{ backgroundColor: "var(--bg-primary)" }}
+      style={{ backgroundColor: "#131F38" }}
       onClick={onFocus}
     >
       {/* Header */}
