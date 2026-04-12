@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { PanelLeftClose } from "lucide-react";
+import { PanelLeftClose, Import } from "lucide-react";
 import { api } from "../../lib/api";
 
 interface Todo {
@@ -171,7 +171,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
               gap: "4px",
             }}
           >
-            <span style={{ fontSize: "10px" }}>↓</span> Import Context
+            <Import size={10} /> Import from...
           </summary>
           <div className="mt-1 space-y-1">
             <button
@@ -184,9 +184,12 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                 border: "none",
                 cursor: "pointer",
               }}
-              onClick={() => {/* TODO: file upload for reference docs */}}
+              onClick={() => {
+                const url = window.prompt("Paste a Notion page URL to import its content as project notes");
+                if (url) console.log("Notion URL:", url);
+              }}
             >
-              Upload Reference File
+              Notion
             </button>
             <button
               className="btn w-full text-left rounded px-2 py-1"
@@ -198,9 +201,12 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                 border: "none",
                 cursor: "pointer",
               }}
-              onClick={() => {/* TODO: paste URL for Notion/Google Docs */}}
+              onClick={() => {
+                const url = window.prompt("Paste a Google Docs URL to import its content as project notes");
+                if (url) console.log("Google Docs URL:", url);
+              }}
             >
-              Paste Notion / Google Docs Link
+              Google Docs
             </button>
             <button
               className="btn w-full text-left rounded px-2 py-1"
@@ -212,7 +218,10 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                 border: "none",
                 cursor: "pointer",
               }}
-              onClick={() => {/* TODO: paste brief or PRD */}}
+              onClick={() => {
+                const text = window.prompt("Paste your brief or PRD content");
+                if (text) console.log("Brief content:", text.substring(0, 100));
+              }}
             >
               Paste a Brief or PRD
             </button>

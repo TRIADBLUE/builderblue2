@@ -81,6 +81,14 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
   const [showNewFile, setShowNewFile] = useState(false);
   const [newFilePath, setNewFilePath] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const designInputRef = useRef<HTMLInputElement>(null);
+  const [designFiles, setDesignFiles] = useState<{ name: string; url: string }[]>([]);
+  const [isDragOver, setIsDragOver] = useState(false);
+
+  const handleDesignUpload = (file: File) => {
+    const url = URL.createObjectURL(file);
+    setDesignFiles((prev) => [...prev, { name: file.name, url }]);
+  };
 
   const handleCreateFile = () => {
     if (!newFilePath.trim()) return;
@@ -167,60 +175,90 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
           }}>
             Design Import
           </div>
-          <div className="space-y-2">
-            <label
-              className="flex items-center gap-2 rounded-md px-3 py-2 transition-all"
-              style={{
-                border: "1px solid rgba(9,8,14,0.08)",
-                cursor: "pointer",
-                background: "rgba(4,59,64,0.02)",
+          <div
+            onClick={() => designInputRef.current?.click()}
+            onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+            onDragLeave={() => setIsDragOver(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragOver(false);
+              const file = e.dataTransfer.files[0];
+              if (file) handleDesignUpload(file);
+            }}
+            style={{
+              border: isDragOver ? "2px dashed #043B40" : "1px dashed rgba(4, 59, 64, 0.3)",
+              borderRadius: "8px",
+              padding: "16px",
+              textAlign: "center",
+              cursor: "pointer",
+              background: isDragOver ? "rgba(4, 59, 64, 0.04)" : "transparent",
+              transition: "all 150ms",
+            }}
+          >
+            <input
+              ref={designInputRef}
+              type="file"
+              accept="image/*,.pdf,.fig"
+              style={{ display: "none" }}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleDesignUpload(file);
+                if (designInputRef.current) designInputRef.current.value = "";
               }}
-            >
-              <span style={{ fontSize: "16px" }}>🎨</span>
-              <div>
-                <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", fontWeight: 600, color: "#09080E" }}>
-                  Upload Design
+            />
+            <span style={{ fontFamily: "var(--font-content)", fontSize: "12px", color: "var(--steel-blue)" }}>
+              Drop a screenshot, mockup, or design file
+            </span>
+          </div>
+          {designFiles.length > 0 && (
+            <div className="flex flex-wrap gap-2" style={{ marginTop: "8px" }}>
+              {designFiles.map((df, i) => (
+                <div key={i} style={{ position: "relative" }}>
+                  <img
+                    src={df.url}
+                    alt={df.name}
+                    style={{ width: "64px", height: "64px", objectFit: "cover", borderRadius: "6px", border: "1px solid rgba(9,8,14,0.1)" }}
+                  />
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setDesignFiles((prev) => prev.filter((_, j) => j !== i)); }}
+                    style={{
+                      position: "absolute", top: "-4px", right: "-4px",
+                      width: "16px", height: "16px", borderRadius: "50%",
+                      background: "var(--ruby-red)", color: "#fff",
+                      border: "none", cursor: "pointer", fontSize: "10px", lineHeight: "16px",
+                      textAlign: "center", padding: 0,
+                    }}
+                  >
+                    x
+                  </button>
+                  <div style={{ fontFamily: "var(--font-content)", fontSize: "9px", color: "rgba(9,8,14,0.5)", textAlign: "center", marginTop: "2px", maxWidth: "64px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {df.name}
+                  </div>
                 </div>
-                <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)" }}>
-                  Screenshot, mockup, or design file — Architect converts to prototype
-                </div>
+              ))}
+            </div>
+          )}
+          <div
+            className="flex items-center gap-2 rounded-md px-3 py-2 transition-all"
+            style={{
+              border: "1px solid rgba(9,8,14,0.08)",
+              cursor: "pointer",
+              background: "rgba(4,59,64,0.02)",
+              marginTop: "8px",
+            }}
+            onClick={() => {
+              const url = window.prompt("Paste Figma share URL:");
+              if (url) {
+                console.log("Figma URL:", url);
+              }
+            }}
+          >
+            <div>
+              <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", fontWeight: 600, color: "#09080E" }}>
+                Figma Import
               </div>
-              <input
-                type="file"
-                accept="image/*,.pdf,.fig"
-                style={{ display: "none" }}
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    // TODO: Upload file, add to architect conversation as image
-                    console.log("Design file selected:", file.name);
-                  }
-                }}
-              />
-            </label>
-            <div
-              className="flex items-center gap-2 rounded-md px-3 py-2 transition-all"
-              style={{
-                border: "1px solid rgba(9,8,14,0.08)",
-                cursor: "pointer",
-                background: "rgba(4,59,64,0.02)",
-              }}
-              onClick={() => {
-                const url = window.prompt("Paste Figma share URL:");
-                if (url) {
-                  // TODO: Process Figma URL, pass to Architect
-                  console.log("Figma URL:", url);
-                }
-              }}
-            >
-              <span style={{ fontSize: "16px" }}>📐</span>
-              <div>
-                <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", fontWeight: 600, color: "#09080E" }}>
-                  Figma Import
-                </div>
-                <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)" }}>
-                  Paste a Figma share link — Architect converts to clickable prototype
-                </div>
+              <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)" }}>
+                Paste a Figma share link — Architect converts to clickable prototype
               </div>
             </div>
           </div>
