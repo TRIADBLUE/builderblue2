@@ -123,19 +123,31 @@ export function BuilderPane({
         className="flex flex-col px-3 py-1"
         style={{ borderBottom: "1px solid rgba(82, 3, 34, 0.1)" }}
       >
-        <span
-          className="accent-outlined"
-          style={{
-            fontFamily: "var(--font-label)",
-            fontWeight: 600,
-            fontSize: "13px",
-            color: "#520322",
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-          }}
-        >
-          Builder
-        </span>
+        <div className="flex items-baseline" style={{ gap: "12px" }}>
+          <span
+            className="accent-outlined"
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontWeight: "bold",
+              fontSize: "40px",
+              color: "#520322",
+              lineHeight: 1,
+            }}
+          >
+            Builder
+          </span>
+          <span
+            style={{
+              fontFamily: "'Allerta Stencil', sans-serif",
+              fontSize: "40px",
+              color: "#520322",
+              opacity: 0.5,
+              lineHeight: 1,
+            }}
+          >
+            Coder
+          </span>
+        </div>
         <div className="flex justify-end">
           <ModelPicker
             provider={provider}

@@ -475,13 +475,15 @@ export function IDEShell({
               className="btn"
               style={{
                 fontFamily: "var(--font-label)",
-                fontSize:   "11px",
+                fontSize:   "14px",
+                padding:    "6px 16px",
                 color:      layoutPreset === p.key ? p.color : "rgba(9,8,14,0.35)",
-                background: "transparent",
+                background: layoutPreset === p.key ? "rgba(9,8,14,0.04)" : "transparent",
                 border:     "none",
+                borderRadius: "6px",
                 cursor:     "pointer",
-                fontWeight: layoutPreset === p.key ? 600 : 400,
-                transition: "color 0.15s",
+                fontWeight: layoutPreset === p.key ? 700 : 400,
+                transition: "all 0.15s",
               }}
             >
               {p.label}

@@ -25,8 +25,8 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
           overflow: "hidden",
           cursor: "pointer",
           userSelect: "none",
-          width: "220px",
-          height: "26px",
+          width: "280px",
+          height: "34px",
         }}
       >
         {/* Sliding pill indicator */}
@@ -36,7 +36,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             top: "1px",
             left: mode === "architect" ? "1px" : "calc(50% + 1px)",
             width: "calc(50% - 2px)",
-            height: "22px",
+            height: "30px",
             borderRadius: "18px",
             background: mode === "architect" ? "#043B40" : "#520322",
             transition: "left 0.25s ease, background 0.25s ease",
@@ -54,11 +54,12 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             position: "relative",
             zIndex: 1,
             fontFamily: "var(--font-label)",
-            fontSize: "9px",
+            fontSize: "14px",
             fontWeight: 600,
             letterSpacing: "0.06em",
             textTransform: "uppercase",
-            color: mode === "architect" ? "#E9ECF0" : "rgba(9, 8, 14, 0.4)",
+            color: mode === "architect" ? "#E9ECF0" : "rgba(9, 8, 14, 0.55)",
+            fontWeight: mode === "architect" ? 700 : 500,
             transition: "color 0.2s ease",
           }}
         >
@@ -76,11 +77,12 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             position: "relative",
             zIndex: 1,
             fontFamily: "var(--font-label)",
-            fontSize: "9px",
+            fontSize: "14px",
             fontWeight: 600,
             letterSpacing: "0.06em",
             textTransform: "uppercase",
-            color: mode === "builder" ? "#E9ECF0" : "rgba(9, 8, 14, 0.4)",
+            color: mode === "builder" ? "#E9ECF0" : "rgba(9, 8, 14, 0.55)",
+            fontWeight: mode === "builder" ? 700 : 500,
             transition: "color 0.2s ease",
           }}
         >

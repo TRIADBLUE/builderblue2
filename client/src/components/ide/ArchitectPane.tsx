@@ -76,19 +76,31 @@ export function ArchitectPane({
         className="flex flex-col px-3 py-1"
         style={{ borderBottom: "1px solid rgba(4, 59, 64, 0.1)" }}
       >
-        <span
-          className="accent-outlined"
-          style={{
-            fontFamily: "var(--font-label)",
-            fontWeight: "bold",
-            fontSize: "13px",
-            color: "#043B40",
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-          }}
-        >
-          Architect
-        </span>
+        <div className="flex items-baseline" style={{ gap: "12px" }}>
+          <span
+            className="accent-outlined"
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontWeight: "bold",
+              fontSize: "40px",
+              color: "#043B40",
+              lineHeight: 1,
+            }}
+          >
+            Architect
+          </span>
+          <span
+            style={{
+              fontFamily: "'Allerta Stencil', sans-serif",
+              fontSize: "40px",
+              color: "#043B40",
+              opacity: 0.5,
+              lineHeight: 1,
+            }}
+          >
+            Creator
+          </span>
+        </div>
         <div className="flex justify-end">
           <ModelPicker
             provider={provider}
