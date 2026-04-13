@@ -42,7 +42,7 @@ function splitContent(content: string): ContentSegment[] {
   for (let i = 0; i < segments.length; i++) {
     if (segments[i].type === "text") {
       const trimmed = segments[i].content.trim();
-      if (trimmed.startsWith("<!DOCTYPE html>") || trimmed.startsWith("<html") || (trimmed.startsWith("<!") && trimmed.includes("<html"))) {
+      if (trimmed.startsWith("<!DOCTYPE") || trimmed.startsWith("<html") || (trimmed.includes("<style>") && trimmed.includes("<body>"))) {
         segments[i].type = "prototype";
       }
     }
