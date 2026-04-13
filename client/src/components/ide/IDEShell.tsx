@@ -97,7 +97,7 @@ export function IDEShell({
 }: IDEShellProps) {
   const { user } = useAuth();
   const { status: computeStatus } = useComputeStatus();
-  const { theme, cycleTheme } = useTheme();
+  const { theme, setTheme, cycleTheme } = useTheme();
   const { mode: glassMode, toggleMode: toggleGlass } = useGlassMode();
   const [showDotGrid, setShowDotGrid] = useState(true);
   const staging = useStaging();
@@ -650,7 +650,7 @@ export function IDEShell({
         onToggleNotes={() => setShowNotes(!showNotes)}
         onToggleAutoSwitch={() => setRunwayAutoSwitch(!runwayAutoSwitch)}
         onToggleGlass={toggleGlass}
-        onCycleTheme={cycleTheme}
+        onCycleTheme={() => setTheme(theme === "dark" ? "light" : "dark")}
         onToggleDotGrid={() => setShowDotGrid(!showDotGrid)}
         onApplyPreset={applyPreset}
       />

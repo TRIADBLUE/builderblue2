@@ -58,6 +58,7 @@
 /* ─── Light theme (default) ──────────────────────────────────────────────── */
 :root,
 [data-theme="light"] {
+  --ide-bg: #FBF6EE;
   --bg-primary: #FFF5ED;
   --bg-secondary: #FFFFFF;
   --bg-elevated: #FFF5ED;
@@ -86,6 +87,7 @@
 
 /* ─── Dark theme ─────────────────────────────────────────────────────────── */
 [data-theme="dark"] {
+  --ide-bg: #131F38;
   --bg-primary: #0D0D12;
   --bg-secondary: #16161D;
   --bg-elevated: #1C1C26;
@@ -423,12 +425,12 @@ a:hover, button:not(.btn):hover {
 
 /* Dark backdrop behind the glass panels — entire IDE goes dark */
 [data-glass="lab"] .ide-layout {
-  background: #131F38;
+  background: var(--ide-bg);
 }
 
 /* Each panel becomes a glass slab */
 [data-glass="lab"] .ide-pane {
-  background-color: #131F38 !important;
+  background-color: var(--ide-bg) !important;
   backdrop-filter: blur(18px) saturate(1.4);
   -webkit-backdrop-filter: blur(18px) saturate(1.4);
   border-left: none !important;
@@ -469,7 +471,7 @@ a:hover, button:not(.btn):hover {
 /* TopNav & controls bar — frosted glass strip */
 [data-glass="lab"] .ide-layout > nav.glass-bg,
 [data-glass="lab"] .ide-layout > .glass-bg:not(.ide-panel-container) {
-  background-color: rgba(19, 31, 56, 0.9) !important;
+  background-color: var(--ide-bg) !important;
   backdrop-filter: blur(12px) saturate(1.2);
   -webkit-backdrop-filter: blur(12px) saturate(1.2);
   border-bottom-color: var(--glass-border) !important;
