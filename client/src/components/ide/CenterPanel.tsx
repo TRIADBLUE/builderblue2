@@ -15,7 +15,6 @@ import { ToolsFilesTab } from "./tabs/ToolsFilesTab";
 import { ComputeTab } from "./tabs/ComputeTab";
 import { RunwayToggle } from "./RunwayToggle";
 import { ArchitectIdeationView } from "./ArchitectIdeationView";
-import { RunwayThinkingFeed } from "./RunwayThinkingFeed";
 
 interface CenterPanelProps {
   projectId: string;
@@ -42,6 +41,7 @@ interface CenterPanelProps {
   onApprovePrototype?: (htmlContent: string, technicalSpec: string) => void;
   onIteratePrototype?: () => void;
   builderIsStreaming?: boolean;
+  builderStreamedText?: string;
 }
 
 const TAB_LABELS: Record<string, string> = {
@@ -84,6 +84,7 @@ export function CenterPanel({
   onApprovePrototype,
   onIteratePrototype,
   builderIsStreaming = false,
+  builderStreamedText = "",
 }: CenterPanelProps) {
   const [activeTab, setActiveTab] = useState<CenterTab>("tools");
   const [openTabs, setOpenTabs] = useState<CenterTab[]>(["tools"]);
@@ -117,9 +118,45 @@ export function CenterPanel({
       {/* Architect Ideation mode */}
       {runwayMode === "architect" && (
         <>
-          {/* Show thinking feed when streaming and no prototype in stream yet */}
-          {architectIsStreaming && !architectStreamedText.includes("```prototype") && !architectStreamedText.includes("```html") && (
-            <RunwayThinkingFeed isActive={true} role="architect" />
+          {/* Show real streaming text while Architect is thinking */}
+          {architectIsStreaming && (
+            <div style={{
+              padding: "16px 20px",
+              overflowY: "auto",
+              flex: 1,
+            }}>
+              <div style={{
+                fontFamily: "var(--font-runway)",
+                fontSize: "11px",
+                color: "#043B40",
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                fontVariant: "small-caps",
+                marginBottom: "12px",
+                paddingBottom: "8px",
+                borderBottom: "1px solid var(--ide-border, rgba(251,246,238,0.15))",
+              }}>
+                ARCHITECT IS THINKING
+                <div style={{
+                  marginTop: "6px",
+                  height: "2px",
+                  borderRadius: "1px",
+                  background: "linear-gradient(90deg, transparent, #043B40, transparent)",
+                  animation: "thinking-pulse 1.2s ease-in-out infinite",
+                }} />
+              </div>
+              <div
+                className="text-ai-architect"
+                style={{
+                  fontSize: "15px",
+                  lineHeight: 1.6,
+                  whiteSpace: "pre-wrap",
+                }}
+              >
+                {architectStreamedText}
+                <span className="streaming-cursor streaming-cursor-architect" />
+              </div>
+            </div>
           )}
           {/* Show ideation view (prototypes, specs, text) when there's content */}
           {(!architectIsStreaming || architectStreamedText.includes("```prototype") || architectStreamedText.includes("```html")) && (
@@ -241,15 +278,47 @@ export function CenterPanel({
         className="flex-1 overflow-hidden glass-bg"
         style={{ background: "transparent", position: "relative" }}
       >
-        {/* Builder thinking feed overlay */}
+        {/* Builder real streaming overlay */}
         {builderIsStreaming && (
           <div style={{
             position: "absolute",
             inset: 0,
             zIndex: 30,
-            background: "var(--triad-black)",
+            background: "var(--ide-bg, #131F38)",
+            overflowY: "auto",
+            padding: "16px 20px",
           }}>
-            <RunwayThinkingFeed isActive={true} role="builder" />
+            <div style={{
+              fontFamily: "var(--font-runway)",
+              fontSize: "11px",
+              color: "#520322",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              fontVariant: "small-caps",
+              marginBottom: "12px",
+              paddingBottom: "8px",
+              borderBottom: "1px solid var(--ide-border, rgba(251,246,238,0.15))",
+            }}>
+              BUILDER IS WORKING
+              <div style={{
+                marginTop: "6px",
+                height: "2px",
+                borderRadius: "1px",
+                background: "linear-gradient(90deg, transparent, #520322, transparent)",
+                animation: "thinking-pulse 1.2s ease-in-out infinite",
+              }} />
+            </div>
+            <div
+              className="text-ai-builder"
+              style={{
+                fontSize: "15px",
+                lineHeight: 1.6,
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {builderStreamedText}
+              <span className="streaming-cursor streaming-cursor-builder" />
+            </div>
           </div>
         )}
         {activeTab === "tools" && (

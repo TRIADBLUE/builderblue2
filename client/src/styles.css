@@ -215,6 +215,7 @@ a:hover, button:not(.btn):hover {
   font-family: 'Allerta Stencil', sans-serif;
   color: #520322;
   font-weight: 400;
+  font-variant: small-caps;
   text-shadow: 1px 1px 0px #8085A1, 0 0 8px rgba(82, 3, 34, 0.4);
 }
 .text-ai-staging {

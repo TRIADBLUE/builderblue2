@@ -596,6 +596,7 @@ export function IDEShell({
                   onApprovePrototype={handleApprovePrototype}
                   onIteratePrototype={handleIteratePrototype}
                   builderIsStreaming={builderConvo.isStreaming}
+                  builderStreamedText={builderConvo.streamedText}
                 />
                 </div>
               </div>
