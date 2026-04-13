@@ -8,11 +8,12 @@ interface ServiceStatus {
 
 export function ServicesTab() {
   const [services, setServices] = useState<ServiceStatus[]>([
-    { name: "HostsBlue", url: "hostsblue.com", status: "checking" },
-    { name: "SwipesBlue", url: "swipesblue.com", status: "checking" },
+    { name: "TRIADBLUE", url: "TRIADBLUE.COM", status: "checking" },
+    { name: "hostsblue", url: "hostsblue.com", status: "checking" },
+    { name: "swipesblue", url: "swipesblue.com", status: "checking" },
+    { name: "scansblue", url: "scansblue.com", status: "checking" },
+    { name: "ConsoleBlue", url: "console.blue", status: "checking" },
     { name: "BuilderBlue²", url: "builderblue2.com", status: "online" },
-    { name: "CenterBlue", url: "centerblue.com", status: "checking" },
-    { name: "BrandBlue", url: "brandblue.com", status: "checking" },
   ]);
 
   useEffect(() => {

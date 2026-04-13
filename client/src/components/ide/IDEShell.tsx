@@ -491,6 +491,7 @@ export function IDEShell({
                 borderRadius: "6px",
                 cursor:     "pointer",
                 fontWeight: layoutPreset === p.key ? 700 : 400,
+                textShadow: "1px 1px 0px #09080E",
                 transition: "all 0.15s",
               }}
             >
