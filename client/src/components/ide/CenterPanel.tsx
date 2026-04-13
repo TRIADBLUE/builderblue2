@@ -158,7 +158,7 @@ export function CenterPanel({
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "11px",
-                color: activeTab === tab ? "#FBF6EE" : "rgba(251, 246, 238, 0.45)",
+                color: activeTab === tab ? "#09080E" : "rgba(9, 8, 14, 0.45)",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
@@ -177,7 +177,7 @@ export function CenterPanel({
                 style={{
                   fontFamily: "var(--font-runway)",
                   fontSize: "10px",
-                  color: "rgba(251,246,238,0.25)",
+                  color: "rgba(9,8,14,0.45)",
                   background: "transparent",
                   border: "none",
                   cursor: "pointer",
@@ -197,7 +197,7 @@ export function CenterPanel({
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "14px",
-            color: "rgba(251,246,238,0.3)",
+            color: "rgba(9,8,14,0.35)",
             background: "transparent",
             border: "none",
             cursor: "pointer",
@@ -218,7 +218,7 @@ export function CenterPanel({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "13px",
-              color: "rgba(251,246,238,0.25)",
+              color: "rgba(9,8,14,0.45)",
               background: "transparent",
               border: "none",
               cursor: "pointer",
@@ -228,8 +228,8 @@ export function CenterPanel({
               flexShrink: 0,
             }}
             title="Collapse panel"
-            onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(251,246,238,0.6)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(251,246,238,0.25)")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.6)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.45)")}
           >
             <PanelRightClose size={14} />
           </button>

@@ -103,7 +103,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                 border: "none",
                 cursor: "pointer",
                 fontSize: "12px",
-                color: "rgba(251,246,238,0.3)",
+                color: "rgba(9,8,14,0.35)",
                 padding: "0 2px",
                 lineHeight: 1,
               }}
@@ -131,7 +131,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
               padding: "4px 6px",
               fontFamily: "var(--font-content)",
               fontSize: "11px",
-              color: "#FBF6EE",
+              color: "#09080E",
               outline: "none",
             }}
             onKeyDown={(e) => { if (e.key === "Enter") handleAdd(); }}
@@ -162,7 +162,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
             style={{
               fontFamily: "var(--font-label)",
               fontSize: "9px",
-              color: "rgba(251,246,238,0.35)",
+              color: "rgba(9,8,14,0.4)",
               textTransform: "uppercase",
               letterSpacing: "0.06em",
               listStyle: "none",
@@ -273,7 +273,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                   <p style={{
                     fontFamily: "var(--font-content)",
                     fontSize: "11px",
-                    color: "#FBF6EE",
+                    color: "#09080E",
                     lineHeight: 1.4,
                     margin: 0,
                     wordBreak: "break-word",
@@ -325,7 +325,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
                     <span style={{
                       fontFamily: "var(--font-content)",
                       fontSize: "10px",
-                      color: "#FBF6EE",
+                      color: "#09080E",
                       textDecoration: "line-through",
                       flex: 1,
                     }}>

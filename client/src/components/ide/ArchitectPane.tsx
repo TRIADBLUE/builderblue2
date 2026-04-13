@@ -176,7 +176,7 @@ export function ArchitectPane({
             className="chat-input flex-1 resize-none rounded-md border px-3 py-2 outline-none"
             style={{
               fontSize: "11px",
-              color: "#FBF6EE",
+              color: "#09080E",
               background: "rgba(251, 246, 238, 0.08)",
               borderColor: "rgba(251, 246, 238, 0.15)",
             }}
@@ -189,7 +189,7 @@ export function ArchitectPane({
               className={`btn flex h-9 w-9 items-center justify-center rounded-md${isListening ? " mic-listening" : ""}`}
               style={{
                 background: isListening ? "#E00420" : "transparent",
-                color: isListening ? "#fff" : "#FBF6EE",
+                color: isListening ? "#fff" : "#09080E",
                 border: isListening ? "none" : "1px solid rgba(251,246,238,0.15)",
                 cursor: "pointer",
                 flexShrink: 0,
@@ -240,7 +240,7 @@ export function ArchitectPane({
             fontSize: "11px",
             letterSpacing: "0.04em",
             background: "transparent",
-            color: "#FBF6EE",
+            color: "#09080E",
             border: "1px solid rgba(251, 246, 238, 0.15)",
             cursor: "pointer",
           }}

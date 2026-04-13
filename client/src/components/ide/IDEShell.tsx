@@ -503,7 +503,7 @@ export function IDEShell({
                       border: "none",
                       borderRight: "1px solid rgba(251,246,238,0.15)",
                       cursor: "pointer",
-                      color: "rgba(251,246,238,0.3)",
+                      color: "rgba(9,8,14,0.35)",
                       display: "flex",
                       alignItems: "flex-start",
                     }}
