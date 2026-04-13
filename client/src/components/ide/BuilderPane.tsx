@@ -121,7 +121,7 @@ export function BuilderPane({
       {/* Header */}
       <div
         className="flex flex-col px-3 py-1"
-        style={{ borderBottom: "1px solid rgba(251, 246, 238, 0.15)" }}
+        style={{ borderBottom: "1px solid var(--ide-border)" }}
       >
         <div className="flex items-baseline" style={{ gap: "12px" }}>
           <span
@@ -172,7 +172,7 @@ export function BuilderPane({
               ...(msg.role === "user" ? {
                 marginLeft: "auto",
                 maxWidth: "85%",
-                background: "rgba(251, 246, 238, 0.06)",
+                background: "var(--ide-input-bg)",
                 borderRadius: "8px",
                 textAlign: "right" as const,
               } : {}),
@@ -205,7 +205,7 @@ export function BuilderPane({
       </div>
 
       {/* Input */}
-      <div className="border-t p-3" style={{ borderColor: "rgba(251, 246, 238, 0.15)" }}>
+      <div className="border-t p-3" style={{ borderColor: "var(--ide-border)" }}>
         <form onSubmit={handleSubmit} className="flex gap-2">
           <textarea
             ref={textareaRef}
@@ -223,9 +223,9 @@ export function BuilderPane({
             className="chat-input flex-1 resize-none rounded-md border px-3 py-2 outline-none"
             style={{
               fontSize: "11px",
-              color: "#09080E",
-              background: "rgba(251, 246, 238, 0.08)",
-              borderColor: "rgba(251, 246, 238, 0.15)",
+              color: "var(--ide-text)",
+              background: "var(--ide-input-bg)",
+              borderColor: "var(--ide-border)",
             }}
           />
           {isSupported && (
@@ -236,8 +236,8 @@ export function BuilderPane({
               className={`btn flex h-9 w-9 items-center justify-center rounded-md${isListening ? " mic-listening" : ""}`}
               style={{
                 background: isListening ? "#E00420" : "transparent",
-                color: isListening ? "#fff" : "#09080E",
-                border: isListening ? "none" : "1px solid rgba(251,246,238,0.15)",
+                color: isListening ? "#fff" : "var(--ide-text)",
+                border: isListening ? "none" : "1px solid var(--ide-border)",
                 cursor: "pointer",
                 flexShrink: 0,
               }}
@@ -272,7 +272,7 @@ export function BuilderPane({
       </div>
 
       {/* Hand to Architect — separate bottom bar */}
-      <div style={{ padding: "8px 12px", borderTop: "1px solid rgba(251, 246, 238, 0.15)", background: "transparent" }}>
+      <div style={{ padding: "8px 12px", borderTop: "1px solid var(--ide-border)", background: "transparent" }}>
         <button
           onClick={() => {
             const lastAssistant = [...messages]
@@ -287,8 +287,8 @@ export function BuilderPane({
             fontSize: "11px",
             letterSpacing: "0.04em",
             background: "transparent",
-            color: "#09080E",
-            border: "1px solid rgba(251, 246, 238, 0.15)",
+            color: "var(--ide-text)",
+            border: "1px solid var(--ide-border)",
             cursor: "pointer",
           }}
         >

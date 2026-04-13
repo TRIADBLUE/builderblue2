@@ -76,17 +76,17 @@ function renderMarkdown(text: string) {
           style={{
             fontFamily: "var(--font-builder)",
             fontSize: "12px",
-            background: "rgba(9, 8, 14, 0.06)",
+            background: "var(--ide-input-bg)",
             borderRadius: "6px",
             padding: "12px 14px",
             overflowX: "auto",
             margin: "8px 0",
-            border: "1px solid rgba(9, 8, 14, 0.08)",
+            border: "1px solid var(--ide-border)",
             lineHeight: 1.5,
           }}
         >
           {lang && (
-            <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "rgba(9,8,14,0.35)", textTransform: "uppercase", marginBottom: "6px", letterSpacing: "0.06em" }}>
+            <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "var(--ide-text-dim)", textTransform: "uppercase", marginBottom: "6px", letterSpacing: "0.06em" }}>
               {lang}
             </div>
           )}
@@ -98,17 +98,17 @@ function renderMarkdown(text: string) {
 
     // Heading
     if (line.startsWith("### ")) {
-      elements.push(<h4 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "14px", fontWeight: 700, color: "#043B40", margin: "14px 0 6px" }}>{line.slice(4)}</h4>);
+      elements.push(<h4 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "14px", fontWeight: 700, color: "var(--ide-text)", margin: "14px 0 6px" }}>{line.slice(4)}</h4>);
       i++;
       continue;
     }
     if (line.startsWith("## ")) {
-      elements.push(<h3 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: 700, color: "#043B40", margin: "16px 0 8px" }}>{line.slice(3)}</h3>);
+      elements.push(<h3 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: 700, color: "var(--ide-text)", margin: "16px 0 8px" }}>{line.slice(3)}</h3>);
       i++;
       continue;
     }
     if (line.startsWith("# ")) {
-      elements.push(<h2 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "18px", fontWeight: 700, color: "#043B40", margin: "18px 0 8px" }}>{line.slice(2)}</h2>);
+      elements.push(<h2 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "18px", fontWeight: 700, color: "var(--ide-text)", margin: "18px 0 8px" }}>{line.slice(2)}</h2>);
       i++;
       continue;
     }
@@ -117,8 +117,8 @@ function renderMarkdown(text: string) {
     if (line.match(/^[-*] /)) {
       elements.push(
         <div key={elements.length} style={{ display: "flex", gap: "8px", margin: "3px 0", paddingLeft: "4px" }}>
-          <span style={{ color: "#043B40", flexShrink: 0 }}>-</span>
-          <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#043B40", lineHeight: 1.6 }}>
+          <span style={{ color: "var(--ide-text)", flexShrink: 0 }}>-</span>
+          <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "var(--ide-text)", lineHeight: 1.6 }}>
             {renderInline(line.slice(2))}
           </span>
         </div>
@@ -133,8 +133,8 @@ function renderMarkdown(text: string) {
       const rest = line.replace(/^\d+\. /, "");
       elements.push(
         <div key={elements.length} style={{ display: "flex", gap: "8px", margin: "3px 0", paddingLeft: "4px" }}>
-          <span style={{ color: "#043B40", flexShrink: 0, fontWeight: 600, fontSize: "12px" }}>{num}.</span>
-          <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#043B40", lineHeight: 1.6 }}>
+          <span style={{ color: "var(--ide-text)", flexShrink: 0, fontWeight: 600, fontSize: "12px" }}>{num}.</span>
+          <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "var(--ide-text)", lineHeight: 1.6 }}>
             {renderInline(rest)}
           </span>
         </div>
@@ -152,7 +152,7 @@ function renderMarkdown(text: string) {
 
     // Regular paragraph
     elements.push(
-      <p key={elements.length} style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#043B40", lineHeight: 1.6, margin: "4px 0" }}>
+      <p key={elements.length} style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "var(--ide-text)", lineHeight: 1.6, margin: "4px 0" }}>
         {renderInline(line)}
       </p>
     );
@@ -175,7 +175,7 @@ function renderInline(text: string): (string | JSX.Element)[] {
     if (token.startsWith("**"))
       parts.push(<strong key={parts.length} style={{ fontWeight: 700 }}>{token.slice(2, -2)}</strong>);
     else if (token.startsWith("`"))
-      parts.push(<code key={parts.length} style={{ fontFamily: "var(--font-builder)", fontSize: "12px", background: "rgba(9,8,14,0.06)", padding: "1px 5px", borderRadius: "3px" }}>{token.slice(1, -1)}</code>);
+      parts.push(<code key={parts.length} style={{ fontFamily: "var(--font-builder)", fontSize: "12px", background: "var(--ide-input-bg)", padding: "1px 5px", borderRadius: "3px" }}>{token.slice(1, -1)}</code>);
     else if (token.startsWith("*"))
       parts.push(<em key={parts.length}>{token.slice(1, -1)}</em>);
     lastIndex = match.index + token.length;
@@ -212,10 +212,10 @@ export function ArchitectIdeationView({
     >
       {assistantMessages.length === 0 && !isStreaming && (
         <div style={{ textAlign: "center", padding: "40px 20px" }}>
-          <div style={{ fontFamily: "var(--font-heading)", fontSize: "16px", color: "rgba(4,59,64,0.4)", marginBottom: "8px" }}>
+          <div style={{ fontFamily: "var(--font-heading)", fontSize: "16px", color: "var(--ide-text-muted)", marginBottom: "8px" }}>
             Architect Ideation
           </div>
-          <div style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "rgba(4,59,64,0.5)", lineHeight: 1.6 }}>
+          <div style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "var(--ide-text-muted)", lineHeight: 1.6 }}>
             Describe what you want to build to the Architect. After a brief conversation, a live clickable prototype will appear here.
           </div>
         </div>
@@ -247,16 +247,16 @@ export function ArchitectIdeationView({
                     key={si}
                     style={{
                       padding: "16px 18px",
-                      background: "rgba(0, 32, 58, 0.04)",
+                      background: "var(--ide-input-bg)",
                       borderRadius: "8px",
-                      borderLeft: "3px solid #00203A",
+                      borderLeft: "3px solid var(--ide-text)",
                       marginBottom: "8px",
                     }}
                   >
                     <div style={{
                       fontFamily: "var(--font-label)",
                       fontSize: "9px",
-                      color: "#00203A",
+                      color: "var(--ide-text)",
                       textTransform: "uppercase",
                       letterSpacing: "0.06em",
                       marginBottom: "8px",
@@ -273,9 +273,9 @@ export function ArchitectIdeationView({
                   key={si}
                   style={{
                     padding: "16px 18px",
-                    background: "rgba(4, 59, 64, 0.04)",
+                    background: "var(--ide-input-bg)",
                     borderRadius: "8px",
-                    borderLeft: "3px solid #043B40",
+                    borderLeft: "3px solid var(--ide-text)",
                     marginBottom: "8px",
                   }}
                 >
@@ -283,7 +283,7 @@ export function ArchitectIdeationView({
                     <div style={{
                       fontFamily: "var(--font-label)",
                       fontSize: "9px",
-                      color: "#043B40",
+                      color: "var(--ide-text)",
                       textTransform: "uppercase",
                       letterSpacing: "0.06em",
                       marginBottom: "8px",
@@ -306,13 +306,13 @@ export function ArchitectIdeationView({
           style={{
             marginBottom: "16px",
             padding: "16px 18px",
-            background: "rgba(4, 59, 64, 0.06)",
+            background: "var(--ide-input-bg)",
             borderRadius: "8px",
-            borderLeft: "3px solid #043B40",
+            borderLeft: "3px solid var(--ide-text)",
             opacity: 0.9,
           }}
         >
-          <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#043B40", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px", fontWeight: 600 }}>
+          <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "var(--ide-text)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "8px", fontWeight: 600 }}>
             Architect — Thinking...
           </div>
           {renderMarkdown(streamedText)}

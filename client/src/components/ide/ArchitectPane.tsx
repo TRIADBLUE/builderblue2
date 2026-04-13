@@ -74,7 +74,7 @@ export function ArchitectPane({
       {/* Header */}
       <div
         className="flex flex-col px-3 py-1"
-        style={{ borderBottom: "1px solid rgba(251, 246, 238, 0.15)" }}
+        style={{ borderBottom: "1px solid var(--ide-border)" }}
       >
         <div className="flex items-baseline" style={{ gap: "12px" }}>
           <span
@@ -114,26 +114,46 @@ export function ArchitectPane({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            className={`${msg.role === "user" ? "text-user-message" : "text-ai-architect"}`}
-            style={{
-              fontSize: msg.role === "user" ? "11px" : "15px",
-              lineHeight: 1.5,
-              padding: msg.role === "user" ? "6px 10px" : "2px 0",
-              ...(msg.role === "user" ? {
-                marginLeft: "auto",
-                maxWidth: "85%",
-                background: "rgba(251, 246, 238, 0.06)",
-                borderRadius: "8px",
-                textAlign: "right" as const,
-              } : {}),
-            }}
-          >
-            {msg.content}
-          </div>
-        ))}
+        {messages.map((msg, i) => {
+          if (msg.role === "user") {
+            return (
+              <div
+                key={i}
+                className="text-user-message"
+                style={{
+                  fontSize: "11px",
+                  lineHeight: 1.5,
+                  padding: "6px 10px",
+                  marginLeft: "auto",
+                  maxWidth: "85%",
+                  background: "var(--ide-input-bg)",
+                  borderRadius: "8px",
+                  textAlign: "right" as const,
+                }}
+              >
+                {msg.content}
+              </div>
+            );
+          }
+          const textOnly = msg.content
+            .replace(/```(?:prototype|spec|html)\s*\n[\s\S]*?```/g, "")
+            .trim();
+          if (!textOnly) return null;
+          return (
+            <div
+              key={i}
+              className="text-ai-architect"
+              style={{
+                fontSize: "13px",
+                lineHeight: 1.6,
+                padding: "2px 0",
+                whiteSpace: "pre-wrap",
+              }}
+            >
+              {textOnly}
+            </div>
+          );
+        })}
 
         {isStreaming && !streamedText && (
           <ThinkingIndicator role="architect" isActive={true} />
@@ -156,7 +176,7 @@ export function ArchitectPane({
       </div>
 
       {/* Input */}
-      <div className="border-t p-3" style={{ borderColor: "rgba(251, 246, 238, 0.15)" }}>
+      <div className="border-t p-3" style={{ borderColor: "var(--ide-border)" }}>
         <form onSubmit={handleSubmit} className="flex gap-2">
           <textarea
             ref={textareaRef}
@@ -174,9 +194,9 @@ export function ArchitectPane({
             className="chat-input flex-1 resize-none rounded-md border px-3 py-2 outline-none"
             style={{
               fontSize: "11px",
-              color: "#09080E",
-              background: "rgba(251, 246, 238, 0.08)",
-              borderColor: "rgba(251, 246, 238, 0.15)",
+              color: "var(--ide-text)",
+              background: "var(--ide-input-bg)",
+              borderColor: "var(--ide-border)",
             }}
           />
           {isSupported && (
@@ -187,8 +207,8 @@ export function ArchitectPane({
               className={`btn flex h-9 w-9 items-center justify-center rounded-md${isListening ? " mic-listening" : ""}`}
               style={{
                 background: isListening ? "#E00420" : "transparent",
-                color: isListening ? "#fff" : "#09080E",
-                border: isListening ? "none" : "1px solid rgba(251,246,238,0.15)",
+                color: isListening ? "#fff" : "var(--ide-text)",
+                border: isListening ? "none" : "1px solid var(--ide-border)",
                 cursor: "pointer",
                 flexShrink: 0,
               }}
@@ -223,7 +243,7 @@ export function ArchitectPane({
       </div>
 
       {/* Hand to Builder — separate bottom bar */}
-      <div style={{ padding: "8px 12px", borderTop: "1px solid rgba(251, 246, 238, 0.15)", background: "transparent" }}>
+      <div style={{ padding: "8px 12px", borderTop: "1px solid var(--ide-border)", background: "transparent" }}>
         <button
           onClick={() => {
             const lastAssistant = [...messages]
@@ -238,8 +258,8 @@ export function ArchitectPane({
             fontSize: "11px",
             letterSpacing: "0.04em",
             background: "transparent",
-            color: "#09080E",
-            border: "1px solid rgba(251, 246, 238, 0.15)",
+            color: "var(--ide-text)",
+            border: "1px solid var(--ide-border)",
             cursor: "pointer",
           }}
         >

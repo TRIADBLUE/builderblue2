@@ -386,9 +386,9 @@ export function IDEShell({
     fontFamily:      "var(--font-label)",
     fontSize:        "9px",
     fontWeight:      600,
-    color:           PANE_CONFIG[k].color,
+    color:           "var(--ide-text)",
     background:      "transparent",
-    border:          `1px solid ${PANE_CONFIG[k].color}`,
+    border:          "1px solid var(--ide-border)",
     borderRadius:    "4px",
     padding:         "2px 8px",
     cursor:          dormant ? "pointer" : "grab",
@@ -431,7 +431,7 @@ export function IDEShell({
       {/* Layout controls bar */}
       <div
         className="flex items-center justify-between px-3 py-1"
-        style={{ background: "transparent", borderBottom: "1px solid rgba(251,246,238,0.15)", minHeight: "28px" }}
+        style={{ background: "transparent", borderBottom: "1px solid var(--ide-border)", minHeight: "28px" }}
       >
         <div className="flex items-center gap-1">
           {/* Active tabs — outline style, drag to reorder, click to hide */}
@@ -501,9 +501,9 @@ export function IDEShell({
                       padding: "8px 4px",
                       background: "transparent",
                       border: "none",
-                      borderRight: "1px solid rgba(251,246,238,0.15)",
+                      borderRight: "1px solid var(--ide-border)",
                       cursor: "pointer",
-                      color: "rgba(9,8,14,0.35)",
+                      color: "var(--ide-text-dim)",
                       display: "flex",
                       alignItems: "flex-start",
                     }}

@@ -118,11 +118,11 @@ export function CenterPanel({
       {runwayMode === "architect" && (
         <>
           {/* Show thinking feed when streaming and no prototype in stream yet */}
-          {architectIsStreaming && !architectStreamedText.includes("```prototype") && (
+          {architectIsStreaming && !architectStreamedText.includes("```prototype") && !architectStreamedText.includes("```html") && (
             <RunwayThinkingFeed isActive={true} role="architect" />
           )}
           {/* Show ideation view (prototypes, specs, text) when there's content */}
-          {(!architectIsStreaming || architectStreamedText.includes("```prototype")) && (
+          {(!architectIsStreaming || architectStreamedText.includes("```prototype") || architectStreamedText.includes("```html")) && (
             <ArchitectIdeationView
               messages={architectMessages}
               isStreaming={architectIsStreaming}
@@ -143,7 +143,7 @@ export function CenterPanel({
         className="flex items-center"
         style={{
           background: "inherit",
-          borderBottom: "1px solid rgba(251, 246, 238, 0.15)",
+          borderBottom: "1px solid var(--ide-border)",
           flexShrink: 0,
         }}
       >
@@ -151,14 +151,14 @@ export function CenterPanel({
           <div
             key={tab}
             className="flex items-center"
-            style={{ borderRight: "1px solid rgba(251, 246, 238, 0.15)" }}
+            style={{ borderRight: "1px solid var(--ide-border)" }}
           >
             <button
               onClick={() => setActiveTab(tab)}
               style={{
                 fontFamily: "var(--font-runway)",
                 fontSize: "11px",
-                color: activeTab === tab ? "#09080E" : "rgba(9, 8, 14, 0.45)",
+                color: activeTab === tab ? "var(--ide-text)" : "var(--ide-text-muted)",
                 background: "transparent",
                 border: "none",
                 cursor: "pointer",
@@ -177,7 +177,7 @@ export function CenterPanel({
                 style={{
                   fontFamily: "var(--font-runway)",
                   fontSize: "10px",
-                  color: "rgba(9,8,14,0.45)",
+                  color: "var(--ide-text-muted)",
                   background: "transparent",
                   border: "none",
                   cursor: "pointer",
@@ -197,7 +197,7 @@ export function CenterPanel({
           style={{
             fontFamily: "var(--font-runway)",
             fontSize: "14px",
-            color: "rgba(9,8,14,0.35)",
+            color: "var(--ide-text-dim)",
             background: "transparent",
             border: "none",
             cursor: "pointer",
@@ -218,7 +218,7 @@ export function CenterPanel({
             style={{
               fontFamily: "var(--font-runway)",
               fontSize: "13px",
-              color: "rgba(9,8,14,0.45)",
+              color: "var(--ide-text-muted)",
               background: "transparent",
               border: "none",
               cursor: "pointer",
@@ -228,8 +228,8 @@ export function CenterPanel({
               flexShrink: 0,
             }}
             title="Collapse panel"
-            onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.6)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(9,8,14,0.45)")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ide-text)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ide-text-muted)")}
           >
             <PanelRightClose size={14} />
           </button>

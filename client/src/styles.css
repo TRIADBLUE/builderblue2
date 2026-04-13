@@ -59,6 +59,12 @@
 :root,
 [data-theme="light"] {
   --ide-bg: #FBF6EE;
+  --ide-dot: rgba(19, 31, 56, 0.12);
+  --ide-text: #09080E;
+  --ide-text-muted: rgba(9, 8, 14, 0.45);
+  --ide-text-dim: rgba(9, 8, 14, 0.25);
+  --ide-border: rgba(9, 8, 14, 0.15);
+  --ide-input-bg: rgba(9, 8, 14, 0.06);
   --bg-primary: #FFF5ED;
   --bg-secondary: #FFFFFF;
   --bg-elevated: #FFF5ED;
@@ -88,6 +94,12 @@
 /* ─── Dark theme ─────────────────────────────────────────────────────────── */
 [data-theme="dark"] {
   --ide-bg: #131F38;
+  --ide-dot: rgba(251, 246, 238, 0.12);
+  --ide-text: #FBF6EE;
+  --ide-text-muted: rgba(251, 246, 238, 0.45);
+  --ide-text-dim: rgba(251, 246, 238, 0.25);
+  --ide-border: rgba(251, 246, 238, 0.15);
+  --ide-input-bg: rgba(251, 246, 238, 0.06);
   --bg-primary: #0D0D12;
   --bg-secondary: #16161D;
   --bg-elevated: #1C1C26;
@@ -117,6 +129,13 @@
 /* ─── Auto theme (follows OS preference) ─────────────────────────────────── */
 @media (prefers-color-scheme: dark) {
   [data-theme="auto"] {
+    --ide-bg: #131F38;
+    --ide-dot: rgba(251, 246, 238, 0.12);
+    --ide-text: #FBF6EE;
+    --ide-text-muted: rgba(251, 246, 238, 0.45);
+    --ide-text-dim: rgba(251, 246, 238, 0.25);
+    --ide-border: rgba(251, 246, 238, 0.15);
+    --ide-input-bg: rgba(251, 246, 238, 0.06);
     --bg-primary: #0D0D12;
     --bg-secondary: #16161D;
     --bg-elevated: #1C1C26;
@@ -174,17 +193,14 @@ a:hover, button:not(.btn):hover {
   display: none;
 }
 
-/* ─── Universal text rule: dark text + cream outline ─────────────────────── */
-/* Works on both light and dark backgrounds — no font color changes needed */
+/* ─── Global gray accent shadow on all IDE text ─────────────────────────── */
 .ide-layout * {
-  -webkit-text-stroke: 0.5px #FBF6EE;
-  paint-order: stroke fill;
+  text-shadow: 1px 1px 0px #8085A1;
 }
 
-/* Code blocks stay clean */
 .ide-layout pre *,
 .ide-layout code {
-  -webkit-text-stroke: 0;
+  text-shadow: none;
 }
 
 /* ─── AI message text ────────────────────────────────────────────────────── */
@@ -193,20 +209,20 @@ a:hover, button:not(.btn):hover {
   color: #043B40;
   font-variant: small-caps;
   font-weight: 400;
-  -webkit-text-stroke: 0.3px #FBF6EE;
+  text-shadow: 1px 1px 0px #8085A1, 0 0 8px rgba(4, 59, 64, 0.4);
 }
 .text-ai-builder {
   font-family: 'Allerta Stencil', sans-serif;
   color: #520322;
   font-weight: 400;
-  -webkit-text-stroke: 0.3px #FBF6EE;
+  text-shadow: 1px 1px 0px #8085A1, 0 0 8px rgba(82, 3, 34, 0.4);
 }
 .text-ai-staging {
   font-family: 'Allerta Stencil', sans-serif;
   color: #00203A;
   font-variant: small-caps;
   font-weight: 400;
-  -webkit-text-stroke: 0.3px #FBF6EE;
+  text-shadow: 1px 1px 0px #8085A1, 0 0 8px rgba(0, 32, 58, 0.4);
 }
 
 /* ─── User message text ──────────────────────────────────────────────────── */
@@ -215,6 +231,7 @@ a:hover, button:not(.btn):hover {
   font-weight: 700;
   color: #374151;
   letter-spacing: 0.03em;
+  text-shadow: 1px 1px 0px #8085A1, 0 0 6px rgba(55, 65, 81, 0.35);
 }
 
 /* ─── Chat input styling ────────────────────────────────────────────────── */
@@ -656,30 +673,10 @@ a:hover, button:not(.btn):hover {
 
 /* ─── Railway-style dotted grid backgrounds ──────────────────────────────── */
 
-/* Light mode: cream bg + blue dots */
 .dotgrid-architect,
 .dotgrid-builder,
 .dotgrid-staging {
-  background-color: #FBF6EE;
-  background-image: radial-gradient(
-    circle,
-    rgba(19, 31, 56, 0.12) 1px,
-    transparent 1px
-  );
+  background-color: var(--ide-bg);
+  background-image: radial-gradient(circle, var(--ide-dot) 1px, transparent 1px);
   background-size: 22px 22px;
-}
-
-/* Dark mode: blue bg + cream dots */
-[data-theme="dark"] .dotgrid-architect,
-[data-theme="dark"] .dotgrid-builder,
-[data-theme="dark"] .dotgrid-staging,
-.dark .dotgrid-architect,
-.dark .dotgrid-builder,
-.dark .dotgrid-staging {
-  background-color: #131F38;
-  background-image: radial-gradient(
-    circle,
-    rgba(251, 246, 238, 0.12) 1px,
-    transparent 1px
-  );
 }
