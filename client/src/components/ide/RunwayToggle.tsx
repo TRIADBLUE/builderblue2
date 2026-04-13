@@ -11,7 +11,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
         alignItems: "center",
         justifyContent: "center",
         padding: "8px 12px",
-        borderBottom: "2px solid rgba(251, 246, 238, 0.75)",
+        borderBottom: "1px solid rgba(251, 246, 238, 0.15)",
         background: "inherit",
         flexShrink: 0,
       }}
@@ -21,7 +21,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
           position: "relative",
           display: "flex",
           borderRadius: "8px",
-          border: "2px solid rgba(251, 246, 238, 0.3)",
+          border: "1px solid rgba(251, 246, 238, 0.15)",
           overflow: "hidden",
           cursor: "pointer",
           userSelect: "none",

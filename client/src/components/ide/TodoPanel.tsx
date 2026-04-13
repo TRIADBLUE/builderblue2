@@ -81,7 +81,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
   const done = todos.filter((t) => t.status === "done");
 
   return (
-    <div className="flex h-full flex-col glass-bg" style={{ background: "transparent", borderRight: "2px solid rgba(180,180,195,0.25)", boxShadow: "inset -1px 0 0 rgba(255,255,255,0.08), 1px 0 0 rgba(0,0,0,0.15)", width: "220px", minWidth: "220px" }}>
+    <div className="flex h-full flex-col glass-bg" style={{ background: "transparent", borderRight: "1px solid rgba(251,246,238,0.15)", width: "220px", minWidth: "220px" }}>
       {/* Header */}
       <div
         className="flex items-center justify-between px-3 py-2"

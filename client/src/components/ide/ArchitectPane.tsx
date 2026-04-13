@@ -74,7 +74,7 @@ export function ArchitectPane({
       {/* Header */}
       <div
         className="flex flex-col px-3 py-1"
-        style={{ borderBottom: "2px solid rgba(251, 246, 238, 0.75)" }}
+        style={{ borderBottom: "1px solid rgba(251, 246, 238, 0.15)" }}
       >
         <div className="flex items-baseline" style={{ gap: "12px" }}>
           <span
@@ -156,7 +156,7 @@ export function ArchitectPane({
       </div>
 
       {/* Input */}
-      <div className="border-t p-3" style={{ borderColor: "rgba(251, 246, 238, 0.75)", borderWidth: "2px" }}>
+      <div className="border-t p-3" style={{ borderColor: "rgba(251, 246, 238, 0.15)" }}>
         <form onSubmit={handleSubmit} className="flex gap-2">
           <textarea
             ref={textareaRef}
@@ -176,8 +176,7 @@ export function ArchitectPane({
               fontSize: "11px",
               color: "#FBF6EE",
               background: "rgba(251, 246, 238, 0.08)",
-              borderColor: "rgba(251, 246, 238, 0.75)",
-              borderWidth: "2px",
+              borderColor: "rgba(251, 246, 238, 0.15)",
             }}
           />
           {isSupported && (
@@ -189,7 +188,7 @@ export function ArchitectPane({
               style={{
                 background: isListening ? "#E00420" : "transparent",
                 color: isListening ? "#fff" : "#FBF6EE",
-                border: isListening ? "none" : "2px solid rgba(251,246,238,0.75)",
+                border: isListening ? "none" : "1px solid rgba(251,246,238,0.15)",
                 cursor: "pointer",
                 flexShrink: 0,
               }}
@@ -224,7 +223,7 @@ export function ArchitectPane({
       </div>
 
       {/* Hand to Builder — separate bottom bar */}
-      <div style={{ padding: "8px 12px", borderTop: "2px solid rgba(251, 246, 238, 0.75)", background: "transparent" }}>
+      <div style={{ padding: "8px 12px", borderTop: "1px solid rgba(251, 246, 238, 0.15)", background: "transparent" }}>
         <button
           onClick={() => {
             const lastAssistant = [...messages]
@@ -240,7 +239,7 @@ export function ArchitectPane({
             letterSpacing: "0.04em",
             background: "transparent",
             color: "#FBF6EE",
-            border: "2px solid rgba(251, 246, 238, 0.75)",
+            border: "1px solid rgba(251, 246, 238, 0.15)",
             cursor: "pointer",
           }}
         >

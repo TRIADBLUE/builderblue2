@@ -174,7 +174,7 @@ a:hover, button:not(.btn):hover {
 
 /* ─── Global gray accent shadow on all IDE text ─────────────────────────── */
 .ide-layout * {
-  text-shadow: 1px 1px 0px #8085A1;
+  text-shadow: 1px 1px 0px #505562;
 }
 
 /* Code blocks don't get the shadow — keep them clean */
@@ -188,18 +188,18 @@ a:hover, button:not(.btn):hover {
   font-family: 'Allerta Stencil', sans-serif;
   color: #043B40;
   font-variant: small-caps;
-  text-shadow: 1px 1px 0px #8085A1;
+  text-shadow: 1px 1px 0px #505562;
 }
 .text-ai-builder {
   font-family: 'Allerta Stencil', sans-serif;
   color: #520322;
-  text-shadow: 1px 1px 0px #8085A1;
+  text-shadow: 1px 1px 0px #505562;
 }
 .text-ai-staging {
   font-family: 'Allerta Stencil', sans-serif;
   color: #00203A;
   font-variant: small-caps;
-  text-shadow: 1px 1px 0px #8085A1;
+  text-shadow: 1px 1px 0px #505562;
 }
 
 /* ─── User message text ──────────────────────────────────────────────────── */
@@ -208,7 +208,7 @@ a:hover, button:not(.btn):hover {
   font-weight: 700;
   color: #374151;
   letter-spacing: 0.03em;
-  text-shadow: 1px 1px 0px #8085A1;
+  text-shadow: 1px 1px 0px #505562;
 }
 
 /* ─── Chat input styling ────────────────────────────────────────────────── */
@@ -216,13 +216,13 @@ a:hover, button:not(.btn):hover {
   font-family: 'Crusoe Text', sans-serif;
   font-weight: 700;
   color: #374151;
-  text-shadow: 1px 1px 0px #8085A1;
+  text-shadow: 1px 1px 0px #505562;
 }
 
 .chat-input::placeholder {
   font-family: 'Allerta Stencil', sans-serif;
   color: rgba(55, 65, 81, 0.4);
-  text-shadow: 1px 1px 0px rgba(128, 133, 161, 0.5);
+  text-shadow: 1px 1px 0px rgba(80, 85, 98, 0.5);
 }
 
 /* ─── Workspace Control Panel toggles ───────────────────────────────────── */

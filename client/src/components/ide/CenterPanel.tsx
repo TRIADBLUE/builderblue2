@@ -143,7 +143,7 @@ export function CenterPanel({
         className="flex items-center"
         style={{
           background: "inherit",
-          borderBottom: "2px solid rgba(251, 246, 238, 0.75)",
+          borderBottom: "1px solid rgba(251, 246, 238, 0.15)",
           flexShrink: 0,
         }}
       >
@@ -151,7 +151,7 @@ export function CenterPanel({
           <div
             key={tab}
             className="flex items-center"
-            style={{ borderRight: "2px solid rgba(251, 246, 238, 0.75)" }}
+            style={{ borderRight: "1px solid rgba(251, 246, 238, 0.15)" }}
           >
             <button
               onClick={() => setActiveTab(tab)}
