@@ -342,4 +342,32 @@ router.patch("/onboarding", authenticate, async (req, res) => {
   }
 });
 
+// ─── PATCH /api/auth/avatar — upload profile image ──────────────────────────
+
+router.patch("/avatar", authenticate, async (req, res) => {
+  try {
+    const { avatarUrl } = req.body;
+    if (!avatarUrl || typeof avatarUrl !== "string") {
+      res.status(400).json({ message: "avatarUrl is required" });
+      return;
+    }
+
+    const [updated] = await db
+      .update(users)
+      .set({ avatarUrl, updatedAt: new Date() })
+      .where(eq(users.id, req.user!.userId))
+      .returning();
+
+    if (!updated) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.json({ avatarUrl: updated.avatarUrl });
+  } catch (error) {
+    console.error("Avatar update error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 export default router;

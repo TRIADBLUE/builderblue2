@@ -51,6 +51,7 @@ export interface User {
   email: string;
   name: string;
   role: UserRole;
+  avatarUrl: string | null;
   businessIndustry: BusinessIndustry | null;
   primaryGoal: PrimaryGoal | null;
   onboardingCompletedAt: string | null;
@@ -63,6 +64,7 @@ export interface PublicUser {
   email: string;
   name: string;
   role: UserRole;
+  avatarUrl: string | null;
   businessIndustry: BusinessIndustry | null;
   primaryGoal: PrimaryGoal | null;
   onboardingCompletedAt: string | null;

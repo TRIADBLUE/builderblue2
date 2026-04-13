@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
 import type { ComputeStatus } from "@shared/types";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../hooks/useTheme";
 import { useGlassMode } from "../../hooks/useGlassMode";
+import { api } from "../../lib/api";
 
 interface TopNavProps {
   projectName: string;
@@ -38,6 +39,27 @@ export function TopNav({
   const { logout } = useAuth();
   const { theme, cycleTheme } = useTheme();
   const { mode: glassMode, toggleMode: toggleGlass } = useGlassMode();
+
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const { updateUser } = useAuth();
+
+  const handleAvatarUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result as string;
+      try {
+        await api.fetch("/api/auth/avatar", { method: "PATCH", body: { avatarUrl: dataUrl } });
+        if (avatarUrl !== undefined) {
+          updateUser({ ...{ id: "", email: userEmail ?? "", name: userName, role: "builder" as const, businessIndustry: null, primaryGoal: null, onboardingCompletedAt: null }, avatarUrl: dataUrl });
+        }
+        window.location.reload();
+      } catch {}
+    };
+    reader.readAsDataURL(file);
+    if (avatarInputRef.current) avatarInputRef.current.value = "";
+  }, [avatarUrl, userEmail, userName, updateUser]);
 
   const themeIcon = theme === "light" ? "☀️" : theme === "dark" ? "🌙" : "🔄";
   const themeLabel = theme === "light" ? "Light" : theme === "dark" ? "Dark" : "Auto";
@@ -91,7 +113,7 @@ export function TopNav({
 
   return (
     <nav
-      className="flex h-12 items-center justify-between px-4 glass-bg"
+      className="flex h-16 items-center justify-between px-4 glass-bg"
       style={{
         background: "#FFF5ED",
         borderBottom: "1px solid rgba(9, 8, 14, 0.1)",
@@ -103,7 +125,7 @@ export function TopNav({
           src="/builderblue2_header.png"
           alt="BuilderBlue²"
           className="h-7"
-          style={{ height: "28px", cursor: "pointer" }}
+          style={{ height: "42px", cursor: "pointer" }}
           onClick={() => setLocation("/dashboard")}
         />
       </div>
@@ -117,16 +139,16 @@ export function TopNav({
           className="border-none bg-transparent text-center outline-none"
           style={{
             fontFamily: "var(--font-architect)",
-            fontSize: "14px",
+            fontSize: "28px",
             color: "var(--triad-black)",
-            width: `${Math.max(projectName.length, 8) * 9}px`,
+            width: `${Math.max(projectName.length, 8) * 17}px`,
           }}
         />
         <span
           className="rounded-full px-2 py-0.5"
           style={{
             fontFamily: "var(--font-runway)",
-            fontSize: "11px",
+            fontSize: "22px",
             color: "var(--triad-black)",
             background: "var(--steel-blue)",
           }}
@@ -236,6 +258,19 @@ export function TopNav({
                     {userEmail}
                   </div>
                 )}
+              </div>
+
+              {/* Avatar upload */}
+              <div style={{ padding: "4px 0", borderBottom: "1px solid rgba(9,8,14,0.06)" }}>
+                <input ref={avatarInputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleAvatarUpload} />
+                <button
+                  onClick={() => { avatarInputRef.current?.click(); }}
+                  style={menuItemStyle}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(9,8,14,0.04)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+                >
+                  Change Photo
+                </button>
               </div>
 
               {/* Menu items */}

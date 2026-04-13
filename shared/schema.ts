@@ -22,6 +22,7 @@ export const users = pgTable("users", {
   role: text("role").notNull().default("builder"),
   businessIndustry: text("business_industry"),
   primaryGoal: text("primary_goal"),
+  avatarUrl: text("avatar_url"),
   onboardingCompletedAt: timestamp("onboarding_completed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

@@ -402,6 +402,8 @@ export function IDEShell({
         lastSaved={null}
         computeStatus={computeStatus}
         userName={user?.name ?? ""}
+        userEmail={user?.email}
+        avatarUrl={user?.avatarUrl}
         onProjectNameChange={onProjectNameChange}
         onDeploy={() => setShowDeployModal(true)}
         deployedUrl={deployedUrl}
