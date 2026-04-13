@@ -476,8 +476,8 @@ export function IDEShell({
       </div>
 
       {/* IDE body — panes + workspace panel side by side */}
-      <div className="flex flex-1 overflow-hidden">
-      <div ref={containerRef} className="flex flex-1 overflow-hidden ide-panel-container">
+      <div className="flex flex-1 overflow-hidden" style={{ minHeight: 0 }}>
+      <div ref={containerRef} className="flex flex-1 overflow-hidden ide-panel-container" style={{ minHeight: 0 }}>
         {visibleInOrder.map((k, idx) => (
           <React.Fragment key={k}>
             {/* ── Architect ── */}
