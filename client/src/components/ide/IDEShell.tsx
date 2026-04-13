@@ -325,6 +325,8 @@ export function IDEShell({
     }, 500);
   }, []);
 
+  const [showHandoffPrompt, setShowHandoffPrompt] = useState<"feedback" | "approve" | null>(null);
+
   const handleApprovePrototype = useCallback(async (htmlContent: string, technicalSpec: string) => {
     const { api } = await import("../../lib/api");
     const proto = await api.fetch<Prototype>("/api/prototypes", {
@@ -339,11 +341,29 @@ export function IDEShell({
     });
     setCurrentPrototype(proto);
     setPrototypeVersion(proto.version);
+    setShowHandoffPrompt("approve");
   }, [projectId, architectConvo.conversation]);
 
   const handleIteratePrototype = useCallback(() => {
-    setActivePane("architect");
+    setShowHandoffPrompt("feedback");
   }, []);
+
+  const confirmFeedbackHandoff = useCallback(() => {
+    setShowHandoffPrompt(null);
+    setActivePane("architect");
+    setFlashPane("architect");
+    setTimeout(() => setFlashPane(null), 400);
+  }, []);
+
+  const confirmBuilderHandoff = useCallback(() => {
+    setShowHandoffPrompt(null);
+    const handoffContent = `The Architect has approved the following prototype and technical specification. Build this exactly as designed.\n\n--- APPROVED PROTOTYPE (v${prototypeVersion}) ---\nThe clickable prototype has been approved by the client. Match it precisely.\n\n--- TECHNICAL SPECIFICATION ---\n${currentPrototype?.technicalSpec ?? "See the approved prototype for visual spec."}`;
+    setBuilderInput(handoffContent);
+    setActivePane("builder");
+    setRunwayMode("builder");
+    setFlashPane("builder");
+    setTimeout(() => setFlashPane(null), 400);
+  }, [prototypeVersion, currentPrototype]);
 
   // ── Message handlers ───────────────────────────────────────────────────────
   const handleArchitectMessage = useCallback(async (content: string) => {
@@ -656,6 +676,72 @@ export function IDEShell({
         onApplyPreset={applyPreset}
       />
       </div>
+
+      {/* Feedback handoff prompt */}
+      {showHandoffPrompt === "feedback" && (
+        <div style={{
+          position: "fixed", top: "50%", left: "50%",
+          transform: "translate(-50%, -50%)", zIndex: 100,
+          background: "var(--ide-bg, #131F38)",
+          border: "1px solid var(--ide-border)",
+          borderRadius: "12px", padding: "24px 32px",
+          textAlign: "center",
+          boxShadow: "0 12px 40px rgba(0,0,0,0.3)",
+        }}>
+          <div style={{
+            fontFamily: "var(--font-heading)", fontSize: "16px",
+            color: "var(--ide-text, #FBF6EE)", marginBottom: "16px",
+          }}>
+            Hand to Architect for your feedback?
+          </div>
+          <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
+            <button onClick={() => setShowHandoffPrompt(null)} className="btn"
+              style={{ fontFamily: "var(--font-label)", fontSize: "12px", padding: "8px 20px", background: "transparent", color: "var(--ide-text-muted)", border: "1px solid var(--ide-border)", borderRadius: "6px", cursor: "pointer" }}>
+              Cancel
+            </button>
+            <button onClick={confirmFeedbackHandoff} className="btn"
+              style={{ fontFamily: "var(--font-label)", fontSize: "12px", fontWeight: 600, padding: "8px 20px", background: "#043B40", color: "#E9ECF0", border: "none", borderRadius: "6px", cursor: "pointer" }}>
+              Hand to Architect →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Approve handoff prompt */}
+      {showHandoffPrompt === "approve" && (
+        <div style={{
+          position: "fixed", top: "50%", left: "50%",
+          transform: "translate(-50%, -50%)", zIndex: 100,
+          background: "var(--ide-bg, #131F38)",
+          border: "1px solid var(--ide-border)",
+          borderRadius: "12px", padding: "24px 32px",
+          textAlign: "center",
+          boxShadow: "0 12px 40px rgba(0,0,0,0.3)",
+        }}>
+          <div style={{
+            fontFamily: "var(--font-heading)", fontSize: "16px",
+            color: "var(--ide-text, #FBF6EE)", marginBottom: "8px",
+          }}>
+            Prototype Approved ✓
+          </div>
+          <div style={{
+            fontFamily: "var(--font-content)", fontSize: "13px",
+            color: "var(--ide-text-muted)", marginBottom: "16px",
+          }}>
+            Hand off to Builder to start coding?
+          </div>
+          <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
+            <button onClick={() => setShowHandoffPrompt(null)} className="btn"
+              style={{ fontFamily: "var(--font-label)", fontSize: "12px", padding: "8px 20px", background: "transparent", color: "var(--ide-text-muted)", border: "1px solid var(--ide-border)", borderRadius: "6px", cursor: "pointer" }}>
+              Not yet
+            </button>
+            <button onClick={confirmBuilderHandoff} className="btn"
+              style={{ fontFamily: "var(--font-label)", fontSize: "12px", fontWeight: 600, padding: "8px 20px", background: "#520322", color: "#FFF5ED", border: "none", borderRadius: "6px", cursor: "pointer" }}>
+              Hand to Builder →
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Handoff overlay */}
       {handoffDirection && (
