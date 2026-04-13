@@ -654,14 +654,30 @@ a:hover, button:not(.btn):hover {
 
 /* ─── Railway-style dotted grid backgrounds ──────────────────────────────── */
 
+/* Light mode: cream bg + blue dots */
 .dotgrid-architect,
 .dotgrid-builder,
 .dotgrid-staging {
+  background-color: #FBF6EE;
+  background-image: radial-gradient(
+    circle,
+    rgba(19, 31, 56, 0.12) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+}
+
+/* Dark mode: blue bg + cream dots */
+[data-theme="dark"] .dotgrid-architect,
+[data-theme="dark"] .dotgrid-builder,
+[data-theme="dark"] .dotgrid-staging,
+.dark .dotgrid-architect,
+.dark .dotgrid-builder,
+.dark .dotgrid-staging {
   background-color: #131F38;
   background-image: radial-gradient(
     circle,
     rgba(251, 246, 238, 0.12) 1px,
     transparent 1px
   );
-  background-size: 22px 22px;
 }
