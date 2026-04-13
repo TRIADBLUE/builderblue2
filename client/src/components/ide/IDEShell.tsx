@@ -656,26 +656,27 @@ export function IDEShell({
           </React.Fragment>
         ))}
 
-        {/* Workspace Control Panel — far right */}
-        <WorkspaceControlPanel
-          showArchitect={showArchitect}
-          showBuilder={showBuilder}
-          showRunway={showRunway}
-          showNotes={showNotes}
-          runwayAutoSwitch={runwayAutoSwitch}
-          glassMode={glassMode}
-          theme={theme}
-          showDotGrid={showDotGrid}
-          onToggleArchitect={() => setShowArchitect(!showArchitect)}
-          onToggleBuilder={() => setShowBuilder(!showBuilder)}
-          onToggleRunway={() => setShowRunway(!showRunway)}
-          onToggleNotes={() => setShowNotes(!showNotes)}
-          onToggleAutoSwitch={() => setRunwayAutoSwitch(!runwayAutoSwitch)}
-          onToggleGlass={toggleGlass}
-          onCycleTheme={cycleTheme}
-          onToggleDotGrid={() => setShowDotGrid(!showDotGrid)}
-        />
       </div>
+
+      {/* Workspace Control Panel — far right, outside the overflow-hidden container */}
+      <WorkspaceControlPanel
+        showArchitect={showArchitect}
+        showBuilder={showBuilder}
+        showRunway={showRunway}
+        showNotes={showNotes}
+        runwayAutoSwitch={runwayAutoSwitch}
+        glassMode={glassMode}
+        theme={theme}
+        showDotGrid={showDotGrid}
+        onToggleArchitect={() => setShowArchitect(!showArchitect)}
+        onToggleBuilder={() => setShowBuilder(!showBuilder)}
+        onToggleRunway={() => setShowRunway(!showRunway)}
+        onToggleNotes={() => setShowNotes(!showNotes)}
+        onToggleAutoSwitch={() => setRunwayAutoSwitch(!runwayAutoSwitch)}
+        onToggleGlass={toggleGlass}
+        onCycleTheme={cycleTheme}
+        onToggleDotGrid={() => setShowDotGrid(!showDotGrid)}
+      />
 
       {/* Handoff overlay */}
       {handoffDirection && (
