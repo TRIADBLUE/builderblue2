@@ -198,7 +198,7 @@ export function WorkspaceControlPanel({
             color: "rgba(251,246,238,0.6)",
           }}
         >
-          Workspace
+          Panel
         </span>
         <button
           onClick={() => setExpanded(false)}
@@ -223,8 +223,52 @@ export function WorkspaceControlPanel({
           padding: "0 14px 16px",
         }}
       >
+        {/* Runway Choices — first thing you see */}
+        <div style={{ marginTop: "8px", marginBottom: "16px" }}>
+          <div style={{
+            fontFamily: "var(--font-label)",
+            fontSize: "10px",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            color: "#FBF6EE",
+            marginBottom: "10px",
+            textAlign: "center",
+          }}>
+            Runways
+          </div>
+          {([
+            { label: "Architect", color: "#043B40", active: showArchitect, toggle: onToggleArchitect },
+            { label: "Builder",   color: "#520322", active: showBuilder,   toggle: onToggleBuilder },
+            { label: "Staging",   color: "#00203A", active: showRunway,    toggle: onToggleRunway },
+          ]).map((r) => (
+            <button
+              key={r.label}
+              onClick={r.toggle}
+              className="btn"
+              style={{
+                display: "block",
+                width: "100%",
+                padding: "8px 12px",
+                marginBottom: "4px",
+                fontFamily: "var(--font-label)",
+                fontSize: "13px",
+                fontWeight: r.active ? 700 : 400,
+                color: r.active ? "#FBF6EE" : "rgba(251,246,238,0.3)",
+                background: r.active ? r.color : "transparent",
+                border: r.active ? "none" : "1px solid rgba(251,246,238,0.1)",
+                borderRadius: "6px",
+                cursor: "pointer",
+                textAlign: "left",
+                transition: "all 150ms",
+              }}
+            >
+              {r.active ? "● " : "○ "}{r.label}
+            </button>
+          ))}
+        </div>
+
         {/* Layout Selector — dropdown style */}
-        <GroupHeader text="Layout ← Start Here" />
+        <GroupHeader text="Layout" />
         <div style={{ position: "relative" }}>
           <button
             onClick={() => setLayoutOpen(!layoutOpen)}
@@ -322,12 +366,6 @@ export function WorkspaceControlPanel({
             </div>
           )}
         </div>
-
-        {/* Column Visibility */}
-        <GroupHeader text="Columns" />
-        <Toggle active={showArchitect} onToggle={onToggleArchitect} label="Architect" activeColor="#043B40" />
-        <Toggle active={showBuilder} onToggle={onToggleBuilder} label="Builder" activeColor="#520322" />
-        <Toggle active={showRunway} onToggle={onToggleRunway} label="Staging Runway" activeColor="#00203A" />
 
         {/* Display Settings */}
         <GroupHeader text="Display" />

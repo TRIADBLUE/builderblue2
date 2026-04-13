@@ -174,7 +174,7 @@ a:hover, button:not(.btn):hover {
 
 /* ─── Global gray accent shadow on all IDE text ─────────────────────────── */
 .ide-layout * {
-  text-shadow: 1px 1px 0px #A1ABC7;
+  text-shadow: 1px 1px 0px #FBF6EE;
 }
 
 /* Code blocks don't get the shadow — keep them clean */
@@ -188,18 +188,18 @@ a:hover, button:not(.btn):hover {
   font-family: 'Allerta Stencil', sans-serif;
   color: #043B40;
   font-variant: small-caps;
-  text-shadow: 1px 1px 0px #A1ABC7, 0 0 8px rgba(4, 59, 64, 0.4);
+  text-shadow: 1px 1px 0px #FBF6EE, 0 0 8px rgba(4, 59, 64, 0.4);
 }
 .text-ai-builder {
   font-family: 'Allerta Stencil', sans-serif;
   color: #520322;
-  text-shadow: 1px 1px 0px #A1ABC7, 0 0 8px rgba(82, 3, 34, 0.4);
+  text-shadow: 1px 1px 0px #FBF6EE, 0 0 8px rgba(82, 3, 34, 0.4);
 }
 .text-ai-staging {
   font-family: 'Allerta Stencil', sans-serif;
   color: #00203A;
   font-variant: small-caps;
-  text-shadow: 1px 1px 0px #A1ABC7, 0 0 8px rgba(0, 32, 58, 0.4);
+  text-shadow: 1px 1px 0px #FBF6EE, 0 0 8px rgba(0, 32, 58, 0.4);
 }
 
 /* ─── User message text ──────────────────────────────────────────────────── */
@@ -208,7 +208,7 @@ a:hover, button:not(.btn):hover {
   font-weight: 700;
   color: #374151;
   letter-spacing: 0.03em;
-  text-shadow: 1px 1px 0px #A1ABC7, 0 0 6px rgba(55, 65, 81, 0.35);
+  text-shadow: 1px 1px 0px #FBF6EE, 0 0 6px rgba(55, 65, 81, 0.35);
 }
 
 /* ─── Chat input styling ────────────────────────────────────────────────── */
@@ -216,7 +216,7 @@ a:hover, button:not(.btn):hover {
   font-family: 'Crusoe Text', sans-serif;
   font-weight: 700;
   color: #374151;
-  text-shadow: 1px 1px 0px #A1ABC7, 0 0 6px rgba(55, 65, 81, 0.35);
+  text-shadow: 1px 1px 0px #FBF6EE, 0 0 6px rgba(55, 65, 81, 0.35);
 }
 
 .chat-input::placeholder {
@@ -454,8 +454,8 @@ a:hover, button:not(.btn):hover {
       rgba(255, 255, 255, 0.03) 100%
     );
   pointer-events: none;
-  z-index: 40;
-  opacity: 1;
+  z-index: 0;
+  opacity: 0.3;
   transition: opacity 0.4s ease;
 }
 
@@ -467,7 +467,7 @@ a:hover, button:not(.btn):hover {
 /* TopNav & controls bar — frosted glass strip */
 [data-glass="lab"] .ide-layout > nav.glass-bg,
 [data-glass="lab"] .ide-layout > .glass-bg:not(.ide-panel-container) {
-  background: var(--glass-bg) !important;
+  background-color: rgba(19, 31, 56, 0.9) !important;
   backdrop-filter: blur(12px) saturate(1.2);
   -webkit-backdrop-filter: blur(12px) saturate(1.2);
   border-bottom-color: var(--glass-border) !important;
