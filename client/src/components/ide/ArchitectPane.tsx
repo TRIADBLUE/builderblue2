@@ -139,6 +139,8 @@ export function ArchitectPane({
             .replace(/```(?:prototype|spec|html)\s*\n[\s\S]*?```/g, "")
             .trim();
           if (!textOnly) return null;
+          // Render ask-builder blocks as styled cards
+          const parts = textOnly.split(/(```ask-builder\s*\n[\s\S]*?```)/g);
           return (
             <div
               key={i}
@@ -147,10 +149,36 @@ export function ArchitectPane({
                 fontSize: "var(--ai-message-size, 15px)",
                 lineHeight: 1.6,
                 padding: "2px 0",
-                whiteSpace: "pre-wrap",
               }}
             >
-              {textOnly}
+              {parts.map((part, idx) => {
+                const askMatch = part.match(/```ask-builder\s*\n([\s\S]*?)```/);
+                if (askMatch) {
+                  return (
+                    <div key={idx} style={{
+                      margin: "8px 0", padding: "10px 14px",
+                      background: "rgba(82, 3, 34, 0.06)",
+                      borderRadius: "8px", borderLeft: "3px solid #520322",
+                    }}>
+                      <div style={{
+                        fontFamily: "var(--font-label)", fontSize: "9px",
+                        color: "#520322", textTransform: "uppercase",
+                        letterSpacing: "0.06em", marginBottom: "4px", fontWeight: 600,
+                      }}>
+                        Consulting Builder...
+                      </div>
+                      <div style={{
+                        fontFamily: "'Allerta Stencil', sans-serif",
+                        fontSize: "12px", color: "var(--ide-text-muted)", fontStyle: "italic",
+                      }}>
+                        "{askMatch[1].trim()}"
+                      </div>
+                    </div>
+                  );
+                }
+                if (!part.trim()) return null;
+                return <span key={idx} style={{ whiteSpace: "pre-wrap" }}>{part}</span>;
+              })}
             </div>
           );
         })}

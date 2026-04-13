@@ -42,6 +42,9 @@ interface CenterPanelProps {
   onIteratePrototype?: () => void;
   builderIsStreaming?: boolean;
   builderStreamedText?: string;
+  builderMessages?: ConversationMessage[];
+  crossTalkQuestion?: string | null;
+  crossTalkActive?: boolean;
 }
 
 const TAB_LABELS: Record<string, string> = {
@@ -85,6 +88,9 @@ export function CenterPanel({
   onIteratePrototype,
   builderIsStreaming = false,
   builderStreamedText = "",
+  builderMessages = [],
+  crossTalkQuestion = null,
+  crossTalkActive = false,
 }: CenterPanelProps) {
   const [activeTab, setActiveTab] = useState<CenterTab>("tools");
   const [openTabs, setOpenTabs] = useState<CenterTab[]>(["tools"]);
@@ -308,6 +314,37 @@ export function CenterPanel({
                 animation: "thinking-pulse 1.2s ease-in-out infinite",
               }} />
             </div>
+            {/* Cross-talk: Architect → Builder consultation */}
+            {crossTalkQuestion && (
+              <div style={{
+                marginBottom: "16px",
+                padding: "12px 16px",
+                background: "rgba(4, 59, 64, 0.08)",
+                borderRadius: "8px",
+                borderLeft: "3px solid #043B40",
+              }}>
+                <div style={{
+                  fontFamily: "var(--font-runway)",
+                  fontSize: "10px",
+                  color: "#043B40",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  marginBottom: "6px",
+                  fontWeight: 600,
+                }}>
+                  Architect asked
+                </div>
+                <div style={{
+                  fontFamily: "'Allerta Stencil', sans-serif",
+                  fontSize: "var(--ai-message-size, 15px)",
+                  color: "#043B40",
+                  fontVariant: "small-caps",
+                  lineHeight: 1.5,
+                }}>
+                  {crossTalkQuestion}
+                </div>
+              </div>
+            )}
             <div
               className="text-ai-builder"
               style={{
@@ -318,6 +355,55 @@ export function CenterPanel({
             >
               {builderStreamedText}
               <span className="streaming-cursor streaming-cursor-builder" />
+            </div>
+          </div>
+        )}
+        {/* Cross-talk result — shows briefly after Builder finishes */}
+        {!builderIsStreaming && crossTalkActive && crossTalkQuestion && (
+          <div style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 25,
+            background: "var(--ide-bg, #131F38)",
+            padding: "16px 20px",
+            overflowY: "auto",
+          }}>
+            <div style={{
+              fontFamily: "var(--font-runway)",
+              fontSize: "11px",
+              color: "var(--ide-text-muted)",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              marginBottom: "16px",
+            }}>
+              ARCHITECT ↔ BUILDER
+            </div>
+            <div style={{
+              padding: "12px 16px",
+              background: "rgba(4, 59, 64, 0.08)",
+              borderRadius: "8px",
+              borderLeft: "3px solid #043B40",
+              marginBottom: "12px",
+            }}>
+              <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#043B40", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px", fontWeight: 600 }}>
+                Architect asked
+              </div>
+              <div className="text-ai-architect" style={{ fontSize: "13px" }}>
+                {crossTalkQuestion}
+              </div>
+            </div>
+            <div style={{
+              padding: "12px 16px",
+              background: "rgba(82, 3, 34, 0.06)",
+              borderRadius: "8px",
+              borderLeft: "3px solid #520322",
+            }}>
+              <div style={{ fontFamily: "var(--font-label)", fontSize: "9px", color: "#520322", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "4px", fontWeight: 600 }}>
+                Builder responded
+              </div>
+              <div className="text-ai-builder" style={{ fontSize: "13px", whiteSpace: "pre-wrap" }}>
+                {builderMessages.length > 0 ? builderMessages[builderMessages.length - 1]?.content ?? "" : ""}
+              </div>
             </div>
           </div>
         )}

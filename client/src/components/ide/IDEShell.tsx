@@ -327,6 +327,10 @@ export function IDEShell({
 
   const [showHandoffPrompt, setShowHandoffPrompt] = useState<"feedback" | "approve" | null>(null);
 
+  // Cross-talk state
+  const [crossTalkQuestion, setCrossTalkQuestion] = useState<string | null>(null);
+  const [crossTalkActive, setCrossTalkActive] = useState(false);
+
   const handleApprovePrototype = useCallback(async (htmlContent: string, technicalSpec: string) => {
     const { api } = await import("../../lib/api");
     const proto = await api.fetch<Prototype>("/api/prototypes", {
@@ -364,6 +368,29 @@ export function IDEShell({
     setFlashPane("builder");
     setTimeout(() => setFlashPane(null), 400);
   }, [prototypeVersion, currentPrototype]);
+
+  // ── Cross-talk: Architect consults Builder ──────────────────────────────────
+  const handleArchitectConsultBuilder = useCallback(async (question: string) => {
+    setCrossTalkQuestion(question);
+    setCrossTalkActive(true);
+    setRunwayMode("builder");
+    const prefixedQuestion = `[ARCHITECT CONSULTATION]\n\nThe Architect is asking you on behalf of the client:\n\n${question}`;
+    let convo = builderConvo.conversation;
+    if (!convo) convo = await builderConvo.createConversation(projectId, "builder", builderProvider, builderModel);
+    await builderConvo.sendMessage(convo.id, prefixedQuestion);
+    setTimeout(() => { setCrossTalkActive(false); }, 2000);
+  }, [builderConvo, projectId, builderProvider, builderModel]);
+
+  // Detect ask-builder blocks when Architect finishes streaming
+  useEffect(() => {
+    if (architectConvo.isStreaming) return;
+    const lastMsg = architectMessages[architectMessages.length - 1];
+    if (!lastMsg || lastMsg.role !== "assistant") return;
+    const askMatch = lastMsg.content.match(/```ask-builder\s*\n([\s\S]*?)```/);
+    if (askMatch) {
+      handleArchitectConsultBuilder(askMatch[1].trim());
+    }
+  }, [architectConvo.isStreaming, architectMessages]);
 
   // ── Message handlers ───────────────────────────────────────────────────────
   const handleArchitectMessage = useCallback(async (content: string) => {
@@ -617,6 +644,9 @@ export function IDEShell({
                   onIteratePrototype={handleIteratePrototype}
                   builderIsStreaming={builderConvo.isStreaming}
                   builderStreamedText={builderConvo.streamedText}
+                  builderMessages={builderMessages}
+                  crossTalkQuestion={crossTalkQuestion}
+                  crossTalkActive={crossTalkActive}
                 />
                 </div>
               </div>

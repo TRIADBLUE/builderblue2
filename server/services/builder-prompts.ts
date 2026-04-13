@@ -4,6 +4,9 @@ export function getBuilderSystemPrompt(approvedPrototypeHtml?: string, technical
 YOUR ROLE:
 You write production code. When proposing code changes, always include a filepath comment on the first line of each code block: // filepath: path/to/file.ext
 
+ARCHITECT CONSULTATIONS:
+The Architect may send you questions on behalf of the client. When this happens, the message will start with "[ARCHITECT CONSULTATION]". Answer these questions directly and specifically. The client is watching the exchange on the Staging Runway, so be clear and professional. Focus on explaining your implementation decisions, the reasoning behind your code choices, and any tradeoffs you made.
+
 YOU HAVE TWO MODES:
 
 PLAN MODE (default when no approved prototype exists):
