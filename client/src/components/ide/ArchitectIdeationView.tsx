@@ -98,17 +98,17 @@ function renderMarkdown(text: string) {
 
     // Heading
     if (line.startsWith("### ")) {
-      elements.push(<h4 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "14px", fontWeight: 700, color: "#09080E", margin: "14px 0 6px" }}>{line.slice(4)}</h4>);
+      elements.push(<h4 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "14px", fontWeight: 700, color: "#FBF6EE", margin: "14px 0 6px" }}>{line.slice(4)}</h4>);
       i++;
       continue;
     }
     if (line.startsWith("## ")) {
-      elements.push(<h3 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: 700, color: "#09080E", margin: "16px 0 8px" }}>{line.slice(3)}</h3>);
+      elements.push(<h3 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "16px", fontWeight: 700, color: "#FBF6EE", margin: "16px 0 8px" }}>{line.slice(3)}</h3>);
       i++;
       continue;
     }
     if (line.startsWith("# ")) {
-      elements.push(<h2 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "18px", fontWeight: 700, color: "#09080E", margin: "18px 0 8px" }}>{line.slice(2)}</h2>);
+      elements.push(<h2 key={elements.length} style={{ fontFamily: "var(--font-heading)", fontSize: "18px", fontWeight: 700, color: "#FBF6EE", margin: "18px 0 8px" }}>{line.slice(2)}</h2>);
       i++;
       continue;
     }
@@ -118,7 +118,7 @@ function renderMarkdown(text: string) {
       elements.push(
         <div key={elements.length} style={{ display: "flex", gap: "8px", margin: "3px 0", paddingLeft: "4px" }}>
           <span style={{ color: "#043B40", flexShrink: 0 }}>-</span>
-          <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#09080E", lineHeight: 1.6 }}>
+          <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#FBF6EE", lineHeight: 1.6 }}>
             {renderInline(line.slice(2))}
           </span>
         </div>
@@ -134,7 +134,7 @@ function renderMarkdown(text: string) {
       elements.push(
         <div key={elements.length} style={{ display: "flex", gap: "8px", margin: "3px 0", paddingLeft: "4px" }}>
           <span style={{ color: "#043B40", flexShrink: 0, fontWeight: 600, fontSize: "12px" }}>{num}.</span>
-          <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#09080E", lineHeight: 1.6 }}>
+          <span style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#FBF6EE", lineHeight: 1.6 }}>
             {renderInline(rest)}
           </span>
         </div>
@@ -152,7 +152,7 @@ function renderMarkdown(text: string) {
 
     // Regular paragraph
     elements.push(
-      <p key={elements.length} style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#09080E", lineHeight: 1.6, margin: "4px 0" }}>
+      <p key={elements.length} style={{ fontFamily: "var(--font-content)", fontSize: "13px", color: "#FBF6EE", lineHeight: 1.6, margin: "4px 0" }}>
         {renderInline(line)}
       </p>
     );

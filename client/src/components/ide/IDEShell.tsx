@@ -430,7 +430,7 @@ export function IDEShell({
 
       {/* Layout controls bar */}
       <div
-        className="flex items-center justify-between px-3 py-1 glass-bg"
+        className="flex items-center justify-between px-3 py-1"
         style={{ background: "transparent", borderBottom: "1px solid rgba(251,246,238,0.15)", minHeight: "28px" }}
       >
         <div className="flex items-center gap-1">

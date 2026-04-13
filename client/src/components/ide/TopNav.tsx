@@ -113,7 +113,7 @@ export function TopNav({
 
   return (
     <nav
-      className="flex h-16 items-center justify-between px-4 glass-bg"
+      className="flex h-16 items-center justify-between px-4"
       style={{
         background: "#FFF5ED",
         borderBottom: "1px solid rgba(9, 8, 14, 0.1)",
