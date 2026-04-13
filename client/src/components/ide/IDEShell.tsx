@@ -475,7 +475,8 @@ export function IDEShell({
         </div>
       </div>
 
-      {/* Dynamic pane layout */}
+      {/* IDE body — panes + workspace panel side by side */}
+      <div className="flex flex-1 overflow-hidden">
       <div ref={containerRef} className="flex flex-1 overflow-hidden ide-panel-container">
         {visibleInOrder.map((k, idx) => (
           <React.Fragment key={k}>
@@ -632,7 +633,7 @@ export function IDEShell({
 
       </div>
 
-      {/* Workspace Control Panel — far right, outside the overflow-hidden container */}
+      {/* Workspace Control Panel — far right */}
       <WorkspaceControlPanel
         showArchitect={showArchitect}
         showBuilder={showBuilder}
@@ -653,6 +654,7 @@ export function IDEShell({
         onToggleDotGrid={() => setShowDotGrid(!showDotGrid)}
         onApplyPreset={applyPreset}
       />
+      </div>
 
       {/* Handoff overlay */}
       {handoffDirection && (
