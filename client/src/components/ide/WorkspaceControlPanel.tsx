@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { PanelRightClose, PanelRightOpen } from "lucide-react";
 
+type LayoutPreset = "full" | "prototype" | "staging" | "preview";
+
 interface WorkspaceControlPanelProps {
   showArchitect: boolean;
   showBuilder: boolean;
@@ -10,6 +12,7 @@ interface WorkspaceControlPanelProps {
   glassMode: string;
   theme: string;
   showDotGrid: boolean;
+  layoutPreset: LayoutPreset;
   onToggleArchitect: () => void;
   onToggleBuilder: () => void;
   onToggleRunway: () => void;
@@ -18,6 +21,7 @@ interface WorkspaceControlPanelProps {
   onToggleGlass: () => void;
   onCycleTheme: () => void;
   onToggleDotGrid: () => void;
+  onApplyPreset: (preset: LayoutPreset) => void;
 }
 
 interface ToggleProps {
@@ -33,7 +37,7 @@ function Toggle({ active, onToggle, label, variant = "pill", activeColor }: Togg
   return (
     <div
       className="flex items-center justify-between"
-      style={{ padding: "4px 0" }}
+      style={{ padding: "5px 0" }}
     >
       <span
         style={{
@@ -78,6 +82,13 @@ function GroupHeader({ text }: { text: string }) {
   );
 }
 
+const PRESETS: { key: LayoutPreset; label: string; color: string }[] = [
+  { key: "full",      label: "Full IDE",   color: "rgba(251,246,238,0.5)" },
+  { key: "prototype", label: "Prototype",  color: "#043B40" },
+  { key: "staging",   label: "Staging",    color: "#520322" },
+  { key: "preview",   label: "Preview",    color: "#00203A" },
+];
+
 export function WorkspaceControlPanel({
   showArchitect,
   showBuilder,
@@ -87,6 +98,7 @@ export function WorkspaceControlPanel({
   glassMode,
   theme,
   showDotGrid,
+  layoutPreset,
   onToggleArchitect,
   onToggleBuilder,
   onToggleRunway,
@@ -95,6 +107,7 @@ export function WorkspaceControlPanel({
   onToggleGlass,
   onCycleTheme,
   onToggleDotGrid,
+  onApplyPreset,
 }: WorkspaceControlPanelProps) {
   const [expanded, setExpanded] = useState(true);
 
@@ -102,10 +115,11 @@ export function WorkspaceControlPanel({
     <div
       style={{
         width: expanded ? "240px" : "40px",
+        minWidth: expanded ? "240px" : "40px",
         background: "#0D1117",
-        borderLeft: "1px solid rgba(180,180,195,0.15)",
+        borderLeft: "1px solid rgba(251,246,238,0.15)",
         flexShrink: 0,
-        transition: "width 250ms ease",
+        transition: "width 250ms ease, min-width 250ms ease",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
@@ -118,7 +132,7 @@ export function WorkspaceControlPanel({
           padding: "8px",
           display: "flex",
           justifyContent: expanded ? "flex-end" : "center",
-          borderBottom: "1px solid rgba(251,246,238,0.06)",
+          borderBottom: "1px solid rgba(251,246,238,0.15)",
           flexShrink: 0,
         }}
       >
@@ -137,7 +151,7 @@ export function WorkspaceControlPanel({
         </button>
       </div>
 
-      {/* Scrollable content — only visible when expanded */}
+      {/* Scrollable content */}
       {expanded && (
         <div
           style={{
@@ -146,7 +160,34 @@ export function WorkspaceControlPanel({
             padding: "0 16px 16px",
           }}
         >
-          {/* Group 1: Column Visibility — pill toggles */}
+          {/* Layout Presets */}
+          <GroupHeader text="Layout" />
+          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+            {PRESETS.map((p) => (
+              <button
+                key={p.key}
+                onClick={() => onApplyPreset(p.key)}
+                className="btn"
+                style={{
+                  fontFamily: "var(--font-label)",
+                  fontSize: "12px",
+                  padding: "6px 10px",
+                  color: layoutPreset === p.key ? p.color : "rgba(251,246,238,0.35)",
+                  background: layoutPreset === p.key ? "rgba(251,246,238,0.06)" : "transparent",
+                  border: layoutPreset === p.key ? "1px solid rgba(251,246,238,0.15)" : "1px solid transparent",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontWeight: layoutPreset === p.key ? 700 : 400,
+                  textAlign: "left",
+                  transition: "all 0.15s",
+                }}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Group 1: Column Visibility */}
           <GroupHeader text="Columns" />
           <Toggle
             active={showArchitect}
@@ -167,7 +208,7 @@ export function WorkspaceControlPanel({
             activeColor="#00203A"
           />
 
-          {/* Group 2: Display Settings — small toggles */}
+          {/* Group 2: Display Settings */}
           <GroupHeader text="Display" />
           <Toggle
             active={glassMode === "lab"}
@@ -188,7 +229,7 @@ export function WorkspaceControlPanel({
             variant="sm"
           />
 
-          {/* Group 3: AI Behavior — square toggles */}
+          {/* Group 3: AI Behavior */}
           <GroupHeader text="AI Behavior" />
           <Toggle
             active={runwayAutoSwitch}
@@ -197,7 +238,7 @@ export function WorkspaceControlPanel({
             variant="sq"
           />
 
-          {/* Group 4: Workspace — pill toggles */}
+          {/* Group 4: Workspace */}
           <GroupHeader text="Workspace" />
           <Toggle
             active={showNotes}

@@ -471,33 +471,7 @@ export function IDEShell({
               <div style={{ width: "1px", height: "12px", background: "rgba(251,246,238,0.12)" }} />
             </>
           )}
-          {([
-            { key: "full"       as LayoutPreset, label: "Full IDE",   color: "rgba(251,246,238,0.5)" },
-            { key: "prototype"  as LayoutPreset, label: "Prototype",  color: "#043B40" },
-            { key: "staging"    as LayoutPreset, label: "Staging",    color: "#520322" },
-            { key: "preview"    as LayoutPreset, label: "Preview",    color: "#00203A" },
-          ]).map((p) => (
-            <button
-              key={p.key}
-              onClick={() => applyPreset(p.key)}
-              className="btn"
-              style={{
-                fontFamily: "var(--font-label)",
-                fontSize:   "14px",
-                padding:    "6px 16px",
-                color:      layoutPreset === p.key ? p.color : "rgba(251,246,238,0.35)",
-                background: layoutPreset === p.key ? "rgba(251,246,238,0.04)" : "transparent",
-                border:     "none",
-                borderRadius: "6px",
-                cursor:     "pointer",
-                fontWeight: layoutPreset === p.key ? 700 : 400,
-                textShadow: "1px 1px 0px #09080E",
-                transition: "all 0.15s",
-              }}
-            >
-              {p.label}
-            </button>
-          ))}
+          {/* Layout presets moved to Workspace Control Panel */}
         </div>
       </div>
 
@@ -668,6 +642,7 @@ export function IDEShell({
         glassMode={glassMode}
         theme={theme}
         showDotGrid={showDotGrid}
+        layoutPreset={layoutPreset}
         onToggleArchitect={() => setShowArchitect(!showArchitect)}
         onToggleBuilder={() => setShowBuilder(!showBuilder)}
         onToggleRunway={() => setShowRunway(!showRunway)}
@@ -676,6 +651,7 @@ export function IDEShell({
         onToggleGlass={toggleGlass}
         onCycleTheme={cycleTheme}
         onToggleDotGrid={() => setShowDotGrid(!showDotGrid)}
+        onApplyPreset={applyPreset}
       />
 
       {/* Handoff overlay */}
