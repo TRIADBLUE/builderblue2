@@ -188,18 +188,18 @@ a:hover, button:not(.btn):hover {
   font-family: 'Allerta Stencil', sans-serif;
   color: #043B40;
   font-variant: small-caps;
-  text-shadow: 1px 1px 0px #A1ABC7;
+  text-shadow: 1px 1px 0px #A1ABC7, 0 0 8px rgba(4, 59, 64, 0.4);
 }
 .text-ai-builder {
   font-family: 'Allerta Stencil', sans-serif;
   color: #520322;
-  text-shadow: 1px 1px 0px #A1ABC7;
+  text-shadow: 1px 1px 0px #A1ABC7, 0 0 8px rgba(82, 3, 34, 0.4);
 }
 .text-ai-staging {
   font-family: 'Allerta Stencil', sans-serif;
   color: #00203A;
   font-variant: small-caps;
-  text-shadow: 1px 1px 0px #A1ABC7;
+  text-shadow: 1px 1px 0px #A1ABC7, 0 0 8px rgba(0, 32, 58, 0.4);
 }
 
 /* ─── User message text ──────────────────────────────────────────────────── */
@@ -208,7 +208,7 @@ a:hover, button:not(.btn):hover {
   font-weight: 700;
   color: #374151;
   letter-spacing: 0.03em;
-  text-shadow: 1px 1px 0px #A1ABC7;
+  text-shadow: 1px 1px 0px #A1ABC7, 0 0 6px rgba(55, 65, 81, 0.35);
 }
 
 /* ─── Chat input styling ────────────────────────────────────────────────── */
@@ -216,13 +216,13 @@ a:hover, button:not(.btn):hover {
   font-family: 'Crusoe Text', sans-serif;
   font-weight: 700;
   color: #374151;
-  text-shadow: 1px 1px 0px #A1ABC7;
+  text-shadow: 1px 1px 0px #A1ABC7, 0 0 6px rgba(55, 65, 81, 0.35);
 }
 
 .chat-input::placeholder {
   font-family: 'Allerta Stencil', sans-serif;
   color: rgba(55, 65, 81, 0.4);
-  text-shadow: 1px 1px 0px rgba(161, 171, 199, 0.5);
+  text-shadow: none;
 }
 
 /* ─── Workspace Control Panel toggles ───────────────────────────────────── */
@@ -574,27 +574,14 @@ a:hover, button:not(.btn):hover {
 
 /* ─── Railway-style dotted grid backgrounds ──────────────────────────────── */
 
-/* Dots render on a ::before pseudo-element behind all content */
-.dotgrid-architect::before,
-.dotgrid-builder::before,
-.dotgrid-staging::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
+.dotgrid-architect,
+.dotgrid-builder,
+.dotgrid-staging {
+  background-color: #131F38;
   background-image: radial-gradient(
     circle,
-    rgba(251, 246, 238, 0.375) 1px,
+    rgba(251, 246, 238, 0.12) 1px,
     transparent 1px
   );
   background-size: 22px 22px;
-}
-
-/* Content inside panes sits above the dots */
-.dotgrid-architect > *,
-.dotgrid-builder > *,
-.dotgrid-staging > * {
-  position: relative;
-  z-index: 1;
 }
