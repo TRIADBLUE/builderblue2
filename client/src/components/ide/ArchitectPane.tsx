@@ -74,7 +74,7 @@ export function ArchitectPane({
       {/* Header */}
       <div
         className="flex flex-col px-3 py-1"
-        style={{ borderBottom: "1px solid rgba(4, 59, 64, 0.1)" }}
+        style={{ borderBottom: "2px solid rgba(251, 246, 238, 0.75)" }}
       >
         <div className="flex items-baseline" style={{ gap: "12px" }}>
           <span
@@ -156,7 +156,7 @@ export function ArchitectPane({
       </div>
 
       {/* Input */}
-      <div className="border-t p-3" style={{ borderColor: "rgba(251, 246, 238, 0.1)" }}>
+      <div className="border-t p-3" style={{ borderColor: "rgba(251, 246, 238, 0.75)", borderWidth: "2px" }}>
         <form onSubmit={handleSubmit} className="flex gap-2">
           <textarea
             ref={textareaRef}
@@ -174,9 +174,10 @@ export function ArchitectPane({
             className="chat-input flex-1 resize-none rounded-md border px-3 py-2 outline-none"
             style={{
               fontSize: "11px",
-              color: "#043B40",
+              color: "#FBF6EE",
               background: "rgba(251, 246, 238, 0.08)",
-              borderColor: "var(--steel-blue)",
+              borderColor: "rgba(251, 246, 238, 0.75)",
+              borderWidth: "2px",
             }}
           />
           {isSupported && (
@@ -187,8 +188,8 @@ export function ArchitectPane({
               className={`btn flex h-9 w-9 items-center justify-center rounded-md${isListening ? " mic-listening" : ""}`}
               style={{
                 background: isListening ? "#E00420" : "transparent",
-                color: isListening ? "#fff" : "#043B40",
-                border: isListening ? "none" : "1px solid rgba(4,59,64,0.4)",
+                color: isListening ? "#fff" : "#FBF6EE",
+                border: isListening ? "none" : "2px solid rgba(251,246,238,0.75)",
                 cursor: "pointer",
                 flexShrink: 0,
               }}
@@ -223,7 +224,7 @@ export function ArchitectPane({
       </div>
 
       {/* Hand to Builder — separate bottom bar */}
-      <div style={{ padding: "8px 12px", borderTop: "1px solid rgba(4, 59, 64, 0.15)", background: "rgba(4, 59, 64, 0.04)" }}>
+      <div style={{ padding: "8px 12px", borderTop: "2px solid rgba(251, 246, 238, 0.75)", background: "transparent" }}>
         <button
           onClick={() => {
             const lastAssistant = [...messages]
@@ -238,8 +239,8 @@ export function ArchitectPane({
             fontSize: "11px",
             letterSpacing: "0.04em",
             background: "transparent",
-            color: "#520322",
-            border: "1px solid rgba(82, 3, 34, 0.3)",
+            color: "#FBF6EE",
+            border: "2px solid rgba(251, 246, 238, 0.75)",
             cursor: "pointer",
           }}
         >

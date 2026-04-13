@@ -504,7 +504,6 @@ export function IDEShell({
                 className={`ide-pane flex flex-col dotgrid-architect ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
                 style={{
                   width:      `${colWidths.architect}%`,
-                  borderLeft: activePane === "architect" ? `3px solid ${PANE_CONFIG.architect.color}` : "3px solid transparent",
                   overflow:   "hidden",
                   flexShrink: 0,
                 }}
@@ -585,7 +584,6 @@ export function IDEShell({
                 className="ide-pane ide-pane-active flex flex-col dotgrid-staging"
                 style={{
                   width:       `${colWidths.runway}%`,
-                  borderRight: activePane === "builder" ? `3px solid ${PANE_CONFIG.runway.color}` : "3px solid transparent",
                   flexShrink:  0,
                 }}
               >
@@ -621,17 +619,30 @@ export function IDEShell({
               </div>
             )}
 
-            {/* Resize handle after every pane except the last */}
+            {/* Resize handle — reflective gray divider with perspective */}
             {idx < visibleInOrder.length - 1 && (
               <div
                 className="resize-handle"
                 onMouseDown={(e) => handleResizeStart(idx, e)}
-                style={{ width: "5px", cursor: "col-resize", background: "transparent", position: "relative", flexShrink: 0, zIndex: 20 }}
+                style={{ width: "6px", cursor: "col-resize", background: "transparent", position: "relative", flexShrink: 0, zIndex: 20 }}
               >
+                {/* Left edge highlight */}
                 <div style={{
-                  position: "absolute", top: 0, bottom: 0, left: "2px",
-                  width: "1px", background: "rgba(251,246,238,0.08)",
-                  transition: "background 0.15s, width 0.15s",
+                  position: "absolute", top: 0, bottom: 0, left: "0px",
+                  width: "1px",
+                  background: "linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.15) 100%)",
+                }} />
+                {/* Center body — thicker, metallic gray */}
+                <div style={{
+                  position: "absolute", top: 0, bottom: 0, left: "1px",
+                  width: idx === 0 ? "3px" : "2px",
+                  background: "linear-gradient(180deg, rgba(180,180,195,0.3) 0%, rgba(120,120,140,0.2) 50%, rgba(180,180,195,0.3) 100%)",
+                }} />
+                {/* Right edge shadow */}
+                <div style={{
+                  position: "absolute", top: 0, bottom: 0, right: "0px",
+                  width: "1px",
+                  background: "linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%)",
                 }} />
               </div>
             )}

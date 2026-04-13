@@ -272,8 +272,8 @@ a:hover, button:not(.btn):hover {
   background-color: #131F38 !important;
   backdrop-filter: blur(18px) saturate(1.4);
   -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  border-left: 1px solid var(--glass-border) !important;
-  border-right: 1px solid var(--glass-border) !important;
+  border-left: none !important;
+  border-right: none !important;
   box-shadow:
     0 8px 32px var(--glass-shadow),
     0 2px 8px rgba(0, 0, 0, 0.15),
@@ -495,57 +495,27 @@ a:hover, button:not(.btn):hover {
 
 /* ─── Railway-style dotted grid backgrounds ──────────────────────────────── */
 
-.dotgrid-architect {
+/* Dots render on a ::before pseudo-element behind all content */
+.dotgrid-architect::before,
+.dotgrid-builder::before,
+.dotgrid-staging::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background-image: radial-gradient(
     circle,
-    rgba(251, 246, 238, 0.25) 1px,
+    rgba(251, 246, 238, 0.375) 1px,
     transparent 1px
   );
   background-size: 22px 22px;
 }
 
-.dotgrid-builder {
-  background-image: radial-gradient(
-    circle,
-    rgba(251, 246, 238, 0.25) 1px,
-    transparent 1px
-  );
-  background-size: 22px 22px;
-}
-
-.dotgrid-staging {
-  background-image: radial-gradient(
-    circle,
-    rgba(251, 246, 238, 0.25) 1px,
-    transparent 1px
-  );
-  background-size: 22px 22px;
-}
-
-/* Dark mode — same dots */
-[data-theme="dark"] .dotgrid-architect,
-.dark .dotgrid-architect {
-  background-image: radial-gradient(
-    circle,
-    rgba(251, 246, 238, 0.25) 1px,
-    transparent 1px
-  );
-}
-
-[data-theme="dark"] .dotgrid-builder,
-.dark .dotgrid-builder {
-  background-image: radial-gradient(
-    circle,
-    rgba(251, 246, 238, 0.25) 1px,
-    transparent 1px
-  );
-}
-
-[data-theme="dark"] .dotgrid-staging,
-.dark .dotgrid-staging {
-  background-image: radial-gradient(
-    circle,
-    rgba(251, 246, 238, 0.25) 1px,
-    transparent 1px
-  );
+/* Content inside panes sits above the dots */
+.dotgrid-architect > *,
+.dotgrid-builder > *,
+.dotgrid-staging > * {
+  position: relative;
+  z-index: 1;
 }
