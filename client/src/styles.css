@@ -70,6 +70,7 @@
   --ide-text-dim: rgba(9, 8, 14, 0.25);
   --ide-border: rgba(9, 8, 14, 0.15);
   --ide-input-bg: rgba(9, 8, 14, 0.06);
+  --ide-chat-text: #09080E;
   --bg-primary: #FFF5ED;
   --bg-secondary: #FFFFFF;
   --bg-elevated: #FFF5ED;
@@ -105,6 +106,7 @@
   --ide-text-dim: rgba(251, 246, 238, 0.25);
   --ide-border: rgba(251, 246, 238, 0.15);
   --ide-input-bg: rgba(251, 246, 238, 0.06);
+  --ide-chat-text: #C8CCD4;
   --bg-primary: #0D0D12;
   --bg-secondary: #16161D;
   --bg-elevated: #1C1C26;
@@ -141,6 +143,7 @@
     --ide-text-dim: rgba(251, 246, 238, 0.25);
     --ide-border: rgba(251, 246, 238, 0.15);
     --ide-input-bg: rgba(251, 246, 238, 0.06);
+    --ide-chat-text: #C8CCD4;
     --bg-primary: #0D0D12;
     --bg-secondary: #16161D;
     --bg-elevated: #1C1C26;
@@ -198,82 +201,55 @@ a:hover, button:not(.btn):hover {
   display: none;
 }
 
-/* ─── Global gray accent for all IDE text ────────────────────────────────── */
-.ide-layout * {
-  text-shadow: 1px 1px 0px #8085A1;
-}
+/* ─── Code blocks — no shadow ────────────────────────────────────────────── */
 .ide-layout pre *, .ide-layout code {
   text-shadow: none;
 }
 
-/* ─── AI + User message text — white halo + gray accent ──────────────────── */
+/* ─── AI message text — neutral gray with identity-colored right shadow ──── */
 .text-ai-architect {
   font-family: 'Allerta Stencil', sans-serif;
-  color: #043B40;
+  color: var(--ide-chat-text);
   font-variant: small-caps;
   font-weight: 400;
-  text-shadow:
-    -1px 0 0 rgba(255,255,255,0.85),
-    1px 0 0 rgba(255,255,255,0.85),
-    0 -1px 0 rgba(255,255,255,0.85),
-    0 1px 0 rgba(255,255,255,0.85),
-    1px 1px 0px #8085A1;
+  text-shadow: 1px 0 0 #043B40;
 }
 .text-ai-builder {
   font-family: 'Allerta Stencil', sans-serif;
-  color: #520322;
+  color: var(--ide-chat-text);
   font-variant: small-caps;
   font-weight: 400;
-  text-shadow:
-    -1px 0 0 rgba(255,255,255,0.85),
-    1px 0 0 rgba(255,255,255,0.85),
-    0 -1px 0 rgba(255,255,255,0.85),
-    0 1px 0 rgba(255,255,255,0.85),
-    1px 1px 0px #8085A1;
+  text-shadow: 1px 0 0 #520322;
 }
 .text-ai-staging {
   font-family: 'Allerta Stencil', sans-serif;
-  color: #00203A;
+  color: var(--ide-chat-text);
   font-variant: small-caps;
   font-weight: 400;
-  text-shadow:
-    -1px 0 0 rgba(255,255,255,0.85),
-    1px 0 0 rgba(255,255,255,0.85),
-    0 -1px 0 rgba(255,255,255,0.85),
-    0 1px 0 rgba(255,255,255,0.85),
-    1px 1px 0px #8085A1;
+  text-shadow: 1px 0 0 #00203A;
 }
 
-/* ─── User message text ──────────────────────────────────────────────────── */
+/* ─── User message text — gray with subtle neutral shadow ──────────────── */
 .text-user-message {
   font-family: 'Crusoe Text', sans-serif;
   font-weight: 700;
-  color: #374151;
+  color: var(--ide-chat-text);
   letter-spacing: 0.03em;
-  text-shadow:
-    -1px 0 0 rgba(255,255,255,0.85),
-    1px 0 0 rgba(255,255,255,0.85),
-    0 -1px 0 rgba(255,255,255,0.85),
-    0 1px 0 rgba(255,255,255,0.85),
-    1px 1px 0px #8085A1;
+  text-shadow: 1px 0 0 rgba(128, 133, 161, 0.5);
 }
 
-/* ─── Chat input styling ────────────────────────────────────────────────── */
+/* ─── Chat input — matches user message styling ────────────────────────── */
 .chat-input {
   font-family: 'Crusoe Text', sans-serif;
   font-weight: 700;
-  color: #374151;
-  text-shadow:
-    -1px 0 0 rgba(255,255,255,0.85),
-    1px 0 0 rgba(255,255,255,0.85),
-    0 -1px 0 rgba(255,255,255,0.85),
-    0 1px 0 rgba(255,255,255,0.85),
-    1px 1px 0px #8085A1;
+  color: var(--ide-chat-text);
+  text-shadow: 1px 0 0 rgba(128, 133, 161, 0.5);
 }
 
 .chat-input::placeholder {
   font-family: 'Allerta Stencil', sans-serif;
-  color: rgba(55, 65, 81, 0.4);
+  color: var(--ide-text-muted);
+  text-shadow: none;
 }
 
 /* ─── Workspace Control Panel toggles — photorealistic metallic ─────────── */
@@ -703,10 +679,23 @@ a:hover, button:not(.btn):hover {
 
 /* ─── Railway-style dotted grid backgrounds ──────────────────────────────── */
 
-.dotgrid-architect,
-.dotgrid-builder,
+/* Architect dots — green identity */
+.dotgrid-architect {
+  background-color: var(--ide-bg);
+  background-image: radial-gradient(circle, rgba(4, 59, 64, 0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Builder dots — red identity */
+.dotgrid-builder {
+  background-color: var(--ide-bg);
+  background-image: radial-gradient(circle, rgba(82, 3, 34, 0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Staging dots — blue identity */
 .dotgrid-staging {
   background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, var(--ide-dot) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(0, 32, 58, 0.07) 1px, transparent 1px);
   background-size: 22px 22px;
 }
