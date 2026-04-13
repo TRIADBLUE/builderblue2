@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PanelRightClose, PanelRightOpen } from "lucide-react";
+import { PanelRightClose, Settings, ChevronDown } from "lucide-react";
 
 type LayoutPreset = "full" | "prototype" | "staging" | "preview";
 
@@ -43,21 +43,35 @@ function Toggle({ active, onToggle, label, variant = "pill", activeColor }: Togg
         style={{
           fontFamily: "'Source Sans 3', sans-serif",
           fontSize: "12px",
-          color: active ? "rgba(251, 246, 238, 0.9)" : "rgba(251, 246, 238, 0.6)",
+          color: active ? "rgba(251, 246, 238, 0.9)" : "rgba(251, 246, 238, 0.5)",
           transition: "color 200ms",
         }}
       >
         {label}
       </span>
-      <div
-        className={cls}
-        onClick={onToggle}
-      >
-        <div
-          className="track"
-          style={activeColor && active ? { background: activeColor } as React.CSSProperties : undefined}
+      <div className="flex items-center gap-2">
+        <span
+          style={{
+            fontFamily: "'Source Code Pro', monospace",
+            fontSize: "9px",
+            fontWeight: 600,
+            letterSpacing: "0.05em",
+            color: active ? "#00FF41" : "rgba(251,246,238,0.25)",
+            transition: "color 200ms",
+          }}
         >
-          <div className="knob" />
+          {active ? "ON" : "OFF"}
+        </span>
+        <div
+          className={cls}
+          onClick={onToggle}
+        >
+          <div
+            className="track"
+            style={activeColor && active ? { background: activeColor } as React.CSSProperties : undefined}
+          >
+            <div className="knob" />
+          </div>
         </div>
       </div>
     </div>
@@ -73,8 +87,10 @@ function GroupHeader({ text }: { text: string }) {
         textTransform: "uppercase",
         letterSpacing: "0.1em",
         color: "rgba(251, 246, 238, 0.3)",
-        marginTop: "16px",
+        marginTop: "20px",
         marginBottom: "8px",
+        borderBottom: "1px solid rgba(251,246,238,0.06)",
+        paddingBottom: "4px",
       }}
     >
       {text}
@@ -82,11 +98,11 @@ function GroupHeader({ text }: { text: string }) {
   );
 }
 
-const PRESETS: { key: LayoutPreset; label: string; color: string }[] = [
-  { key: "full",      label: "Full IDE",   color: "rgba(251,246,238,0.5)" },
-  { key: "prototype", label: "Prototype",  color: "#043B40" },
-  { key: "staging",   label: "Staging",    color: "#520322" },
-  { key: "preview",   label: "Preview",    color: "#00203A" },
+const PRESETS: { key: LayoutPreset; label: string; desc: string; color: string }[] = [
+  { key: "full",      label: "Full IDE",  desc: "All 3 columns",          color: "rgba(251,246,238,0.7)" },
+  { key: "prototype", label: "Prototype", desc: "Architect + Runway",     color: "#043B40" },
+  { key: "staging",   label: "Staging",   desc: "Builder + Runway",       color: "#520322" },
+  { key: "preview",   label: "Preview",   desc: "Runway only",            color: "#00203A" },
 ];
 
 export function WorkspaceControlPanel({
@@ -109,144 +125,224 @@ export function WorkspaceControlPanel({
   onToggleDotGrid,
   onApplyPreset,
 }: WorkspaceControlPanelProps) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const [layoutOpen, setLayoutOpen] = useState(false);
 
-  return (
-    <div
-      style={{
-        width: expanded ? "240px" : "40px",
-        minWidth: expanded ? "240px" : "40px",
-        background: "#0D1117",
-        borderLeft: "1px solid rgba(251,246,238,0.15)",
-        flexShrink: 0,
-        transition: "width 250ms ease, min-width 250ms ease",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-      }}
-    >
-      {/* Expand/collapse button */}
+  const currentPreset = PRESETS.find((p) => p.key === layoutPreset) ?? PRESETS[0];
+
+  if (!expanded) {
+    return (
       <div
         style={{
-          padding: "8px",
-          display: "flex",
-          justifyContent: expanded ? "flex-end" : "center",
-          borderBottom: "1px solid rgba(251,246,238,0.15)",
+          width: "40px",
+          minWidth: "40px",
+          background: "#0D1117",
+          borderLeft: "1px solid rgba(251,246,238,0.15)",
           flexShrink: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          paddingTop: "12px",
+          height: "100%",
         }}
       >
         <button
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => setExpanded(true)}
           className="btn"
           style={{
             background: "transparent",
             border: "none",
             cursor: "pointer",
             color: "rgba(251,246,238,0.4)",
-            padding: "4px",
+            padding: "6px",
+          }}
+          title="Open Workspace Controls"
+        >
+          <Settings size={18} />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      style={{
+        width: "240px",
+        minWidth: "240px",
+        background: "#0D1117",
+        borderLeft: "1px solid rgba(251,246,238,0.15)",
+        flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+      }}
+    >
+      {/* Header */}
+      <div
+        style={{
+          padding: "10px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderBottom: "1px solid rgba(251,246,238,0.15)",
+          flexShrink: 0,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--font-label)",
+            fontSize: "11px",
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            color: "rgba(251,246,238,0.6)",
           }}
         >
-          {expanded ? <PanelRightClose size={16} /> : <PanelRightOpen size={16} />}
+          Workspace
+        </span>
+        <button
+          onClick={() => setExpanded(false)}
+          className="btn"
+          style={{
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
+            color: "rgba(251,246,238,0.4)",
+            padding: "2px",
+          }}
+        >
+          <PanelRightClose size={14} />
         </button>
       </div>
 
       {/* Scrollable content */}
-      {expanded && (
-        <div
-          style={{
-            flex: 1,
-            overflowY: "auto",
-            padding: "0 16px 16px",
-          }}
-        >
-          {/* Layout Presets */}
-          <GroupHeader text="Layout" />
-          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-            {PRESETS.map((p) => (
-              <button
-                key={p.key}
-                onClick={() => onApplyPreset(p.key)}
-                className="btn"
-                style={{
-                  fontFamily: "var(--font-label)",
-                  fontSize: "12px",
-                  padding: "6px 10px",
-                  color: layoutPreset === p.key ? p.color : "rgba(251,246,238,0.35)",
-                  background: layoutPreset === p.key ? "rgba(251,246,238,0.06)" : "transparent",
-                  border: layoutPreset === p.key ? "1px solid rgba(251,246,238,0.15)" : "1px solid transparent",
-                  borderRadius: "6px",
-                  cursor: "pointer",
-                  fontWeight: layoutPreset === p.key ? 700 : 400,
-                  textAlign: "left",
-                  transition: "all 0.15s",
-                }}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
+      <div
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          padding: "0 14px 16px",
+        }}
+      >
+        {/* Layout Selector — dropdown style */}
+        <GroupHeader text="Layout ← Start Here" />
+        <div style={{ position: "relative" }}>
+          <button
+            onClick={() => setLayoutOpen(!layoutOpen)}
+            className="btn"
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "10px 12px",
+              background: "rgba(251,246,238,0.04)",
+              border: "1px solid rgba(251,246,238,0.15)",
+              borderRadius: "8px",
+              cursor: "pointer",
+              transition: "all 150ms",
+            }}
+          >
+            <div>
+              <div style={{
+                fontFamily: "var(--font-label)",
+                fontSize: "13px",
+                fontWeight: 700,
+                color: currentPreset.color,
+                textAlign: "left",
+              }}>
+                {currentPreset.label}
+              </div>
+              <div style={{
+                fontFamily: "'Source Sans 3', sans-serif",
+                fontSize: "10px",
+                color: "rgba(251,246,238,0.4)",
+                textAlign: "left",
+                marginTop: "2px",
+              }}>
+                {currentPreset.desc}
+              </div>
+            </div>
+            <ChevronDown
+              size={14}
+              style={{
+                color: "rgba(251,246,238,0.4)",
+                transform: layoutOpen ? "rotate(180deg)" : "none",
+                transition: "transform 200ms",
+              }}
+            />
+          </button>
 
-          {/* Group 1: Column Visibility */}
-          <GroupHeader text="Columns" />
-          <Toggle
-            active={showArchitect}
-            onToggle={onToggleArchitect}
-            label="Architect"
-            activeColor="#043B40"
-          />
-          <Toggle
-            active={showBuilder}
-            onToggle={onToggleBuilder}
-            label="Builder"
-            activeColor="#520322"
-          />
-          <Toggle
-            active={showRunway}
-            onToggle={onToggleRunway}
-            label="Staging Runway"
-            activeColor="#00203A"
-          />
-
-          {/* Group 2: Display Settings */}
-          <GroupHeader text="Display" />
-          <Toggle
-            active={glassMode === "lab"}
-            onToggle={onToggleGlass}
-            label="Glass Mode"
-            variant="sm"
-          />
-          <Toggle
-            active={theme === "dark"}
-            onToggle={onCycleTheme}
-            label="Dark Mode"
-            variant="sm"
-          />
-          <Toggle
-            active={showDotGrid}
-            onToggle={onToggleDotGrid}
-            label="Dot Grid"
-            variant="sm"
-          />
-
-          {/* Group 3: AI Behavior */}
-          <GroupHeader text="AI Behavior" />
-          <Toggle
-            active={runwayAutoSwitch}
-            onToggle={onToggleAutoSwitch}
-            label="Auto-switch Runway"
-            variant="sq"
-          />
-
-          {/* Group 4: Workspace */}
-          <GroupHeader text="Workspace" />
-          <Toggle
-            active={showNotes}
-            onToggle={onToggleNotes}
-            label="Notes Panel"
-          />
+          {layoutOpen && (
+            <div
+              style={{
+                marginTop: "4px",
+                background: "#161B26",
+                border: "1px solid rgba(251,246,238,0.12)",
+                borderRadius: "8px",
+                overflow: "hidden",
+              }}
+            >
+              {PRESETS.map((p) => (
+                <button
+                  key={p.key}
+                  onClick={() => { onApplyPreset(p.key); setLayoutOpen(false); }}
+                  className="btn"
+                  style={{
+                    width: "100%",
+                    display: "block",
+                    padding: "8px 12px",
+                    background: layoutPreset === p.key ? "rgba(251,246,238,0.06)" : "transparent",
+                    border: "none",
+                    borderBottom: "1px solid rgba(251,246,238,0.04)",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    transition: "background 100ms",
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(251,246,238,0.08)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = layoutPreset === p.key ? "rgba(251,246,238,0.06)" : "transparent"; }}
+                >
+                  <div style={{
+                    fontFamily: "var(--font-label)",
+                    fontSize: "12px",
+                    fontWeight: layoutPreset === p.key ? 700 : 400,
+                    color: layoutPreset === p.key ? p.color : "rgba(251,246,238,0.6)",
+                  }}>
+                    {layoutPreset === p.key ? "● " : ""}{p.label}
+                  </div>
+                  <div style={{
+                    fontFamily: "'Source Sans 3', sans-serif",
+                    fontSize: "10px",
+                    color: "rgba(251,246,238,0.3)",
+                    marginTop: "1px",
+                  }}>
+                    {p.desc}
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+
+        {/* Column Visibility */}
+        <GroupHeader text="Columns" />
+        <Toggle active={showArchitect} onToggle={onToggleArchitect} label="Architect" activeColor="#043B40" />
+        <Toggle active={showBuilder} onToggle={onToggleBuilder} label="Builder" activeColor="#520322" />
+        <Toggle active={showRunway} onToggle={onToggleRunway} label="Staging Runway" activeColor="#00203A" />
+
+        {/* Display Settings */}
+        <GroupHeader text="Display" />
+        <Toggle active={glassMode === "lab"} onToggle={onToggleGlass} label="Glass Mode" variant="sm" />
+        <Toggle active={theme === "dark"} onToggle={onCycleTheme} label="Dark Mode" variant="sm" />
+        <Toggle active={showDotGrid} onToggle={onToggleDotGrid} label="Dot Grid" variant="sm" />
+
+        {/* AI Behavior */}
+        <GroupHeader text="AI Behavior" />
+        <Toggle active={runwayAutoSwitch} onToggle={onToggleAutoSwitch} label="Auto-switch Runway" variant="sq" />
+
+        {/* Workspace */}
+        <GroupHeader text="Workspace" />
+        <Toggle active={showNotes} onToggle={onToggleNotes} label="Notes Panel" />
+      </div>
     </div>
   );
 }
