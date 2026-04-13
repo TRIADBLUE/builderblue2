@@ -50,7 +50,7 @@ function MiniTreeItem({ node, depth }: { node: TreeNode; depth: number }) {
         )}
         <span style={{
           fontFamily: "var(--font-runway)",
-          fontSize: "11px",
+          fontSize: "13px",
           color: node.isDir ? "#09080E" : "rgba(9,8,14,0.7)",
           fontWeight: node.isDir ? 600 : 400,
         }}>
@@ -113,7 +113,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
         <div style={{ marginBottom: "32px" }}>
           <div style={{
             fontFamily: "var(--font-label)",
-            fontSize: "10px",
+            fontSize: "14px",
             fontWeight: 700,
             color: "#09080E",
             textTransform: "uppercase",
@@ -140,7 +140,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               >
                 <div style={{
                   fontFamily: "var(--font-runway)",
-                  fontSize: "13px",
+                  fontSize: "16px",
                   color: "#09080E",
                   fontWeight: 500,
                 }}>
@@ -148,7 +148,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                 </div>
                 <div style={{
                   fontFamily: "var(--font-content)",
-                  fontSize: "11px",
+                  fontSize: "13px",
                   color: "rgba(9,8,14,0.45)",
                   marginTop: "2px",
                 }}>
@@ -166,7 +166,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
         <div style={{ marginBottom: "32px" }}>
           <div style={{
             fontFamily: "var(--font-label)",
-            fontSize: "10px",
+            fontSize: "14px",
             fontWeight: 700,
             color: "#043B40",
             textTransform: "uppercase",
@@ -206,7 +206,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                 if (designInputRef.current) designInputRef.current.value = "";
               }}
             />
-            <span style={{ fontFamily: "var(--font-content)", fontSize: "12px", color: "var(--steel-blue)" }}>
+            <span style={{ fontFamily: "var(--font-content)", fontSize: "14px", color: "var(--steel-blue)" }}>
               Drop a screenshot, mockup, or design file
             </span>
           </div>
@@ -254,7 +254,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
             }}
           >
             <div>
-              <div style={{ fontFamily: "var(--font-content)", fontSize: "12px", fontWeight: 600, color: "#09080E" }}>
+              <div style={{ fontFamily: "var(--font-content)", fontSize: "14px", fontWeight: 600, color: "#09080E" }}>
                 Figma Import
               </div>
               <div style={{ fontFamily: "var(--font-content)", fontSize: "10px", color: "var(--steel-blue)" }}>
@@ -271,7 +271,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
         <div>
           <div style={{
             fontFamily: "var(--font-label)",
-            fontSize: "10px",
+            fontSize: "14px",
             fontWeight: 700,
             color: "#09080E",
             textTransform: "uppercase",
@@ -290,7 +290,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
           ) : (
             <div style={{
               fontFamily: "var(--font-content)",
-              fontSize: "12px",
+              fontSize: "14px",
               color: "rgba(9,8,14,0.4)",
               marginBottom: "12px",
             }}>
@@ -311,7 +311,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               onClick={() => onOpenTool("files")}
               style={{
                 fontFamily: "var(--font-content)",
-                fontSize: "12px",
+                fontSize: "14px",
                 color: "#09080E",
                 background: "none",
                 border: "none",
@@ -325,7 +325,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               onClick={() => setShowNewFile(!showNewFile)}
               style={{
                 fontFamily: "var(--font-content)",
-                fontSize: "12px",
+                fontSize: "14px",
                 color: "#09080E",
                 background: "none",
                 border: "none",
@@ -339,7 +339,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
               onClick={() => fileInputRef.current?.click()}
               style={{
                 fontFamily: "var(--font-content)",
-                fontSize: "12px",
+                fontSize: "14px",
                 color: "#09080E",
                 background: "none",
                 border: "none",
@@ -363,7 +363,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                 style={{
                   flex: 1,
                   fontFamily: "var(--font-runway)",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   color: "#09080E",
                   background: "transparent",
                   border: "none",
@@ -380,7 +380,7 @@ export function ToolsFilesTab({ files, onOpenTool, onSaveAsProposal }: ToolsFile
                 onClick={handleCreateFile}
                 style={{
                   fontFamily: "var(--font-content)",
-                  fontSize: "12px",
+                  fontSize: "14px",
                   color: "#09080E",
                   background: "none",
                   border: "none",
