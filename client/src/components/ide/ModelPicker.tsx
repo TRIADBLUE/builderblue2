@@ -100,12 +100,12 @@ export function ModelPicker({ provider, model, panelColor, onProviderChange, onM
         className="flex items-center gap-1 rounded transition-all"
         style={{
           fontFamily: "var(--font-runway)",
-          fontSize: "11px",
+          fontSize: "14px",
           color: panelColor,
           background: open ? `${panelColor}10` : "transparent",
           border: "none",
           cursor: "pointer",
-          padding: "2px 6px",
+          padding: "4px 8px",
         }}
       >
         {displayName}
@@ -139,12 +139,12 @@ export function ModelPicker({ provider, model, panelColor, onProviderChange, onM
               <div
                 style={{
                   fontFamily: "var(--font-label)",
-                  fontSize: "10px",
+                  fontSize: "13px",
                   fontWeight: 700,
                   color: "var(--steel-blue)",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
-                  padding: "8px 14px 4px",
+                  padding: "10px 14px 4px",
                 }}
               >
                 {prov.name}
@@ -188,29 +188,16 @@ export function ModelPicker({ provider, model, panelColor, onProviderChange, onM
                     >
                       {isSelected ? "✓" : ""}
                     </span>
-                    <div>
-                      <div
-                        style={{
-                          fontFamily: "var(--font-runway)",
-                          fontSize: "12px",
-                          fontWeight: isSelected ? 700 : 500,
-                          color: isSelected ? panelColor : "#09080E",
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        {m.name}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: "var(--font-content)",
-                          fontSize: "10px",
-                          color: "var(--steel-blue)",
-                          lineHeight: 1.3,
-                          marginTop: "1px",
-                        }}
-                      >
-                        {m.description}
-                      </div>
+                    <div
+                      style={{
+                        fontFamily: "var(--font-runway)",
+                        fontSize: "14px",
+                        fontWeight: isSelected ? 700 : 500,
+                        color: isSelected ? panelColor : "#09080E",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {m.name}
                     </div>
                   </button>
                 );
