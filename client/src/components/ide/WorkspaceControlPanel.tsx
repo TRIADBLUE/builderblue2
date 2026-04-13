@@ -48,9 +48,13 @@ function Toggle({ active, onToggle, label, variant = "pill", activeColor }: Togg
       <div
         className={cls}
         onClick={onToggle}
-        style={activeColor && active ? { background: activeColor } as React.CSSProperties : undefined}
       >
-        <div className="knob" />
+        <div
+          className="track"
+          style={activeColor && active ? { background: activeColor } as React.CSSProperties : undefined}
+        >
+          <div className="knob" />
+        </div>
       </div>
     </div>
   );
