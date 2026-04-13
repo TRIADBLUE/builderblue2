@@ -85,7 +85,6 @@ export function ArchitectPane({
               fontSize: "40px",
               color: "#043B40",
               lineHeight: 1,
-              textShadow: "1px 1px 0px #FBF6EE, 0 0 8px rgba(4, 59, 64, 0.4)",
             }}
           >
             Architect
@@ -97,7 +96,6 @@ export function ArchitectPane({
               color: "#043B40",
               opacity: 0.5,
               lineHeight: 1,
-              textShadow: "1px 1px 0px #FBF6EE, 0 0 8px rgba(4, 59, 64, 0.4)",
             }}
           >
             Creator
