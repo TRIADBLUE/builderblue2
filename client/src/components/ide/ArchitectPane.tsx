@@ -68,7 +68,7 @@ export function ArchitectPane({
   return (
     <div
       className="flex h-full flex-col glass-bg"
-      style={{ backgroundColor: "#131F38" }}
+      style={{ backgroundColor: "transparent" }}
       onClick={onFocus}
     >
       {/* Header */}

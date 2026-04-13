@@ -108,7 +108,7 @@ export function CenterPanel({
   }, [activeTab]);
 
   return (
-    <div className="flex h-full flex-col runway glass-bg" style={{ zIndex: 10, backgroundColor: "#131F38" }}>
+    <div className="flex h-full flex-col runway glass-bg" style={{ zIndex: 10, backgroundColor: "transparent" }}>
       {/* Runway mode toggle: Architect Ideation / Builder Construction */}
       {onRunwayToggle && (
         <RunwayToggle mode={runwayMode} onToggle={onRunwayToggle} />
@@ -239,7 +239,7 @@ export function CenterPanel({
       {/* Tab content */}
       <div
         className="flex-1 overflow-hidden glass-bg"
-        style={{ background: "#131F38", position: "relative" }}
+        style={{ background: "transparent", position: "relative" }}
       >
         {/* Builder thinking feed overlay */}
         {builderIsStreaming && (

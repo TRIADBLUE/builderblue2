@@ -304,7 +304,7 @@ a:hover, button:not(.btn):hover {
 
 /* Override child component solid backgrounds in glass mode */
 [data-glass="lab"] .ide-layout .glass-bg {
-  background-color: #131F38 !important;
+  background-color: transparent !important;
 }
 
 /* TopNav & controls bar — frosted glass strip */
