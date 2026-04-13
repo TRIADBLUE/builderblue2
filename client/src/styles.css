@@ -172,34 +172,31 @@ a:hover, button:not(.btn):hover {
   display: none;
 }
 
-/* ─── Global gray accent shadow on all IDE text ─────────────────────────── */
-.ide-layout * {
-  text-shadow: 1px 1px 0px #FBF6EE;
-}
-
-/* Code blocks don't get the shadow — keep them clean */
-.ide-layout pre *,
-.ide-layout code {
-  text-shadow: none;
-}
+/* ─── Text shadow — only on specific elements, not global ────────────────── */
 
 /* ─── AI message text ────────────────────────────────────────────────────── */
 .text-ai-architect {
   font-family: 'Allerta Stencil', sans-serif;
   color: #043B40;
   font-variant: small-caps;
-  text-shadow: 1px 1px 0px #FBF6EE, 0 0 8px rgba(4, 59, 64, 0.4);
+  -webkit-text-stroke: 0.5px #FBF6EE;
+  paint-order: stroke fill;
+  text-shadow: none;
 }
 .text-ai-builder {
   font-family: 'Allerta Stencil', sans-serif;
   color: #520322;
-  text-shadow: 1px 1px 0px #FBF6EE, 0 0 8px rgba(82, 3, 34, 0.4);
+  -webkit-text-stroke: 0.5px #FBF6EE;
+  paint-order: stroke fill;
+  text-shadow: none;
 }
 .text-ai-staging {
   font-family: 'Allerta Stencil', sans-serif;
   color: #00203A;
   font-variant: small-caps;
-  text-shadow: 1px 1px 0px #FBF6EE, 0 0 8px rgba(0, 32, 58, 0.4);
+  -webkit-text-stroke: 0.5px #FBF6EE;
+  paint-order: stroke fill;
+  text-shadow: none;
 }
 
 /* ─── User message text ──────────────────────────────────────────────────── */
