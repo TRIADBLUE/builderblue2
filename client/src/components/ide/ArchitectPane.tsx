@@ -276,7 +276,12 @@ export function ArchitectPane({
           onClick={() => {
             const lastAssistant = [...messages]
               .reverse()
-              .find((m) => m.role === "assistant");
+              .find((m) => {
+                if (m.role !== "assistant") return false;
+                if (m.content.length < 200) return false;
+                if (!m.content.includes("```") && !m.content.includes("##") && !m.content.includes("spec") && !m.content.includes("prototype")) return false;
+                return true;
+              });
             if (lastAssistant) onHandToBuilder(lastAssistant.content);
           }}
           className="btn w-full rounded py-2 text-center transition-colors"
