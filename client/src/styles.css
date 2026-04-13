@@ -31,6 +31,11 @@
 /* ─── CSS Custom Properties — LOCKED PALETTE ─────────────────────────────── */
 /* ─── Brand colors (constant across themes) ─────────────────────────────── */
 :root {
+  --ai-message-size: 15px;
+  --ai-message-line-height: 1.6;
+  --user-message-size: 11px;
+  --input-font-size: 11px;
+  --header-size: 40px;
   --cream: #E9ECF0;
   --tan: #A67C4B;
   --triad-black: #09080E;
@@ -193,37 +198,50 @@ a:hover, button:not(.btn):hover {
   display: none;
 }
 
-/* ─── Global gray accent shadow on all IDE text ─────────────────────────── */
+/* ─── Global gray accent for all IDE text ────────────────────────────────── */
 .ide-layout * {
   text-shadow: 1px 1px 0px #8085A1;
 }
-
-.ide-layout pre *,
-.ide-layout code {
+.ide-layout pre *, .ide-layout code {
   text-shadow: none;
 }
 
-/* ─── AI message text ────────────────────────────────────────────────────── */
+/* ─── AI + User message text — white halo + gray accent ──────────────────── */
 .text-ai-architect {
   font-family: 'Allerta Stencil', sans-serif;
   color: #043B40;
   font-variant: small-caps;
   font-weight: 400;
-  text-shadow: 1px 1px 0px #8085A1, 0 0 8px rgba(4, 59, 64, 0.4);
+  text-shadow:
+    -1px 0 0 rgba(255,255,255,0.85),
+    1px 0 0 rgba(255,255,255,0.85),
+    0 -1px 0 rgba(255,255,255,0.85),
+    0 1px 0 rgba(255,255,255,0.85),
+    1px 1px 0px #8085A1;
 }
 .text-ai-builder {
   font-family: 'Allerta Stencil', sans-serif;
   color: #520322;
-  font-weight: 400;
   font-variant: small-caps;
-  text-shadow: 1px 1px 0px #8085A1, 0 0 8px rgba(82, 3, 34, 0.4);
+  font-weight: 400;
+  text-shadow:
+    -1px 0 0 rgba(255,255,255,0.85),
+    1px 0 0 rgba(255,255,255,0.85),
+    0 -1px 0 rgba(255,255,255,0.85),
+    0 1px 0 rgba(255,255,255,0.85),
+    1px 1px 0px #8085A1;
 }
 .text-ai-staging {
   font-family: 'Allerta Stencil', sans-serif;
   color: #00203A;
   font-variant: small-caps;
   font-weight: 400;
-  text-shadow: 1px 1px 0px #8085A1, 0 0 8px rgba(0, 32, 58, 0.4);
+  text-shadow:
+    -1px 0 0 rgba(255,255,255,0.85),
+    1px 0 0 rgba(255,255,255,0.85),
+    0 -1px 0 rgba(255,255,255,0.85),
+    0 1px 0 rgba(255,255,255,0.85),
+    1px 1px 0px #8085A1;
 }
 
 /* ─── User message text ──────────────────────────────────────────────────── */
@@ -232,7 +250,12 @@ a:hover, button:not(.btn):hover {
   font-weight: 700;
   color: #374151;
   letter-spacing: 0.03em;
-  text-shadow: 1px 1px 0px #8085A1, 0 0 6px rgba(55, 65, 81, 0.35);
+  text-shadow:
+    -1px 0 0 rgba(255,255,255,0.85),
+    1px 0 0 rgba(255,255,255,0.85),
+    0 -1px 0 rgba(255,255,255,0.85),
+    0 1px 0 rgba(255,255,255,0.85),
+    1px 1px 0px #8085A1;
 }
 
 /* ─── Chat input styling ────────────────────────────────────────────────── */
@@ -240,6 +263,12 @@ a:hover, button:not(.btn):hover {
   font-family: 'Crusoe Text', sans-serif;
   font-weight: 700;
   color: #374151;
+  text-shadow:
+    -1px 0 0 rgba(255,255,255,0.85),
+    1px 0 0 rgba(255,255,255,0.85),
+    0 -1px 0 rgba(255,255,255,0.85),
+    0 1px 0 rgba(255,255,255,0.85),
+    1px 1px 0px #8085A1;
 }
 
 .chat-input::placeholder {

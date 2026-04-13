@@ -166,7 +166,7 @@ export function BuilderPane({
             key={i}
             className={`${msg.role === "user" ? "text-user-message" : "text-ai-builder"}`}
             style={{
-              fontSize: msg.role === "user" ? "11px" : "15px",
+              fontSize: msg.role === "user" ? "var(--user-message-size, 11px)" : "var(--ai-message-size, 15px)",
               lineHeight: 1.5,
               padding: msg.role === "user" ? "6px 10px" : "2px 0",
               ...(msg.role === "user" ? {
@@ -192,7 +192,7 @@ export function BuilderPane({
           <div
             className="text-ai-builder"
             style={{
-              fontSize: "15px",
+              fontSize: "var(--ai-message-size, 15px)",
               lineHeight: 1.5,
               padding: "2px 0",
             }}

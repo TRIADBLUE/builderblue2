@@ -121,7 +121,7 @@ export function ArchitectPane({
                 key={i}
                 className="text-user-message"
                 style={{
-                  fontSize: "11px",
+                  fontSize: "var(--user-message-size, 11px)",
                   lineHeight: 1.5,
                   padding: "6px 10px",
                   marginLeft: "auto",
@@ -144,7 +144,7 @@ export function ArchitectPane({
               key={i}
               className="text-ai-architect"
               style={{
-                fontSize: "13px",
+                fontSize: "var(--ai-message-size, 15px)",
                 lineHeight: 1.6,
                 padding: "2px 0",
                 whiteSpace: "pre-wrap",
@@ -163,7 +163,7 @@ export function ArchitectPane({
           <div
             className="text-ai-architect"
             style={{
-              fontSize: "15px",
+              fontSize: "var(--ai-message-size, 15px)",
               lineHeight: 1.5,
               padding: "2px 0",
             }}
