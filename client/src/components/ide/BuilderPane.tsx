@@ -132,6 +132,7 @@ export function BuilderPane({
               fontSize: "40px",
               color: "#520322",
               lineHeight: 1,
+              textShadow: "1px 1px 0px #FBF6EE, 0 0 8px rgba(82, 3, 34, 0.4)",
             }}
           >
             Builder
@@ -143,6 +144,7 @@ export function BuilderPane({
               color: "#520322",
               opacity: 0.5,
               lineHeight: 1,
+              textShadow: "1px 1px 0px #FBF6EE, 0 0 8px rgba(82, 3, 34, 0.4)",
             }}
           >
             Coder
