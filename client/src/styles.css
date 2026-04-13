@@ -172,32 +172,43 @@ a:hover, button:not(.btn):hover {
   display: none;
 }
 
-/* ─── AI message text — solid fills with white shadow ────────────────────── */
+/* ─── Global gray accent shadow on all IDE text ─────────────────────────── */
+.ide-layout * {
+  text-shadow: 1px 1px 0px #8085A1;
+}
+
+/* Code blocks don't get the shadow — keep them clean */
+.ide-layout pre *,
+.ide-layout code {
+  text-shadow: none;
+}
+
+/* ─── AI message text ────────────────────────────────────────────────────── */
 .text-ai-architect {
   font-family: 'Allerta Stencil', sans-serif;
   color: #043B40;
   font-variant: small-caps;
-  text-shadow: 0.5px 0px 0px #FFFFFF;
+  text-shadow: 1px 1px 0px #8085A1;
 }
 .text-ai-builder {
   font-family: 'Allerta Stencil', sans-serif;
   color: #520322;
-  text-shadow: 0.5px 0px 0px #FFFFFF;
+  text-shadow: 1px 1px 0px #8085A1;
 }
 .text-ai-staging {
   font-family: 'Allerta Stencil', sans-serif;
   color: #00203A;
   font-variant: small-caps;
-  text-shadow: 0.5px 0px 0px #FFFFFF;
+  text-shadow: 1px 1px 0px #8085A1;
 }
 
-/* ─── User message text — light with black shadow ─────────────────────────── */
+/* ─── User message text ──────────────────────────────────────────────────── */
 .text-user-message {
   font-family: 'Crusoe Text', sans-serif;
   font-weight: 700;
   color: #374151;
   letter-spacing: 0.03em;
-  text-shadow: 0.5px 0px 0px #FFFFFF;
+  text-shadow: 1px 1px 0px #8085A1;
 }
 
 /* ─── Chat input styling ────────────────────────────────────────────────── */
@@ -205,11 +216,79 @@ a:hover, button:not(.btn):hover {
   font-family: 'Crusoe Text', sans-serif;
   font-weight: 700;
   color: #374151;
+  text-shadow: 1px 1px 0px #8085A1;
 }
 
 .chat-input::placeholder {
   font-family: 'Allerta Stencil', sans-serif;
   color: rgba(55, 65, 81, 0.4);
+  text-shadow: 1px 1px 0px rgba(128, 133, 161, 0.5);
+}
+
+/* ─── Workspace Control Panel toggles ───────────────────────────────────── */
+.workspace-toggle {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  border-radius: 13px;
+  background: #1C2333;
+  border: 1px solid rgba(251, 246, 238, 0.1);
+  cursor: pointer;
+  transition: background 200ms ease;
+  flex-shrink: 0;
+}
+
+.workspace-toggle.active {
+  background: var(--toggle-active-color, #1F5882);
+}
+
+.workspace-toggle .knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #F0F0F0, #999);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.3);
+  transition: left 200ms ease;
+}
+
+.workspace-toggle.active .knob {
+  left: 26px;
+}
+
+/* Small toggle variant (display settings) */
+.workspace-toggle.sm {
+  width: 44px;
+  height: 22px;
+  border-radius: 11px;
+}
+
+.workspace-toggle.sm .knob {
+  width: 18px;
+  height: 18px;
+}
+
+.workspace-toggle.sm.active .knob {
+  left: 22px;
+}
+
+/* Square toggle variant (AI behavior) */
+.workspace-toggle.sq {
+  width: 46px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.workspace-toggle.sq .knob {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.workspace-toggle.sq.active .knob {
+  left: 22px;
 }
 
 /* ─── Scrollbar styling ──────────────────────────────────────────────────── */

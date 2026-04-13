@@ -16,10 +16,13 @@ import { ComputeWarningBanner } from "./ComputeWarningBanner";
 import { ComputeDepletedModal } from "./ComputeDepletedModal";
 import { DeployModal } from "./DeployModal";
 import { UpgradeToast } from "./UpgradeToast";
+import { WorkspaceControlPanel } from "./WorkspaceControlPanel";
 import { useConversation } from "../../hooks/useConversation";
 import { useStaging } from "../../hooks/useStaging";
 import { useComputeStatus } from "../../hooks/useComputeStatus";
 import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
+import { useGlassMode } from "../../hooks/useGlassMode";
 
 type PaneKey = "architect" | "builder" | "runway";
 
@@ -94,6 +97,9 @@ export function IDEShell({
 }: IDEShellProps) {
   const { user } = useAuth();
   const { status: computeStatus } = useComputeStatus();
+  const { theme, cycleTheme } = useTheme();
+  const { mode: glassMode, toggleMode: toggleGlass } = useGlassMode();
+  const [showDotGrid, setShowDotGrid] = useState(true);
   const staging = useStaging();
 
   // Deploy state
@@ -501,7 +507,7 @@ export function IDEShell({
             {/* ── Architect ── */}
             {k === "architect" && (
               <div
-                className={`ide-pane flex flex-col dotgrid-architect ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
+                className={`ide-pane flex flex-col ${showDotGrid ? "dotgrid-architect" : ""} ${activePane === "builder" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "architect" ? "pane-flash" : ""}`}
                 style={{
                   width:      `${colWidths.architect}%`,
                   overflow:   "hidden",
@@ -554,7 +560,7 @@ export function IDEShell({
             {/* ── Builder ── */}
             {k === "builder" && (
               <div
-                className={`ide-pane flex flex-col dotgrid-builder ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
+                className={`ide-pane flex flex-col ${showDotGrid ? "dotgrid-builder" : ""} ${activePane === "architect" ? "ide-pane-inactive" : "ide-pane-active"} ${flashPane === "builder" ? "pane-flash" : ""}`}
                 style={{ width: `${colWidths.builder}%`, overflow: "hidden", flexShrink: 0 }}
               >
                 <ColDragHandle paneKey="builder" colOrder={colOrder} onDragStart={handleTabDragStart} onDrop={handleTabDrop} />
@@ -581,7 +587,7 @@ export function IDEShell({
             {/* ── Runway ── */}
             {k === "runway" && (
               <div
-                className="ide-pane ide-pane-active flex flex-col dotgrid-staging"
+                className={`ide-pane ide-pane-active flex flex-col ${showDotGrid ? "dotgrid-staging" : ""}`}
                 style={{
                   width:       `${colWidths.runway}%`,
                   flexShrink:  0,
@@ -648,6 +654,26 @@ export function IDEShell({
             )}
           </React.Fragment>
         ))}
+
+        {/* Workspace Control Panel — far right */}
+        <WorkspaceControlPanel
+          showArchitect={showArchitect}
+          showBuilder={showBuilder}
+          showRunway={showRunway}
+          showNotes={showNotes}
+          runwayAutoSwitch={runwayAutoSwitch}
+          glassMode={glassMode}
+          theme={theme}
+          showDotGrid={showDotGrid}
+          onToggleArchitect={() => setShowArchitect(!showArchitect)}
+          onToggleBuilder={() => setShowBuilder(!showBuilder)}
+          onToggleRunway={() => setShowRunway(!showRunway)}
+          onToggleNotes={() => setShowNotes(!showNotes)}
+          onToggleAutoSwitch={() => setRunwayAutoSwitch(!runwayAutoSwitch)}
+          onToggleGlass={toggleGlass}
+          onCycleTheme={cycleTheme}
+          onToggleDotGrid={() => setShowDotGrid(!showDotGrid)}
+        />
       </div>
 
       {/* Handoff overlay */}

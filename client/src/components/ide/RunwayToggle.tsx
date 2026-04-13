@@ -10,8 +10,8 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "6px 12px",
-        borderBottom: "1px solid rgba(251, 246, 238, 0.06)",
+        padding: "8px 12px",
+        borderBottom: "2px solid rgba(251, 246, 238, 0.75)",
         background: "inherit",
         flexShrink: 0,
       }}
@@ -20,24 +20,24 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
         style={{
           position: "relative",
           display: "flex",
-          borderRadius: "20px",
-          border: "1px solid rgba(251, 246, 238, 0.12)",
+          borderRadius: "8px",
+          border: "2px solid rgba(251, 246, 238, 0.3)",
           overflow: "hidden",
           cursor: "pointer",
           userSelect: "none",
-          width: "280px",
-          height: "34px",
+          width: "320px",
+          height: "44px",
         }}
       >
         {/* Sliding pill indicator */}
         <div
           style={{
             position: "absolute",
-            top: "1px",
-            left: mode === "architect" ? "1px" : "calc(50% + 1px)",
-            width: "calc(50% - 2px)",
-            height: "30px",
-            borderRadius: "18px",
+            top: "2px",
+            left: mode === "architect" ? "2px" : "calc(50% + 2px)",
+            width: "calc(50% - 4px)",
+            height: "38px",
+            borderRadius: "6px",
             background: mode === "architect" ? "#043B40" : "#520322",
             transition: "left 0.25s ease, background 0.25s ease",
           }}
@@ -54,7 +54,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             position: "relative",
             zIndex: 1,
             fontFamily: "var(--font-label)",
-            fontSize: "14px",
+            fontSize: "16px",
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             color: mode === "architect" ? "#E9ECF0" : "rgba(251, 246, 238, 0.55)",
@@ -76,7 +76,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             position: "relative",
             zIndex: 1,
             fontFamily: "var(--font-label)",
-            fontSize: "14px",
+            fontSize: "16px",
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             color: mode === "builder" ? "#E9ECF0" : "rgba(251, 246, 238, 0.55)",
