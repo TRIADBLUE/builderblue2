@@ -451,6 +451,7 @@ a:hover, button:not(.btn):hover {
 /* ─── IDE Pane transitions ───────────────────────────────────────────────── */
 .ide-pane {
   position: relative;
+  background-color: var(--ide-bg);
   transition: opacity 400ms ease-in-out, filter 400ms ease-in-out;
 }
 
