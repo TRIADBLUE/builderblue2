@@ -369,6 +369,9 @@ export function IDEShell({
     setTimeout(() => setFlashPane(null), 400);
   }, [prototypeVersion, currentPrototype]);
 
+  const architectMessages = (architectConvo.conversation?.messages ?? []) as ConversationMessage[];
+  const builderMessages   = (builderConvo.conversation?.messages ?? []) as ConversationMessage[];
+
   // ── Cross-talk: Architect consults Builder ──────────────────────────────────
   const handleArchitectConsultBuilder = useCallback(async (question: string) => {
     setCrossTalkQuestion(question);
@@ -421,9 +424,6 @@ export function IDEShell({
     });
     staging.loadChanges(projectId);
   }, [projectId, staging]);
-
-  const architectMessages = (architectConvo.conversation?.messages ?? []) as ConversationMessage[];
-  const builderMessages   = (builderConvo.conversation?.messages ?? []) as ConversationMessage[];
 
   // ── Tab bar split ──────────────────────────────────────────────────────────
   const activeTabs  = colOrder.filter(k => isVisible(k));
