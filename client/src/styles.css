@@ -113,12 +113,12 @@
   --shadow-sm: 0 1px 3px rgba(9, 8, 14, 0.06);
   --shadow-md: 0 4px 12px rgba(9, 8, 14, 0.08);
   --shadow-lg: 0 12px 40px rgba(9, 8, 14, 0.12);
-  --glass-bg: rgba(233, 236, 240, 0.78);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-edge: rgba(255, 255, 255, 0.7);
-  --glass-shadow: rgba(9, 8, 14, 0.18);
+  --glass-bg: rgba(251, 246, 238, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-edge: rgba(255, 255, 255, 0.6);
+  --glass-shadow: rgba(9, 8, 14, 0.25);
   --glass-backdrop: #808080;
-  --glass-sheen: rgba(255, 255, 255, 0.08);
+  --glass-sheen: rgba(255, 255, 255, 0.15);
   color-scheme: light;
 }
 
@@ -149,12 +149,12 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
-  --glass-bg: rgba(13, 13, 18, 0.50);
-  --glass-border: rgba(255, 255, 255, 0.10);
-  --glass-edge: rgba(255, 255, 255, 0.15);
-  --glass-shadow: rgba(0, 0, 0, 0.5);
+  --glass-bg: rgba(19, 31, 56, 0.40);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-edge: rgba(255, 255, 255, 0.20);
+  --glass-shadow: rgba(0, 0, 0, 0.6);
   --glass-backdrop: #08080c;
-  --glass-sheen: rgba(255, 255, 255, 0.04);
+  --glass-sheen: rgba(255, 255, 255, 0.06);
   color-scheme: dark;
 }
 
@@ -471,20 +471,23 @@ a:hover, button:not(.btn):hover {
 /* Dark backdrop behind the glass panels — entire IDE goes dark */
 [data-glass="lab"] .ide-layout {
   background: var(--glass-backdrop);
+  background-image: radial-gradient(ellipse at 30% 20%, rgba(31, 88, 130, 0.15) 0%, transparent 60%),
+                     radial-gradient(ellipse at 70% 80%, rgba(20, 40, 125, 0.10) 0%, transparent 60%);
 }
 
 /* Each panel becomes a glass slab */
 [data-glass="lab"] .ide-pane {
   background-color: var(--glass-bg) !important;
-  backdrop-filter: blur(18px) saturate(1.4);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  border-left: none !important;
-  border-right: none !important;
+  backdrop-filter: blur(24px) saturate(1.6) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6) brightness(1.05);
+  border: 1px solid var(--glass-border) !important;
   box-shadow:
     0 8px 32px var(--glass-shadow),
     0 2px 8px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 var(--glass-edge),
     inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  margin: 2px;
 }
 
 /* Glass sheen — diagonal light reflection across each panel */
@@ -496,15 +499,15 @@ a:hover, button:not(.btn):hover {
   right: 0;
   bottom: 0;
   background:
-    linear-gradient(165deg,
+    linear-gradient(135deg,
       var(--glass-sheen) 0%,
-      transparent 35%,
-      transparent 75%,
-      rgba(255, 255, 255, 0.03) 100%
+      transparent 40%,
+      transparent 60%,
+      rgba(255, 255, 255, 0.04) 100%
     );
   pointer-events: none;
   z-index: 0;
-  opacity: 0.3;
+  opacity: 1;
   transition: opacity 0.4s ease;
 }
 
@@ -517,9 +520,9 @@ a:hover, button:not(.btn):hover {
 [data-glass="lab"] .ide-layout > nav.glass-bg,
 [data-glass="lab"] .ide-layout > .glass-bg:not(.ide-panel-container) {
   background-color: var(--glass-bg) !important;
-  backdrop-filter: blur(12px) saturate(1.2);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2);
-  border-bottom-color: var(--glass-border) !important;
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--glass-border) !important;
 }
 
 /* Flat mode — no glass, no overlay */
@@ -701,23 +704,49 @@ a:hover, button:not(.btn):hover {
 
 /* ─── Railway-style dotted grid backgrounds ──────────────────────────────── */
 
-/* Architect dots — green identity */
+/* ─── Dot grid — light mode (0.17 opacity) ───────────────────────────────── */
 .dotgrid-architect {
   background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, rgba(4, 59, 64, 0.15) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(4, 59, 64, 0.17) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
-/* Builder dots — red identity */
 .dotgrid-builder {
   background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, rgba(82, 3, 34, 0.15) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(82, 3, 34, 0.17) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
-/* Staging dots — blue identity */
 .dotgrid-staging {
   background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, rgba(0, 32, 58, 0.15) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(0, 32, 58, 0.17) 1px, transparent 1px);
   background-size: 22px 22px;
+}
+
+/* ─── Dot grid — dark mode (0.20 opacity) ────────────────────────────────── */
+[data-theme="dark"] .dotgrid-architect {
+  background-image: radial-gradient(circle, rgba(4, 59, 64, 0.20) 1px, transparent 1px);
+}
+
+[data-theme="dark"] .dotgrid-builder {
+  background-image: radial-gradient(circle, rgba(82, 3, 34, 0.20) 1px, transparent 1px);
+}
+
+[data-theme="dark"] .dotgrid-staging {
+  background-image: radial-gradient(circle, rgba(0, 32, 58, 0.20) 1px, transparent 1px);
+}
+
+/* ─── Dot grid — auto theme dark mode ────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] .dotgrid-architect {
+    background-image: radial-gradient(circle, rgba(4, 59, 64, 0.20) 1px, transparent 1px);
+  }
+
+  [data-theme="auto"] .dotgrid-builder {
+    background-image: radial-gradient(circle, rgba(82, 3, 34, 0.20) 1px, transparent 1px);
+  }
+
+  [data-theme="auto"] .dotgrid-staging {
+    background-image: radial-gradient(circle, rgba(0, 32, 58, 0.20) 1px, transparent 1px);
+  }
 }

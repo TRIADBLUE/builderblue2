@@ -102,6 +102,7 @@ export function ModelPicker({ provider, model, panelColor, onProviderChange, onM
           fontFamily: "var(--font-runway)",
           fontSize: "14px",
           color: panelColor,
+          textShadow: "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
           background: open ? `${panelColor}10` : "transparent",
           border: "none",
           cursor: "pointer",
