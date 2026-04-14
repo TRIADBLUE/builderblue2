@@ -704,20 +704,20 @@ a:hover, button:not(.btn):hover {
 /* Architect dots — green identity */
 .dotgrid-architect {
   background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, rgba(4, 59, 64, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(4, 59, 64, 0.15) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
 /* Builder dots — red identity */
 .dotgrid-builder {
   background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, rgba(82, 3, 34, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(82, 3, 34, 0.15) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
 /* Staging dots — blue identity */
 .dotgrid-staging {
   background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, rgba(0, 32, 58, 0.07) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(0, 32, 58, 0.15) 1px, transparent 1px);
   background-size: 22px 22px;
 }
