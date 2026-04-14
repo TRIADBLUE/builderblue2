@@ -90,6 +90,11 @@
 [data-theme="light"] {
   --ide-bg: #FBF6EE;
   --ide-dot: rgba(19, 31, 56, 0.12);
+  --dot-architect: rgba(4, 59, 64, 0.17);
+  --dot-builder: rgba(82, 3, 34, 0.17);
+  --dot-staging: rgba(0, 32, 58, 0.17);
+  --dot-size: 1px;
+  --dot-spacing: 22px;
   --ide-text: #09080E;
   --ide-text-muted: rgba(9, 8, 14, 0.45);
   --ide-text-dim: rgba(9, 8, 14, 0.25);
@@ -126,6 +131,9 @@
 [data-theme="dark"] {
   --ide-bg: #131F38;
   --ide-dot: rgba(251, 246, 238, 0.12);
+  --dot-architect: rgba(251, 246, 238, 0.20);
+  --dot-builder: rgba(251, 246, 238, 0.20);
+  --dot-staging: rgba(251, 246, 238, 0.20);
   --ide-text: #FBF6EE;
   --ide-text-muted: rgba(251, 246, 238, 0.45);
   --ide-text-dim: rgba(251, 246, 238, 0.25);
@@ -163,6 +171,9 @@
   [data-theme="auto"] {
     --ide-bg: #131F38;
     --ide-dot: rgba(251, 246, 238, 0.12);
+    --dot-architect: rgba(251, 246, 238, 0.20);
+    --dot-builder: rgba(251, 246, 238, 0.20);
+    --dot-staging: rgba(251, 246, 238, 0.20);
     --ide-text: #FBF6EE;
     --ide-text-muted: rgba(251, 246, 238, 0.45);
     --ide-text-dim: rgba(251, 246, 238, 0.25);
@@ -704,49 +715,42 @@ a:hover, button:not(.btn):hover {
 
 /* ─── Railway-style dotted grid backgrounds ──────────────────────────────── */
 
-/* ─── Dot grid — light mode (0.17 opacity) ───────────────────────────────── */
+/* ─── Dot grid — overlay IN FRONT of text via ::before ───────────────────── */
 .dotgrid-architect {
-  background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, rgba(4, 59, 64, 0.17) 1px, transparent 1px);
-  background-size: 22px 22px;
+  position: relative;
+}
+.dotgrid-architect::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--dot-architect) var(--dot-size), transparent var(--dot-size));
+  background-size: var(--dot-spacing) var(--dot-spacing);
+  pointer-events: none;
+  z-index: 10;
 }
 
 .dotgrid-builder {
-  background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, rgba(82, 3, 34, 0.17) 1px, transparent 1px);
-  background-size: 22px 22px;
+  position: relative;
+}
+.dotgrid-builder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--dot-builder) var(--dot-size), transparent var(--dot-size));
+  background-size: var(--dot-spacing) var(--dot-spacing);
+  pointer-events: none;
+  z-index: 10;
 }
 
 .dotgrid-staging {
-  background-color: var(--ide-bg);
-  background-image: radial-gradient(circle, rgba(0, 32, 58, 0.17) 1px, transparent 1px);
-  background-size: 22px 22px;
+  position: relative;
 }
-
-/* ─── Dot grid — dark mode (0.20 opacity) ────────────────────────────────── */
-[data-theme="dark"] .dotgrid-architect {
-  background-image: radial-gradient(circle, rgba(4, 59, 64, 0.20) 1px, transparent 1px);
-}
-
-[data-theme="dark"] .dotgrid-builder {
-  background-image: radial-gradient(circle, rgba(82, 3, 34, 0.20) 1px, transparent 1px);
-}
-
-[data-theme="dark"] .dotgrid-staging {
-  background-image: radial-gradient(circle, rgba(0, 32, 58, 0.20) 1px, transparent 1px);
-}
-
-/* ─── Dot grid — auto theme dark mode ────────────────────────────────────── */
-@media (prefers-color-scheme: dark) {
-  [data-theme="auto"] .dotgrid-architect {
-    background-image: radial-gradient(circle, rgba(4, 59, 64, 0.20) 1px, transparent 1px);
-  }
-
-  [data-theme="auto"] .dotgrid-builder {
-    background-image: radial-gradient(circle, rgba(82, 3, 34, 0.20) 1px, transparent 1px);
-  }
-
-  [data-theme="auto"] .dotgrid-staging {
-    background-image: radial-gradient(circle, rgba(0, 32, 58, 0.20) 1px, transparent 1px);
-  }
+.dotgrid-staging::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, var(--dot-staging) var(--dot-size), transparent var(--dot-size));
+  background-size: var(--dot-spacing) var(--dot-spacing);
+  pointer-events: none;
+  z-index: 10;
 }
