@@ -85,6 +85,7 @@ export function ArchitectPane({
               fontSize: "40px",
               color: "#043B40",
               lineHeight: 1,
+              textShadow: "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
             }}
           >
             Architect
@@ -96,6 +97,7 @@ export function ArchitectPane({
               color: "#043B40",
               opacity: 0.5,
               lineHeight: 1,
+              textShadow: "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
             }}
           >
             Creator
@@ -168,7 +170,7 @@ export function ArchitectPane({
                         Consulting Builder...
                       </div>
                       <div style={{
-                        fontFamily: "'Allerta Stencil', sans-serif",
+                        fontFamily: "'JetBrains Mono', monospace",
                         fontSize: "12px", color: "var(--ide-text-muted)", fontStyle: "italic",
                       }}>
                         "{askMatch[1].trim()}"

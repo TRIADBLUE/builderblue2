@@ -335,10 +335,9 @@ export function CenterPanel({
                   Architect asked
                 </div>
                 <div style={{
-                  fontFamily: "'Allerta Stencil', sans-serif",
+                  fontFamily: "'JetBrains Mono', monospace",
                   fontSize: "var(--ai-message-size, 15px)",
                   color: "#043B40",
-                  fontVariant: "small-caps",
                   lineHeight: 1.5,
                 }}>
                   {crossTalkQuestion}

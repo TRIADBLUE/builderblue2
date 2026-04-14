@@ -144,7 +144,7 @@ export function RunwayThinkingFeed({ isActive, role }: RunwayThinkingFeedProps) 
               key={`${i}-${line}`}
               className="animate-fade-in"
               style={{
-                fontFamily: "'Allerta Stencil', sans-serif",
+                fontFamily: "'JetBrains Mono', monospace",
                 fontSize: "14px",
                 color: "#00FF41",
                 opacity: isNewest ? 1 : 0.5,

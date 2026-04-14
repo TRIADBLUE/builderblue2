@@ -2,6 +2,31 @@
 
 /* ─── Google Fonts — loaded via <link> in index.html ─────────────────────── */
 
+/* ─── JetBrains Mono — AI messages ──────────────────────────────────────── */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrainsMono-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ─── Acherus Grotesque — buttons ────────────────────────────────────────── */
 @font-face {
   font-family: 'Acherus Grotesque';
@@ -57,7 +82,7 @@
   --font-builder: 'Allerta Stencil', sans-serif;
   --font-content: 'Source Sans 3', sans-serif;
   --font-user-chat: 'Crusoe Text', sans-serif;
-  --font-ai-chat: 'Allerta Stencil', sans-serif;
+  --font-ai-chat: 'JetBrains Mono', monospace;
 }
 
 /* ─── Light theme (default) ──────────────────────────────────────────────── */
@@ -208,23 +233,20 @@ a:hover, button:not(.btn):hover {
 
 /* ─── AI message text — neutral gray with identity-colored right shadow ──── */
 .text-ai-architect {
-  font-family: 'Allerta Stencil', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   color: var(--ide-chat-text);
-  font-variant: small-caps;
   font-weight: 400;
   text-shadow: 1px 0 0 #043B40;
 }
 .text-ai-builder {
-  font-family: 'Allerta Stencil', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   color: var(--ide-chat-text);
-  font-variant: small-caps;
   font-weight: 400;
   text-shadow: 1px 0 0 #520322;
 }
 .text-ai-staging {
-  font-family: 'Allerta Stencil', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   color: var(--ide-chat-text);
-  font-variant: small-caps;
   font-weight: 400;
   text-shadow: 1px 0 0 #00203A;
 }
@@ -448,12 +470,12 @@ a:hover, button:not(.btn):hover {
 
 /* Dark backdrop behind the glass panels — entire IDE goes dark */
 [data-glass="lab"] .ide-layout {
-  background: var(--ide-bg);
+  background: var(--glass-backdrop);
 }
 
 /* Each panel becomes a glass slab */
 [data-glass="lab"] .ide-pane {
-  background-color: var(--ide-bg) !important;
+  background-color: var(--glass-bg) !important;
   backdrop-filter: blur(18px) saturate(1.4);
   -webkit-backdrop-filter: blur(18px) saturate(1.4);
   border-left: none !important;
@@ -494,7 +516,7 @@ a:hover, button:not(.btn):hover {
 /* TopNav & controls bar — frosted glass strip */
 [data-glass="lab"] .ide-layout > nav.glass-bg,
 [data-glass="lab"] .ide-layout > .glass-bg:not(.ide-panel-container) {
-  background-color: var(--ide-bg) !important;
+  background-color: var(--glass-bg) !important;
   backdrop-filter: blur(12px) saturate(1.2);
   -webkit-backdrop-filter: blur(12px) saturate(1.2);
   border-bottom-color: var(--glass-border) !important;

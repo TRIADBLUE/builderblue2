@@ -128,7 +128,7 @@ export function ComputeTab({ projectId }: ComputeTabProps) {
           Session Cost
         </div>
         <div style={{
-          fontFamily: "'Allerta Stencil', sans-serif",
+          fontFamily: "'JetBrains Mono', monospace",
           fontSize: "28px",
           color: "#00FF41",
           lineHeight: 1,
