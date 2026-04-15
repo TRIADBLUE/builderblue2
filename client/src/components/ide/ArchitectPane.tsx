@@ -95,7 +95,6 @@ export function ArchitectPane({
               fontFamily: "'Allerta Stencil', sans-serif",
               fontSize: "40px",
               color: "#043B40",
-              opacity: 0.5,
               lineHeight: 1,
               textShadow: "0.5px 0.5px 0px #E9ECF0",
             }}

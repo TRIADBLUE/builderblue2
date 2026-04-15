@@ -142,7 +142,6 @@ export function BuilderPane({
               fontFamily: "'Allerta Stencil', sans-serif",
               fontSize: "40px",
               color: "#520322",
-              opacity: 0.5,
               lineHeight: 1,
               textShadow: "0.5px 0.5px 0px #E9ECF0",
             }}

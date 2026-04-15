@@ -463,8 +463,8 @@ a:hover, button:not(.btn):hover {
 }
 
 .ide-pane-inactive {
-  opacity: 0.8;
-  filter: saturate(0.85);
+  opacity: 0.5;
+  filter: saturate(0.7);
 }
 
 .ide-pane-active {
