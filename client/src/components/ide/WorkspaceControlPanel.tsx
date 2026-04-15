@@ -20,7 +20,24 @@ interface WorkspaceControlPanelProps {
   onCycleTheme: () => void;
   onToggleDotGrid: () => void;
   onApplyPreset: (preset: LayoutPreset) => void;
+  architectFont: string;
+  builderFont: string;
+  onArchitectFontChange: (font: string) => void;
+  onBuilderFontChange: (font: string) => void;
 }
+
+const FONT_OPTIONS = [
+  { value: "'JetBrains Mono', monospace", label: "JetBrains Mono" },
+  { value: "'Fira Code', monospace", label: "Fira Code" },
+  { value: "'Source Code Pro', monospace", label: "Source Code Pro" },
+  { value: "'IBM Plex Mono', monospace", label: "IBM Plex Mono" },
+  { value: "'Space Mono', monospace", label: "Space Mono" },
+  { value: "'Inconsolata', monospace", label: "Inconsolata" },
+  { value: "'Ubuntu Mono', monospace", label: "Ubuntu Mono" },
+  { value: "'Roboto Mono', monospace", label: "Roboto Mono" },
+  { value: "'Anonymous Pro', monospace", label: "Anonymous Pro" },
+  { value: "'Overpass Mono', monospace", label: "Overpass Mono" },
+];
 
 interface ToggleProps {
   active: boolean;
@@ -120,6 +137,10 @@ export function WorkspaceControlPanel({
   onCycleTheme,
   onToggleDotGrid,
   onApplyPreset,
+  architectFont,
+  builderFont,
+  onArchitectFontChange,
+  onBuilderFontChange,
 }: WorkspaceControlPanelProps) {
   const [expanded, setExpanded] = useState(false);
   const [layoutOpen, setLayoutOpen] = useState(false);
@@ -368,6 +389,73 @@ export function WorkspaceControlPanel({
         <Toggle active={glassMode === "lab"} onToggle={onToggleGlass} label="Glass Mode" variant="sm" />
         <Toggle active={theme === "dark"} onToggle={onCycleTheme} label="Dark Mode" variant="sm" />
         <Toggle active={showDotGrid} onToggle={onToggleDotGrid} label="Dot Grid" variant="sm" />
+
+        {/* Fonts */}
+        <GroupHeader text="Fonts" />
+        <div style={{ marginBottom: "8px" }}>
+          <div style={{
+            fontFamily: "'Source Sans 3', sans-serif",
+            fontSize: "12px",
+            color: "rgba(251, 246, 238, 0.7)",
+            marginBottom: "4px",
+          }}>
+            Architect
+          </div>
+          <select
+            value={architectFont}
+            onChange={(e) => onArchitectFontChange(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "6px 8px",
+              fontFamily: "'Source Sans 3', sans-serif",
+              fontSize: "12px",
+              color: "#FBF6EE",
+              background: "#161B26",
+              border: "1px solid rgba(251,246,238,0.15)",
+              borderRadius: "6px",
+              cursor: "pointer",
+              outline: "none",
+            }}
+          >
+            {FONT_OPTIONS.map((f) => (
+              <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>
+                {f.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div style={{ marginBottom: "8px" }}>
+          <div style={{
+            fontFamily: "'Source Sans 3', sans-serif",
+            fontSize: "12px",
+            color: "rgba(251, 246, 238, 0.7)",
+            marginBottom: "4px",
+          }}>
+            Builder
+          </div>
+          <select
+            value={builderFont}
+            onChange={(e) => onBuilderFontChange(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "6px 8px",
+              fontFamily: "'Source Sans 3', sans-serif",
+              fontSize: "12px",
+              color: "#FBF6EE",
+              background: "#161B26",
+              border: "1px solid rgba(251,246,238,0.15)",
+              borderRadius: "6px",
+              cursor: "pointer",
+              outline: "none",
+            }}
+          >
+            {FONT_OPTIONS.map((f) => (
+              <option key={f.value} value={f.value} style={{ fontFamily: f.value }}>
+                {f.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
         {/* Workspace */}
         <GroupHeader text="Workspace" />

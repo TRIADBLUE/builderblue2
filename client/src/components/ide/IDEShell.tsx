@@ -175,6 +175,24 @@ export function IDEShell({
   const [currentPrototype, setCurrentPrototype] = useState<Prototype | null>(null);
   const [prototypeVersion, setPrototypeVersion] = useState(1);
 
+  // Skip-architect popup state
+  const [showSkipArchitectPopup, setShowSkipArchitectPopup] = useState(false);
+  const [pendingBuilderMessage, setPendingBuilderMessage] = useState<string | null>(null);
+
+  // Font picker state
+  const [architectFont, setArchitectFont] = useState(() => localStorage.getItem("bb2-architect-font") || "'JetBrains Mono', monospace");
+  const [builderFont, setBuilderFont] = useState(() => localStorage.getItem("bb2-builder-font") || "'JetBrains Mono', monospace");
+
+  useEffect(() => {
+    document.documentElement.style.setProperty("--font-architect-custom", architectFont);
+    localStorage.setItem("bb2-architect-font", architectFont);
+  }, [architectFont]);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty("--font-builder-custom", builderFont);
+    localStorage.setItem("bb2-builder-font", builderFont);
+  }, [builderFont]);
+
   useEffect(() => { staging.loadChanges(projectId); }, [projectId]);
   useEffect(() => {
     architectConvo.loadConversations(projectId, "architect");
@@ -400,6 +418,12 @@ export function IDEShell({
   }, [architectConvo, projectId, architectProvider, architectModel]);
 
   const handleBuilderMessage = useCallback(async (content: string) => {
+    // Check if user should see skip-architect popup
+    if (architectMessages.length === 0 && !localStorage.getItem(`bb2-skip-architect-${projectId}`)) {
+      setPendingBuilderMessage(content);
+      setShowSkipArchitectPopup(true);
+      return;
+    }
     let convo = builderConvo.conversation;
     if (!convo) convo = await builderConvo.createConversation(projectId, "builder", builderProvider, builderModel);
     await builderConvo.sendMessage(convo.id, content, (ids) => {
@@ -407,7 +431,29 @@ export function IDEShell({
       staging.loadChanges(projectId);
       setTimeout(() => setNewStagedIds(new Set()), 1000);
     });
-  }, [builderConvo, projectId, builderProvider, builderModel, staging]);
+  }, [architectMessages, builderConvo, projectId, builderProvider, builderModel, staging]);
+
+  const handleGoToArchitect = useCallback(() => {
+    localStorage.setItem(`bb2-skip-architect-${projectId}`, "true");
+    setShowSkipArchitectPopup(false);
+    setPendingBuilderMessage(null);
+    setActivePane("architect");
+  }, [projectId]);
+
+  const handleContinueToBuilder = useCallback(async () => {
+    localStorage.setItem(`bb2-skip-architect-${projectId}`, "true");
+    setShowSkipArchitectPopup(false);
+    if (pendingBuilderMessage) {
+      let convo = builderConvo.conversation;
+      if (!convo) convo = await builderConvo.createConversation(projectId, "builder", builderProvider, builderModel);
+      await builderConvo.sendMessage(convo.id, pendingBuilderMessage, (ids) => {
+        setNewStagedIds(prev => new Set([...prev, ...ids]));
+        staging.loadChanges(projectId);
+        setTimeout(() => setNewStagedIds(new Set()), 1000);
+      });
+    }
+    setPendingBuilderMessage(null);
+  }, [pendingBuilderMessage, builderConvo, projectId, builderProvider, builderModel, staging]);
 
   const handleCommit = useCallback(async (_message: string) => {
     await staging.commitChanges(projectId);
@@ -699,6 +745,10 @@ export function IDEShell({
         onCycleTheme={() => setTheme(theme === "dark" ? "light" : "dark")}
         onToggleDotGrid={() => setShowDotGrid(!showDotGrid)}
         onApplyPreset={applyPreset}
+        architectFont={architectFont}
+        builderFont={builderFont}
+        onArchitectFontChange={setArchitectFont}
+        onBuilderFontChange={setBuilderFont}
       />
       </div>
 
@@ -763,6 +813,42 @@ export function IDEShell({
             <button onClick={confirmBuilderHandoff} className="btn"
               style={{ fontFamily: "var(--font-label)", fontSize: "12px", fontWeight: 600, padding: "8px 20px", background: "#520322", color: "#FFF5ED", border: "none", borderRadius: "6px", cursor: "pointer" }}>
               Hand to Builder →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Skip-architect popup */}
+      {showSkipArchitectPopup && (
+        <div style={{
+          position: "fixed", top: "50%", left: "50%",
+          transform: "translate(-50%, -50%)", zIndex: 100,
+          background: "var(--ide-bg, #131F38)",
+          border: "1px solid var(--ide-border)",
+          borderRadius: "12px", padding: "24px 32px",
+          textAlign: "center", maxWidth: "400px",
+          boxShadow: "0 12px 40px rgba(0,0,0,0.3)",
+        }}>
+          <div style={{
+            fontFamily: "var(--font-heading)", fontSize: "16px",
+            color: "var(--ide-text)", marginBottom: "12px",
+          }}>
+            You're going straight to the Builder.
+          </div>
+          <div style={{
+            fontFamily: "var(--font-content)", fontSize: "13px",
+            color: "var(--ide-text-muted)", marginBottom: "20px", lineHeight: 1.6,
+          }}>
+            The Architect creates a clickable prototype and technical spec before any code is written — catching mistakes early and saving you time and tokens.
+          </div>
+          <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
+            <button onClick={handleGoToArchitect} className="btn"
+              style={{ fontFamily: "var(--font-label)", fontSize: "12px", padding: "8px 20px", background: "#043B40", color: "#E9ECF0", border: "none", borderRadius: "6px", cursor: "pointer", fontWeight: 600 }}>
+              Go to Architect
+            </button>
+            <button onClick={handleContinueToBuilder} className="btn"
+              style={{ fontFamily: "var(--font-label)", fontSize: "12px", padding: "8px 20px", background: "transparent", color: "var(--ide-text-muted)", border: "1px solid var(--ide-border)", borderRadius: "6px", cursor: "pointer" }}>
+              Continue to Builder
             </button>
           </div>
         </div>

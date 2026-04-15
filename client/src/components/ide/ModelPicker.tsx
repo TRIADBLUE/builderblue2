@@ -24,6 +24,22 @@ const PROVIDERS: ProviderInfo[] = [
     ],
   },
   {
+    id: "openrouter",
+    name: "OpenRouter",
+    models: [
+      { id: "anthropic/claude-sonnet-4", name: "Claude Sonnet 4", description: "" },
+      { id: "openai/gpt-4o", name: "GPT-4o", description: "" },
+      { id: "openai/o3-mini", name: "o3-mini", description: "" },
+      { id: "google/gemini-2.5-pro-preview", name: "Gemini 2.5 Pro", description: "" },
+      { id: "meta-llama/llama-4-maverick", name: "Llama 4 Maverick", description: "" },
+      { id: "deepseek/deepseek-r1", name: "DeepSeek R1", description: "" },
+      { id: "mistralai/mistral-large-latest", name: "Mistral Large", description: "" },
+      { id: "cohere/command-r-plus", name: "Command R+", description: "" },
+      { id: "qwen/qwen-2.5-72b-instruct", name: "Qwen 2.5 72B", description: "" },
+      { id: "nvidia/llama-3.1-nemotron-70b-instruct", name: "Nemotron 70B", description: "" },
+    ],
+  },
+  {
     id: "groq",
     name: "Groq",
     models: [

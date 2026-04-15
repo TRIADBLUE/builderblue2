@@ -23,6 +23,7 @@ const PROVIDER_ENDPOINTS: Record<string, { baseUrl: string; envKey: string }> = 
   gemini: { baseUrl: "https://generativelanguage.googleapis.com/v1beta/openai", envKey: "GEMINI_API_KEY" },
   kimi: { baseUrl: "https://api.moonshot.cn/v1", envKey: "KIMI_API_KEY" },
   groq: { baseUrl: "https://api.groq.com/openai/v1", envKey: "GROQ_API_KEY" },
+  openrouter: { baseUrl: "https://openrouter.ai/api/v1", envKey: "OPENROUTER_API_KEY" },
 };
 
 // ─── Claude streaming ───────────────────────────────────────────────────────
@@ -115,6 +116,10 @@ async function streamOpenAICompatible(
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
+        ...(provider === "openrouter" && {
+          "HTTP-Referer": "https://builderblue2.com",
+          "X-Title": "BuilderBlue2",
+        }),
       },
       body: JSON.stringify({
         model,
@@ -189,6 +194,7 @@ async function recordUsage(
     gemini: { input: 0.075, output: 0.3 },
     kimi: { input: 1.0, output: 2.0 },
     groq: { input: 0.05, output: 0.10 },
+    openrouter: { input: 1.0, output: 3.0 },
   };
 
   const rate = costs[provider] ?? { input: 1.0, output: 5.0 };

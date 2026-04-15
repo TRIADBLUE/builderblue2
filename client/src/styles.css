@@ -83,6 +83,8 @@
   --font-content: 'Source Sans 3', sans-serif;
   --font-user-chat: 'Crusoe Text', sans-serif;
   --font-ai-chat: 'JetBrains Mono', monospace;
+  --font-architect-custom: 'JetBrains Mono', monospace;
+  --font-builder-custom: 'JetBrains Mono', monospace;
 }
 
 /* ─── Light theme (default) ──────────────────────────────────────────────── */
@@ -244,19 +246,19 @@ a:hover, button:not(.btn):hover {
 
 /* ─── AI message text — neutral gray with identity-colored right shadow ──── */
 .text-ai-architect {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-architect-custom);
   color: var(--ide-chat-text);
   font-weight: 400;
   text-shadow: 1px 0 0 #043B40;
 }
 .text-ai-builder {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-builder-custom);
   color: var(--ide-chat-text);
   font-weight: 400;
   text-shadow: 1px 0 0 #520322;
 }
 .text-ai-staging {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-architect-custom);
   color: var(--ide-chat-text);
   font-weight: 400;
   text-shadow: 1px 0 0 #00203A;

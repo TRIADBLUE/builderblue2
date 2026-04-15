@@ -26,7 +26,7 @@ router.use(authenticate);
 const createSchema = z.object({
   projectId: z.string().uuid(),
   role: z.enum(["architect", "builder"]),
-  provider: z.enum(["claude", "deepseek", "gemini", "kimi", "groq"]),
+  provider: z.enum(["claude", "deepseek", "gemini", "kimi", "groq", "openrouter"]),
   model: z.string().min(1),
 });
 

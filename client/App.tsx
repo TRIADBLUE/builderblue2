@@ -8,6 +8,9 @@ import Onboarding from "./src/pages/onboarding";
 import Dashboard from "./src/pages/dashboard/index";
 import IDEPage from "./src/pages/ide/index";
 import ProjectSettings from "./src/pages/project-settings/index";
+import About from "./src/pages/about";
+import Terms from "./src/pages/terms";
+import Privacy from "./src/pages/privacy";
 
 export default function App() {
   return (
@@ -21,6 +24,9 @@ export default function App() {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/project/:id/settings" component={ProjectSettings} />
         <Route path="/ide/:id" component={IDEPage} />
+        <Route path="/about" component={About} />
+        <Route path="/terms" component={Terms} />
+        <Route path="/privacy" component={Privacy} />
         <Route>
           <div className="flex items-center justify-center min-h-screen">
             <h1 className="text-2xl font-semibold text-gray-600">404 — Not Found</h1>

@@ -185,7 +185,7 @@ export interface ProjectFile {
 // ─── Conversations ──────────────────────────────────────────────────────────
 
 export type ConversationRole = "architect" | "builder";
-export type AIProvider = "claude" | "deepseek" | "gemini" | "kimi" | "groq";
+export type AIProvider = "claude" | "deepseek" | "gemini" | "kimi" | "groq" | "openrouter";
 
 export interface ConversationMessage {
   role: "user" | "assistant";
