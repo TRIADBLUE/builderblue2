@@ -87,7 +87,7 @@ export function TodoPanel({ projectId, onCollapse }: TodoPanelProps) {
         className="flex items-center justify-between px-3 py-2"
         style={{ borderBottom: "1px solid var(--ide-border)" }}
       >
-        <span style={{ fontFamily: "var(--font-label)", fontSize: "10px", fontWeight: 700, color: "#043B40", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+        <span style={{ fontFamily: "var(--font-label)", fontSize: "10px", fontWeight: 700, color: "#043B40", textTransform: "uppercase", letterSpacing: "0.08em", textShadow: "0.5px 0.5px 0px #E9ECF0" }}>
           Notes & TODOs
         </span>
         <div className="flex items-center gap-2">

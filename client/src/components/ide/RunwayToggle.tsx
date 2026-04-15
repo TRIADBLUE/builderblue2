@@ -46,9 +46,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             transition: "all 0.2s ease",
             background: mode === "architect" ? "#043B40" : "transparent",
             color: mode === "architect" ? "#E9ECF0" : "var(--ide-text)",
-            textShadow: mode === "architect"
-              ? "0 0 8px rgba(255, 255, 255, 0.4)"
-              : "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
+            textShadow: "0.5px 0.5px 0px #E9ECF0",
           }}
         >
           Architect
@@ -71,9 +69,7 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
             transition: "all 0.2s ease",
             background: mode === "builder" ? "#520322" : "transparent",
             color: mode === "builder" ? "#E9ECF0" : "var(--ide-text)",
-            textShadow: mode === "builder"
-              ? "0 0 8px rgba(255, 255, 255, 0.4)"
-              : "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
+            textShadow: "0.5px 0.5px 0px #E9ECF0",
           }}
         >
           Builder

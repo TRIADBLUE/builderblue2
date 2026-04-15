@@ -85,7 +85,7 @@ export function ArchitectPane({
               fontSize: "40px",
               color: "#043B40",
               lineHeight: 1,
-              textShadow: "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
+              textShadow: "0.5px 0.5px 0px #E9ECF0",
             }}
           >
             Architect
@@ -97,7 +97,7 @@ export function ArchitectPane({
               color: "#043B40",
               opacity: 0.5,
               lineHeight: 1,
-              textShadow: "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
+              textShadow: "0.5px 0.5px 0px #E9ECF0",
             }}
           >
             Creator
@@ -194,7 +194,7 @@ export function ArchitectPane({
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 600,
-              textShadow: "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
+              textShadow: "0.5px 0.5px 0px #E9ECF0",
             }}>
               Streaming on Runway →
             </div>
