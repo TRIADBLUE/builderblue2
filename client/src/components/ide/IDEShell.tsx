@@ -122,7 +122,6 @@ export function IDEShell({
 
   // Runway display mode: architect ideation vs builder construction
   const [runwayMode, setRunwayMode] = useState<"architect" | "builder">("architect");
-  const [runwayAutoSwitch, setRunwayAutoSwitch] = useState(true);
 
   // Column order — draggable
   const [colOrder, setColOrder] = useState<PaneKey[]>(["architect", "builder", "runway"]);
@@ -196,16 +195,14 @@ export function IDEShell({
     })();
   }, [projectId]);
 
-  // Auto-switch runway mode based on who's streaming
+  // Runway always follows the streaming AI
   useEffect(() => {
-    if (!runwayAutoSwitch) return;
     if (architectConvo.isStreaming) setRunwayMode("architect");
     else if (builderConvo.isStreaming) setRunwayMode("builder");
-  }, [architectConvo.isStreaming, builderConvo.isStreaming, runwayAutoSwitch]);
+  }, [architectConvo.isStreaming, builderConvo.isStreaming]);
 
   const handleRunwayToggle = useCallback((mode: "architect" | "builder") => {
     setRunwayMode(mode);
-    setRunwayAutoSwitch(false);
   }, []);
 
   // ── Resizable columns ──────────────────────────────────────────────────────
@@ -690,7 +687,6 @@ export function IDEShell({
         showBuilder={showBuilder}
         showRunway={showRunway}
         showNotes={showNotes}
-        runwayAutoSwitch={runwayAutoSwitch}
         glassMode={glassMode}
         theme={theme}
         showDotGrid={showDotGrid}
@@ -699,7 +695,6 @@ export function IDEShell({
         onToggleBuilder={() => setShowBuilder(!showBuilder)}
         onToggleRunway={() => setShowRunway(!showRunway)}
         onToggleNotes={() => setShowNotes(!showNotes)}
-        onToggleAutoSwitch={() => setRunwayAutoSwitch(!runwayAutoSwitch)}
         onToggleGlass={toggleGlass}
         onCycleTheme={() => setTheme(theme === "dark" ? "light" : "dark")}
         onToggleDotGrid={() => setShowDotGrid(!showDotGrid)}

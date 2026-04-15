@@ -8,7 +8,6 @@ interface WorkspaceControlPanelProps {
   showBuilder: boolean;
   showRunway: boolean;
   showNotes: boolean;
-  runwayAutoSwitch: boolean;
   glassMode: string;
   theme: string;
   showDotGrid: boolean;
@@ -17,7 +16,6 @@ interface WorkspaceControlPanelProps {
   onToggleBuilder: () => void;
   onToggleRunway: () => void;
   onToggleNotes: () => void;
-  onToggleAutoSwitch: () => void;
   onToggleGlass: () => void;
   onCycleTheme: () => void;
   onToggleDotGrid: () => void;
@@ -110,7 +108,6 @@ export function WorkspaceControlPanel({
   showBuilder,
   showRunway,
   showNotes,
-  runwayAutoSwitch,
   glassMode,
   theme,
   showDotGrid,
@@ -119,7 +116,6 @@ export function WorkspaceControlPanel({
   onToggleBuilder,
   onToggleRunway,
   onToggleNotes,
-  onToggleAutoSwitch,
   onToggleGlass,
   onCycleTheme,
   onToggleDotGrid,
@@ -372,10 +368,6 @@ export function WorkspaceControlPanel({
         <Toggle active={glassMode === "lab"} onToggle={onToggleGlass} label="Glass Mode" variant="sm" />
         <Toggle active={theme === "dark"} onToggle={onCycleTheme} label="Dark Mode" variant="sm" />
         <Toggle active={showDotGrid} onToggle={onToggleDotGrid} label="Dot Grid" variant="sm" />
-
-        {/* AI Behavior */}
-        <GroupHeader text="AI Behavior" />
-        <Toggle active={runwayAutoSwitch} onToggle={onToggleAutoSwitch} label="Auto-switch Runway" variant="sq" />
 
         {/* Workspace */}
         <GroupHeader text="Workspace" />

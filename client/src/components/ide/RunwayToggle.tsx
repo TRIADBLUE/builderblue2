@@ -8,84 +8,76 @@ export function RunwayToggle({ mode, onToggle }: RunwayToggleProps) {
     <div
       style={{
         display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "8px 12px",
-        borderBottom: "1px solid rgba(251, 246, 238, 0.15)",
-        background: "inherit",
+        flexDirection: "column",
         flexShrink: 0,
       }}
     >
       <div
         style={{
-          position: "relative",
+          height: "6px",
+          borderBottom: "1px solid var(--ide-border)",
+        }}
+      />
+
+      <div
+        style={{
           display: "flex",
-          borderRadius: "8px",
-          border: "1px solid rgba(251, 246, 238, 0.15)",
-          overflow: "hidden",
-          cursor: "pointer",
-          userSelect: "none",
-          width: "320px",
-          height: "44px",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "8px 12px",
+          borderBottom: "1px solid var(--ide-border)",
+          gap: "4px",
         }}
       >
-        {/* Sliding pill indicator */}
-        <div
-          style={{
-            position: "absolute",
-            top: "2px",
-            left: mode === "architect" ? "2px" : "calc(50% + 2px)",
-            width: "calc(50% - 4px)",
-            height: "38px",
-            borderRadius: "6px",
-            background: mode === "architect" ? "#043B40" : "#520322",
-            transition: "left 0.25s ease, background 0.25s ease",
-          }}
-        />
-
-        {/* Architect side */}
-        <div
+        <button
           onClick={() => onToggle("architect")}
+          className="btn"
           style={{
             flex: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            zIndex: 1,
+            padding: "8px 16px",
+            borderRadius: "6px",
+            border: "none",
+            cursor: "pointer",
             fontFamily: "var(--font-label)",
-            fontSize: "16px",
+            fontSize: "14px",
             letterSpacing: "0.06em",
-            textTransform: "uppercase",
-            color: mode === "architect" ? "#E9ECF0" : "rgba(251, 246, 238, 0.55)",
-            fontWeight: mode === "architect" ? 700 : 500,
-            transition: "color 0.2s ease",
+            textTransform: "uppercase" as const,
+            fontWeight: 600,
+            transition: "all 0.2s ease",
+            background: mode === "architect" ? "#043B40" : "transparent",
+            color: mode === "architect" ? "#E9ECF0" : "var(--ide-text)",
+            textShadow: mode === "architect"
+              ? "0 0 8px rgba(255, 255, 255, 0.4)"
+              : "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
           }}
         >
           Architect
-        </div>
+        </button>
 
-        {/* Builder side */}
-        <div
+        <button
           onClick={() => onToggle("builder")}
+          className="btn"
           style={{
             flex: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            zIndex: 1,
+            padding: "8px 16px",
+            borderRadius: "6px",
+            border: "none",
+            cursor: "pointer",
             fontFamily: "var(--font-label)",
-            fontSize: "16px",
+            fontSize: "14px",
             letterSpacing: "0.06em",
-            textTransform: "uppercase",
-            color: mode === "builder" ? "#E9ECF0" : "rgba(251, 246, 238, 0.55)",
-            fontWeight: mode === "builder" ? 700 : 500,
-            transition: "color 0.2s ease",
+            textTransform: "uppercase" as const,
+            fontWeight: 600,
+            transition: "all 0.2s ease",
+            background: mode === "builder" ? "#520322" : "transparent",
+            color: mode === "builder" ? "#E9ECF0" : "var(--ide-text)",
+            textShadow: mode === "builder"
+              ? "0 0 8px rgba(255, 255, 255, 0.4)"
+              : "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
           }}
         >
           Builder
-        </div>
+        </button>
       </div>
     </div>
   );

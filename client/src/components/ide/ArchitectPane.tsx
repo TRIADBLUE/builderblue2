@@ -185,21 +185,26 @@ export function ArchitectPane({
           );
         })}
 
-        {isStreaming && !streamedText && (
-          <ThinkingIndicator role="architect" isActive={true} />
-        )}
-
-        {isStreaming && streamedText && (
-          <div
-            className="text-ai-architect"
-            style={{
-              fontSize: "var(--ai-message-size, 15px)",
-              lineHeight: 1.5,
-              padding: "2px 0",
-            }}
-          >
-            {streamedText}
-            <span className="streaming-cursor streaming-cursor-architect" />
+        {isStreaming && (
+          <div style={{ padding: "16px 10px", textAlign: "center" }}>
+            <div style={{
+              fontFamily: "var(--font-label)",
+              fontSize: "11px",
+              color: "#043B40",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              fontWeight: 600,
+              textShadow: "0 0 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.9)",
+            }}>
+              Streaming on Runway →
+            </div>
+            <div style={{
+              marginTop: "8px",
+              height: "2px",
+              borderRadius: "1px",
+              background: "linear-gradient(90deg, transparent, #043B40, transparent)",
+              animation: "thinking-pulse 1.2s ease-in-out infinite",
+            }} />
           </div>
         )}
         <div ref={messagesEndRef} />
