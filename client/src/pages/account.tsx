@@ -37,7 +37,7 @@ export default function Account() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)", padding: "40px 20px" }}>
+    <div style={{ minHeight: "100vh", background: "var(--bg-primary, #FFF5ED)", color: "var(--text-primary, #09080E)", padding: "40px 20px" }}>
       <div style={{ maxWidth: "560px", margin: "0 auto" }}>
         <button
           onClick={() => navigate("/dashboard")}
