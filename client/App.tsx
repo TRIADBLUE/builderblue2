@@ -12,6 +12,7 @@ import About from "./src/pages/about";
 import Terms from "./src/pages/terms";
 import Privacy from "./src/pages/privacy";
 import PlatformKeys from "./src/pages/admin/platform-keys";
+import Account from "./src/pages/account";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/about" component={About} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
+        <Route path="/account" component={Account} />
         <Route path="/admin/platform-keys" component={PlatformKeys} />
         <Route>
           <div className="flex items-center justify-center min-h-screen">

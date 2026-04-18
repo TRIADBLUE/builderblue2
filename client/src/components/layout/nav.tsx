@@ -141,7 +141,7 @@ export function Nav() {
                         Dashboard
                       </button>
                       <button
-                        onClick={() => { setShowMenu(false); /* TODO: account settings */ }}
+                        onClick={() => { setShowMenu(false); setLocation("/account"); }}
                         style={menuItemStyle}
                         onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(9,8,14,0.04)"; }}
                         onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}

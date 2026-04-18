@@ -294,7 +294,7 @@ export function TopNav({
                   </button>
                 )}
                 <button
-                  onClick={() => { setShowMenu(false); /* TODO: account settings page */ }}
+                  onClick={() => { setShowMenu(false); setLocation("/account"); }}
                   style={menuItemStyle}
                   onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(9,8,14,0.04)"; }}
                   onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
