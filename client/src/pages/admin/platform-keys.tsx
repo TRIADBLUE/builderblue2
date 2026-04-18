@@ -31,6 +31,13 @@ export default function PlatformKeys() {
   const [newKeyName, setNewKeyName] = useState("");
   const [newKeyValue, setNewKeyValue] = useState("");
 
+  // Force light theme on this page
+  useEffect(() => {
+    const prev = document.documentElement.getAttribute("data-theme");
+    document.documentElement.setAttribute("data-theme", "light");
+    return () => { if (prev) document.documentElement.setAttribute("data-theme", prev); };
+  }, []);
+
   useEffect(() => {
     if (user && user.role !== "owner") navigate("/dashboard");
   }, [user, navigate]);
