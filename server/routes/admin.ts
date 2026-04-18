@@ -89,8 +89,8 @@ function writeEnvFile(envVars: Record<string, string>): void {
 
 function maskValue(value: string): string {
   if (!value) return "";
-  if (value.length <= 4) return "••••";
-  return "••••••••" + value.slice(-4);
+  if (value.length <= 7) return value.slice(0, 3) + "••••";
+  return value.slice(0, 3) + "••••••••" + value.slice(-4);
 }
 
 router.get("/platform-keys", authenticate, requireRole("owner"), (_req, res) => {
@@ -99,7 +99,9 @@ router.get("/platform-keys", authenticate, requireRole("owner"), (_req, res) => 
     const keys = MANAGED_KEYS.map((mk) => ({
       key: mk.key, label: mk.label, group: mk.group,
       placeholder: mk.placeholder, required: mk.required,
-      isSet: Boolean(envVars[mk.key]), maskedValue: maskValue(envVars[mk.key] || ""),
+      isSet: Boolean(envVars[mk.key]),
+      maskedValue: maskValue(envVars[mk.key] || ""),
+      value: envVars[mk.key] || "",
     }));
     res.json({ keys });
   } catch (error) {
@@ -136,7 +138,9 @@ router.patch("/platform-keys", authenticate, requireRole("owner"), (req, res) =>
     const keys = MANAGED_KEYS.map((mk) => ({
       key: mk.key, label: mk.label, group: mk.group,
       placeholder: mk.placeholder, required: mk.required,
-      isSet: Boolean(envVars[mk.key]), maskedValue: maskValue(envVars[mk.key] || ""),
+      isSet: Boolean(envVars[mk.key]),
+      maskedValue: maskValue(envVars[mk.key] || ""),
+      value: envVars[mk.key] || "",
     }));
     res.json({ message: "Keys updated", keys });
   } catch (error) {

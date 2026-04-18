@@ -11,6 +11,7 @@ interface PlatformKey {
   required: boolean;
   isSet: boolean;
   maskedValue: string;
+  value: string;
 }
 
 export default function PlatformKeys() {
@@ -42,7 +43,8 @@ export default function PlatformKeys() {
 
   function startEditing(key: string) {
     setEditing((prev) => new Set(prev).add(key));
-    setEditValues((prev) => ({ ...prev, [key]: "" }));
+    const existing = keys.find((k) => k.key === key);
+    setEditValues((prev) => ({ ...prev, [key]: existing?.value ?? "" }));
   }
 
   function cancelEditing(key: string) {
@@ -186,12 +188,16 @@ export default function PlatformKeys() {
                     </>
                   ) : (
                     <>
-                      <span style={{ flex: 1, fontFamily: "'Source Code Pro', monospace", fontSize: "13px", color: pk.isSet ? "var(--text-muted)" : "var(--ruby-red)" }}>
+                      <span
+                        onClick={() => startEditing(pk.key)}
+                        style={{ flex: 1, fontFamily: "'Source Code Pro', monospace", fontSize: "13px", color: pk.isSet ? "var(--text-primary)" : "var(--ruby-red)", cursor: "pointer", opacity: pk.isSet ? 0.8 : 1 }}
+                        title="Click to edit"
+                      >
                         {pk.isSet ? pk.maskedValue : "Not set"}
                       </span>
                       <button onClick={() => startEditing(pk.key)} className="btn"
                         style={{ background: "var(--bg-hover)", color: "var(--text-primary)", border: "1px solid var(--border-primary)", borderRadius: "6px", padding: "6px 14px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer" }}>
-                        {pk.isSet ? "Update" : "Set"}
+                        Edit
                       </button>
                       {pk.isSet && !pk.required && (
                         <button onClick={() => clearKey(pk.key)} className="btn"
