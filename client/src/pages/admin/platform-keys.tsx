@@ -6,6 +6,7 @@ import { api } from "../../lib/api";
 interface PlatformKey {
   key: string;
   label: string;
+  description: string;
   group: string;
   placeholder: string;
   required: boolean;
@@ -23,6 +24,9 @@ export default function PlatformKeys() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [revealed, setRevealed] = useState<Set<string>>(new Set());
+  const [newKeyName, setNewKeyName] = useState("");
+  const [newKeyValue, setNewKeyValue] = useState("");
 
   useEffect(() => {
     if (user && user.role !== "owner") navigate("/dashboard");
@@ -148,70 +152,156 @@ export default function PlatformKeys() {
 
             {groupKeys.map((pk) => (
               <div key={pk.key} style={{
-                display: "flex", alignItems: "center", gap: "12px",
-                padding: "12px 0", borderBottom: "1px solid var(--border-subtle)",
+                padding: "14px 0", borderBottom: "1px solid var(--border-subtle)",
               }}>
-                <div style={{ flex: "0 0 200px" }}>
-                  <div style={{ fontFamily: "var(--font-content)", fontSize: "13px", fontWeight: 600 }}>
-                    {pk.label}
-                    {pk.required && <span style={{ color: "var(--ruby-red)", marginLeft: "4px" }}>*</span>}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                  <div style={{ flex: "0 0 220px" }}>
+                    <div style={{ fontFamily: "var(--font-content)", fontSize: "14px", fontWeight: 600 }}>
+                      {pk.label}
+                      {pk.required && <span style={{ color: "var(--ruby-red)", marginLeft: "4px" }}>*</span>}
+                    </div>
+                    <div style={{ fontFamily: "var(--font-content)", fontSize: "11px", opacity: 0.5, marginTop: "3px", lineHeight: 1.4 }}>
+                      {pk.description}
+                    </div>
+                    <div style={{ fontFamily: "'Source Code Pro', monospace", fontSize: "10px", opacity: 0.3, marginTop: "4px" }}>
+                      {pk.key}
+                    </div>
                   </div>
-                  <div style={{ fontFamily: "'Source Code Pro', monospace", fontSize: "10px", opacity: 0.4, marginTop: "2px" }}>
-                    {pk.key}
-                  </div>
-                </div>
 
-                <div style={{ flex: 1, display: "flex", alignItems: "center", gap: "8px" }}>
-                  {editing.has(pk.key) ? (
-                    <>
-                      <input
-                        type="text"
-                        value={editValues[pk.key] || ""}
-                        onChange={(e) => setEditValues((prev) => ({ ...prev, [pk.key]: e.target.value }))}
-                        placeholder={pk.placeholder}
-                        autoFocus
-                        style={{
-                          flex: 1, background: "var(--bg-input)", border: "1px solid var(--border-primary)",
-                          borderRadius: "6px", padding: "8px 12px", fontFamily: "'Source Code Pro', monospace",
-                          fontSize: "13px", color: "var(--text-primary)", outline: "none",
-                        }}
-                        onKeyDown={(e) => { if (e.key === "Enter") saveKey(pk.key); if (e.key === "Escape") cancelEditing(pk.key); }}
-                      />
-                      <button onClick={() => saveKey(pk.key)} disabled={saving || !editValues[pk.key]?.trim()} className="btn"
-                        style={{ background: "#008060", color: "#fff", border: "none", borderRadius: "6px", padding: "8px 14px", fontFamily: "var(--font-label)", fontSize: "12px", fontWeight: 600, cursor: "pointer", opacity: saving || !editValues[pk.key]?.trim() ? 0.4 : 1 }}>
-                        Save
-                      </button>
-                      <button onClick={() => cancelEditing(pk.key)} className="btn"
-                        style={{ background: "none", color: "var(--text-primary)", border: "1px solid var(--border-primary)", borderRadius: "6px", padding: "8px 12px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer", opacity: 0.6 }}>
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <span
-                        onClick={() => startEditing(pk.key)}
-                        style={{ flex: 1, fontFamily: "'Source Code Pro', monospace", fontSize: "13px", color: pk.isSet ? "var(--text-primary)" : "var(--ruby-red)", cursor: "pointer", opacity: pk.isSet ? 0.8 : 1 }}
-                        title="Click to edit"
-                      >
-                        {pk.isSet ? pk.maskedValue : "Not set"}
-                      </span>
-                      <button onClick={() => startEditing(pk.key)} className="btn"
-                        style={{ background: "var(--bg-hover)", color: "var(--text-primary)", border: "1px solid var(--border-primary)", borderRadius: "6px", padding: "6px 14px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer" }}>
-                        Edit
-                      </button>
-                      {pk.isSet && !pk.required && (
-                        <button onClick={() => clearKey(pk.key)} className="btn"
-                          style={{ background: "none", color: "var(--ruby-red)", border: "1px solid rgba(130,50,60,0.3)", borderRadius: "6px", padding: "6px 12px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer" }}>
-                          Remove
+                  <div style={{ flex: 1, display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+                    {editing.has(pk.key) ? (
+                      <>
+                        <input
+                          type="text"
+                          value={editValues[pk.key] || ""}
+                          onChange={(e) => setEditValues((prev) => ({ ...prev, [pk.key]: e.target.value }))}
+                          placeholder={pk.placeholder}
+                          autoFocus
+                          style={{
+                            flex: 1, minWidth: "200px", background: "var(--bg-input)", border: "1px solid var(--border-primary)",
+                            borderRadius: "6px", padding: "8px 12px", fontFamily: "'Source Code Pro', monospace",
+                            fontSize: "13px", color: "var(--text-primary)", outline: "none",
+                          }}
+                          onKeyDown={(e) => { if (e.key === "Enter") saveKey(pk.key); if (e.key === "Escape") cancelEditing(pk.key); }}
+                        />
+                        <button onClick={() => saveKey(pk.key)} disabled={saving || !editValues[pk.key]?.trim()} className="btn"
+                          style={{ background: "#008060", color: "#fff", border: "none", borderRadius: "6px", padding: "8px 14px", fontFamily: "var(--font-label)", fontSize: "12px", fontWeight: 600, cursor: "pointer", opacity: saving || !editValues[pk.key]?.trim() ? 0.4 : 1 }}>
+                          Save
                         </button>
-                      )}
-                    </>
-                  )}
+                        <button onClick={() => cancelEditing(pk.key)} className="btn"
+                          style={{ background: "none", color: "var(--text-primary)", border: "1px solid var(--border-primary)", borderRadius: "6px", padding: "8px 12px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer", opacity: 0.6 }}>
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <span
+                          style={{ flex: 1, fontFamily: "'Source Code Pro', monospace", fontSize: "13px", color: pk.isSet ? "var(--text-primary)" : "var(--ruby-red)", opacity: pk.isSet ? 0.8 : 1 }}
+                        >
+                          {pk.isSet ? (revealed.has(pk.key) ? pk.value : pk.maskedValue) : "Not set"}
+                        </span>
+                        {pk.isSet && (
+                          <button onClick={() => setRevealed((prev) => { const n = new Set(prev); if (n.has(pk.key)) n.delete(pk.key); else n.add(pk.key); return n; })} className="btn"
+                            style={{ background: "none", color: "var(--text-muted)", border: "none", padding: "4px 8px", fontFamily: "var(--font-label)", fontSize: "11px", cursor: "pointer" }}>
+                            {revealed.has(pk.key) ? "Hide" : "Show"}
+                          </button>
+                        )}
+                        <button onClick={() => startEditing(pk.key)} className="btn"
+                          style={{ background: "var(--bg-hover)", color: "var(--text-primary)", border: "1px solid var(--border-primary)", borderRadius: "6px", padding: "6px 14px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer" }}>
+                          Edit
+                        </button>
+                        {pk.isSet && !pk.required && (
+                          <button onClick={() => clearKey(pk.key)} className="btn"
+                            style={{ background: "none", color: "var(--ruby-red)", border: "1px solid rgba(130,50,60,0.3)", borderRadius: "6px", padding: "6px 12px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer" }}>
+                            Remove
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         ))}
+
+        {/* Add Custom Key */}
+        <div style={{ marginBottom: "32px", marginTop: "40px" }}>
+          <h2 style={{
+            fontFamily: "var(--font-label)", fontSize: "12px", fontWeight: 700,
+            textTransform: "uppercase", letterSpacing: "0.1em",
+            color: "var(--steel-blue)", marginBottom: "12px",
+            paddingBottom: "8px", borderBottom: "1px solid var(--border-subtle)",
+          }}>
+            Add New Key
+          </h2>
+          <div style={{ display: "flex", gap: "8px", alignItems: "flex-end" }}>
+            <div style={{ flex: "0 0 200px" }}>
+              <div style={{ fontFamily: "var(--font-content)", fontSize: "11px", opacity: 0.6, marginBottom: "4px" }}>Key Name</div>
+              <input
+                type="text"
+                value={newKeyName}
+                onChange={(e) => setNewKeyName(e.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, ""))}
+                placeholder="MY_CUSTOM_KEY"
+                style={{
+                  width: "100%", background: "var(--bg-input)", border: "1px solid var(--border-primary)",
+                  borderRadius: "6px", padding: "8px 12px", fontFamily: "'Source Code Pro', monospace",
+                  fontSize: "13px", color: "var(--text-primary)", outline: "none",
+                }}
+              />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontFamily: "var(--font-content)", fontSize: "11px", opacity: 0.6, marginBottom: "4px" }}>Value</div>
+              <input
+                type="text"
+                value={newKeyValue}
+                onChange={(e) => setNewKeyValue(e.target.value)}
+                placeholder="Enter value"
+                style={{
+                  width: "100%", background: "var(--bg-input)", border: "1px solid var(--border-primary)",
+                  borderRadius: "6px", padding: "8px 12px", fontFamily: "'Source Code Pro', monospace",
+                  fontSize: "13px", color: "var(--text-primary)", outline: "none",
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && newKeyName && newKeyValue) {
+                    saveKey(newKeyName);
+                  }
+                }}
+              />
+            </div>
+            <button
+              onClick={async () => {
+                if (!newKeyName || !newKeyValue) return;
+                setSaving(true);
+                setMessage(null);
+                try {
+                  const res = await api.fetch<{ keys: PlatformKey[] }>("/api/admin/platform-keys", {
+                    method: "PATCH",
+                    body: { updates: { [newKeyName]: newKeyValue } },
+                  });
+                  setKeys(res.keys);
+                  setNewKeyName("");
+                  setNewKeyValue("");
+                  setMessage({ type: "success", text: `${newKeyName} added — active immediately` });
+                } catch {
+                  setMessage({ type: "error", text: "Failed to add key" });
+                } finally {
+                  setSaving(false);
+                }
+              }}
+              disabled={!newKeyName || !newKeyValue || saving}
+              className="btn"
+              style={{
+                background: "#008060", color: "#fff", border: "none", borderRadius: "6px",
+                padding: "8px 20px", fontFamily: "var(--font-label)", fontSize: "12px",
+                fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap",
+                opacity: !newKeyName || !newKeyValue || saving ? 0.4 : 1,
+              }}
+            >
+              Add Key
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

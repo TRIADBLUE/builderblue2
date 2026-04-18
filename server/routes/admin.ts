@@ -12,29 +12,30 @@ const ENV_PATH = path.resolve(__dirname, "../../.env");
 interface ManagedKey {
   key: string;
   label: string;
+  description: string;
   group: string;
   placeholder: string;
   required: boolean;
 }
 
 const MANAGED_KEYS: ManagedKey[] = [
-  { key: "DATABASE_URL", label: "Database URL", group: "Database", placeholder: "postgresql://user:password@host:5432/builderblue2", required: true },
-  { key: "ACCESS_TOKEN_SECRET", label: "Access Token Secret", group: "Authentication", placeholder: "64+ character random string", required: true },
-  { key: "REFRESH_TOKEN_SECRET", label: "Refresh Token Secret", group: "Authentication", placeholder: "64+ character random string", required: true },
-  { key: "OWNER_EMAIL", label: "Owner Email", group: "Authentication", placeholder: "dean@triadblue.com", required: true },
-  { key: "BASE_URL", label: "Base URL", group: "Application", placeholder: "https://builderblue2.com", required: true },
-  { key: "PORT", label: "Port", group: "Application", placeholder: "5000", required: true },
-  { key: "RESEND_API_KEY", label: "Resend API Key", group: "Email", placeholder: "re_xxxxxxxx", required: false },
-  { key: "HOSTSBLUE_SSO_SECRET", label: "HostsBlue SSO Secret", group: "SSO", placeholder: "shared HMAC secret", required: false },
-  { key: "ANTHROPIC_API_KEY", label: "Anthropic (Claude)", group: "AI Providers", placeholder: "sk-ant-xxxxxxxx", required: true },
-  { key: "OPENAI_API_KEY", label: "OpenAI", group: "AI Providers", placeholder: "sk-xxxxxxxx", required: true },
-  { key: "DEEPSEEK_API_KEY", label: "DeepSeek", group: "AI Providers", placeholder: "sk-xxxxxxxx", required: true },
-  { key: "GEMINI_API_KEY", label: "Google Gemini", group: "AI Providers", placeholder: "AIzaxxxxxxxx", required: true },
-  { key: "KIMI_API_KEY", label: "Kimi (Moonshot)", group: "AI Providers", placeholder: "sk-xxxxxxxx", required: true },
-  { key: "GROQ_API_KEY", label: "Groq", group: "AI Providers", placeholder: "gsk_xxxxxxxx", required: true },
-  { key: "OPENROUTER_API_KEY", label: "OpenRouter", group: "AI Providers", placeholder: "sk-or-xxxxxxxx", required: true },
-  { key: "ENCRYPTION_KEY", label: "Encryption Key", group: "Security", placeholder: "32-byte base64 string", required: true },
-  { key: "GITHUB_TOKEN", label: "GitHub Token", group: "GitHub", placeholder: "ghp_xxxxxxxx", required: false },
+  { key: "DATABASE_URL", label: "Neon Database Connection", description: "PostgreSQL connection string — your Neon project URL with pooler", group: "Database", placeholder: "postgresql://user:password@host:5432/dbname?sslmode=require", required: true },
+  { key: "ACCESS_TOKEN_SECRET", label: "JWT Access Token Secret", description: "Random string used to sign short-lived login tokens (keeps users logged in)", group: "Authentication", placeholder: "64+ character random string", required: true },
+  { key: "REFRESH_TOKEN_SECRET", label: "JWT Refresh Token Secret", description: "Random string used to sign refresh tokens (silent re-login on page reload)", group: "Authentication", placeholder: "64+ character random string", required: true },
+  { key: "OWNER_EMAIL", label: "Owner Email Address", description: "This email auto-elevates to owner role on login — your admin account", group: "Authentication", placeholder: "dean@triadblue.com", required: true },
+  { key: "BASE_URL", label: "Site URL", description: "The public URL where BuilderBlue2 is hosted — used for links in emails and SSO", group: "Application", placeholder: "https://builderblue2.com", required: true },
+  { key: "PORT", label: "Server Port", description: "Port the Node.js server listens on — Nginx proxies to this", group: "Application", placeholder: "5000", required: true },
+  { key: "RESEND_API_KEY", label: "Resend Email Service", description: "API key from resend.com — used for magic link emails and notifications", group: "Email", placeholder: "re_xxxxxxxx", required: false },
+  { key: "HOSTSBLUE_SSO_SECRET", label: "hostsblue.com SSO Secret", description: "Shared HMAC secret for single sign-on between hostsblue.com and BuilderBlue2", group: "SSO", placeholder: "shared HMAC secret", required: false },
+  { key: "ANTHROPIC_API_KEY", label: "Anthropic — Claude AI", description: "Powers Claude Opus, Sonnet, Haiku models — the primary AI provider", group: "AI Providers", placeholder: "sk-ant-xxxxxxxx", required: true },
+  { key: "OPENAI_API_KEY", label: "OpenAI — GPT Models", description: "Powers GPT-4o, o3-mini, and other OpenAI models", group: "AI Providers", placeholder: "sk-xxxxxxxx", required: true },
+  { key: "DEEPSEEK_API_KEY", label: "DeepSeek AI", description: "Powers DeepSeek Chat and DeepSeek Coder models", group: "AI Providers", placeholder: "sk-xxxxxxxx", required: true },
+  { key: "GEMINI_API_KEY", label: "Google Gemini AI", description: "Powers Gemini Pro and Gemini Flash models from Google", group: "AI Providers", placeholder: "AIzaxxxxxxxx", required: true },
+  { key: "KIMI_API_KEY", label: "Kimi / Moonshot AI", description: "Powers Moonshot v1 models (8K and 32K context)", group: "AI Providers", placeholder: "sk-xxxxxxxx", required: true },
+  { key: "GROQ_API_KEY", label: "Groq — Fast Inference", description: "Powers Llama, Qwen, Gemma models at high speed via Groq hardware", group: "AI Providers", placeholder: "gsk_xxxxxxxx", required: true },
+  { key: "OPENROUTER_API_KEY", label: "OpenRouter — 300+ Models", description: "Single key for GPT-4o, Gemini, Llama, Mistral, and hundreds more via openrouter.ai", group: "AI Providers", placeholder: "sk-or-xxxxxxxx", required: true },
+  { key: "ENCRYPTION_KEY", label: "Data Encryption Key", description: "AES-256-GCM key for encrypting secrets stored in the database", group: "Security", placeholder: "32-byte base64 string", required: true },
+  { key: "GITHUB_TOKEN", label: "GitHub Personal Access Token", description: "Used for GitHub repo sync, commits, and pull requests from the IDE", group: "GitHub", placeholder: "ghp_xxxxxxxx", required: false },
 ];
 
 function parseEnvFile(): Record<string, string> {
@@ -97,12 +98,23 @@ router.get("/platform-keys", authenticate, requireRole("owner"), (_req, res) => 
   try {
     const envVars = parseEnvFile();
     const keys = MANAGED_KEYS.map((mk) => ({
-      key: mk.key, label: mk.label, group: mk.group,
+      key: mk.key, label: mk.label, description: mk.description, group: mk.group,
       placeholder: mk.placeholder, required: mk.required,
       isSet: Boolean(envVars[mk.key]),
       maskedValue: maskValue(envVars[mk.key] || ""),
       value: envVars[mk.key] || "",
     }));
+    // Also include any custom keys not in MANAGED_KEYS
+    const managedKeySet = new Set(MANAGED_KEYS.map(mk => mk.key));
+    for (const [k, v] of Object.entries(envVars)) {
+      if (!managedKeySet.has(k)) {
+        keys.push({
+          key: k, label: k, description: "Custom key", group: "Custom",
+          placeholder: "", required: false,
+          isSet: true, maskedValue: maskValue(v), value: v,
+        });
+      }
+    }
     res.json({ keys });
   } catch (error) {
     console.error("Failed to read platform keys:", error);
@@ -117,10 +129,10 @@ router.patch("/platform-keys", authenticate, requireRole("owner"), (req, res) =>
       res.status(400).json({ message: "updates object is required" });
       return;
     }
-    const managedKeySet = new Set(MANAGED_KEYS.map((mk) => mk.key));
+    // Validate key names — alphanumeric + underscore only
     for (const key of Object.keys(updates)) {
-      if (!managedKeySet.has(key)) {
-        res.status(400).json({ message: `Unknown key: ${key}` });
+      if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) {
+        res.status(400).json({ message: `Invalid key name: ${key}` });
         return;
       }
     }
@@ -135,13 +147,23 @@ router.patch("/platform-keys", authenticate, requireRole("owner"), (req, res) =>
       }
     }
     writeEnvFile(envVars);
+    const managedKeySet = new Set(MANAGED_KEYS.map(mk => mk.key));
     const keys = MANAGED_KEYS.map((mk) => ({
-      key: mk.key, label: mk.label, group: mk.group,
+      key: mk.key, label: mk.label, description: mk.description, group: mk.group,
       placeholder: mk.placeholder, required: mk.required,
       isSet: Boolean(envVars[mk.key]),
       maskedValue: maskValue(envVars[mk.key] || ""),
       value: envVars[mk.key] || "",
     }));
+    for (const [k, v] of Object.entries(envVars)) {
+      if (!managedKeySet.has(k)) {
+        keys.push({
+          key: k, label: k, description: "Custom key", group: "Custom",
+          placeholder: "", required: false,
+          isSet: true, maskedValue: maskValue(v), value: v,
+        });
+      }
+    }
     res.json({ message: "Keys updated", keys });
   } catch (error) {
     console.error("Failed to update platform keys:", error);
