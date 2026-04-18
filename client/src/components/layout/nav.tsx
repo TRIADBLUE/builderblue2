@@ -148,6 +148,16 @@ export function Nav() {
                       >
                         Account Settings
                       </button>
+                      {user?.role === "owner" && (
+                        <button
+                          onClick={() => { setShowMenu(false); setLocation("/admin/platform-keys"); }}
+                          style={menuItemStyle}
+                          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(9,8,14,0.04)"; }}
+                          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+                        >
+                          Platform Keys
+                        </button>
+                      )}
                     </div>
 
                     {/* Theme toggle */}
