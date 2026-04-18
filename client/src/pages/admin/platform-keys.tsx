@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import { Eye, EyeOff, Pencil, Trash2, RefreshCw, Save, X } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { api } from "../../lib/api";
 
@@ -13,6 +14,8 @@ interface PlatformKey {
   isSet: boolean;
   maskedValue: string;
   value: string;
+  dashboardUrl: string | null;
+  lastUpdated: string | null;
 }
 
 export default function PlatformKeys() {
@@ -150,78 +153,83 @@ export default function PlatformKeys() {
               {group}
             </h2>
 
-            {groupKeys.map((pk) => (
-              <div key={pk.key} style={{
-                padding: "14px 0", borderBottom: "1px solid var(--border-subtle)",
-              }}>
-                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-                  <div style={{ flex: "0 0 220px" }}>
-                    <div style={{ fontFamily: "var(--font-content)", fontSize: "14px", fontWeight: 600 }}>
-                      {pk.label}
-                      {pk.required && <span style={{ color: "var(--ruby-red)", marginLeft: "4px" }}>*</span>}
+            {groupKeys.map((pk) => {
+              const btnStyle = {
+                background: "var(--bg-hover)", color: "var(--text-primary)",
+                border: "1px solid var(--border-primary)", borderRadius: "6px",
+                padding: "6px 12px", fontFamily: "var(--font-label)", fontSize: "12px",
+                cursor: "pointer" as const,
+              };
+              const btnDanger = { ...btnStyle, color: "var(--ruby-red)", borderColor: "rgba(130,50,60,0.3)", background: "none" };
+              const btnSave = { ...btnStyle, background: "#008060", color: "#fff", border: "none", fontWeight: 600 as const, padding: "8px 14px" };
+              return (
+                <div key={pk.key} style={{ padding: "14px 0", borderBottom: "1px solid var(--border-subtle)" }}>
+                  {/* Row 1: label + value + buttons */}
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ flex: "0 0 220px" }}>
+                      <div style={{ fontFamily: "var(--font-content)", fontSize: "14px", fontWeight: 600 }}>
+                        {pk.label}
+                        {pk.required && <span style={{ color: "var(--ruby-red)", marginLeft: "4px" }}>*</span>}
+                      </div>
                     </div>
-                    <div style={{ fontFamily: "var(--font-content)", fontSize: "11px", opacity: 0.5, marginTop: "3px", lineHeight: 1.4 }}>
-                      {pk.description}
-                    </div>
-                    <div style={{ fontFamily: "'Source Code Pro', monospace", fontSize: "10px", opacity: 0.3, marginTop: "4px" }}>
-                      {pk.key}
+                    <div style={{ flex: 1, display: "flex", alignItems: "center", gap: "6px" }}>
+                      {editing.has(pk.key) ? (
+                        <>
+                          <input type="text" value={editValues[pk.key] || ""} onChange={(e) => setEditValues((prev) => ({ ...prev, [pk.key]: e.target.value }))}
+                            placeholder={pk.placeholder} autoFocus
+                            style={{ flex: 1, background: "var(--bg-input)", border: "1px solid var(--border-primary)", borderRadius: "6px", padding: "8px 12px", fontFamily: "'Source Code Pro', monospace", fontSize: "13px", color: "var(--text-primary)", outline: "none" }}
+                            onKeyDown={(e) => { if (e.key === "Enter") saveKey(pk.key); if (e.key === "Escape") cancelEditing(pk.key); }} />
+                          <button onClick={() => saveKey(pk.key)} disabled={saving || !editValues[pk.key]?.trim()} className="btn" title="Save"
+                            style={{ ...btnSave, opacity: saving || !editValues[pk.key]?.trim() ? 0.4 : 1 }}><Save size={14} /></button>
+                          <button onClick={() => cancelEditing(pk.key)} className="btn" title="Cancel" style={btnStyle}><X size={14} /></button>
+                        </>
+                      ) : (
+                        <>
+                          <span style={{ flex: 1, fontFamily: "'Source Code Pro', monospace", fontSize: "13px", color: pk.isSet ? "var(--text-primary)" : "var(--ruby-red)", opacity: pk.isSet ? 0.8 : 1 }}>
+                            {pk.isSet ? (revealed.has(pk.key) ? pk.value : pk.maskedValue) : "Not set"}
+                          </span>
+                          {pk.isSet && (
+                            <button onClick={() => setRevealed((prev) => { const n = new Set(prev); if (n.has(pk.key)) n.delete(pk.key); else n.add(pk.key); return n; })} className="btn" title={revealed.has(pk.key) ? "Hide" : "View"} style={btnStyle}>
+                              {revealed.has(pk.key) ? <EyeOff size={14} /> : <Eye size={14} />}
+                            </button>
+                          )}
+                          <button onClick={() => startEditing(pk.key)} className="btn" title={pk.isSet ? "Replace" : "Set"} style={btnStyle}>
+                            {pk.isSet ? <RefreshCw size={14} /> : <Pencil size={14} />}
+                          </button>
+                          {pk.isSet && !pk.required && (
+                            <button onClick={() => clearKey(pk.key)} className="btn" title="Remove" style={btnDanger}><Trash2 size={14} /></button>
+                          )}
+                        </>
+                      )}
                     </div>
                   </div>
-
-                  <div style={{ flex: 1, display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-                    {editing.has(pk.key) ? (
-                      <>
-                        <input
-                          type="text"
-                          value={editValues[pk.key] || ""}
-                          onChange={(e) => setEditValues((prev) => ({ ...prev, [pk.key]: e.target.value }))}
-                          placeholder={pk.placeholder}
-                          autoFocus
-                          style={{
-                            flex: 1, minWidth: "200px", background: "var(--bg-input)", border: "1px solid var(--border-primary)",
-                            borderRadius: "6px", padding: "8px 12px", fontFamily: "'Source Code Pro', monospace",
-                            fontSize: "13px", color: "var(--text-primary)", outline: "none",
-                          }}
-                          onKeyDown={(e) => { if (e.key === "Enter") saveKey(pk.key); if (e.key === "Escape") cancelEditing(pk.key); }}
-                        />
-                        <button onClick={() => saveKey(pk.key)} disabled={saving || !editValues[pk.key]?.trim()} className="btn"
-                          style={{ background: "#008060", color: "#fff", border: "none", borderRadius: "6px", padding: "8px 14px", fontFamily: "var(--font-label)", fontSize: "12px", fontWeight: 600, cursor: "pointer", opacity: saving || !editValues[pk.key]?.trim() ? 0.4 : 1 }}>
-                          Save
-                        </button>
-                        <button onClick={() => cancelEditing(pk.key)} className="btn"
-                          style={{ background: "none", color: "var(--text-primary)", border: "1px solid var(--border-primary)", borderRadius: "6px", padding: "8px 12px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer", opacity: 0.6 }}>
-                          Cancel
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <span
-                          style={{ flex: 1, fontFamily: "'Source Code Pro', monospace", fontSize: "13px", color: pk.isSet ? "var(--text-primary)" : "var(--ruby-red)", opacity: pk.isSet ? 0.8 : 1 }}
-                        >
-                          {pk.isSet ? (revealed.has(pk.key) ? pk.value : pk.maskedValue) : "Not set"}
-                        </span>
-                        {pk.isSet && (
-                          <button onClick={() => setRevealed((prev) => { const n = new Set(prev); if (n.has(pk.key)) n.delete(pk.key); else n.add(pk.key); return n; })} className="btn"
-                            style={{ background: "none", color: "var(--text-muted)", border: "none", padding: "4px 8px", fontFamily: "var(--font-label)", fontSize: "11px", cursor: "pointer" }}>
-                            {revealed.has(pk.key) ? "Hide" : "Show"}
-                          </button>
+                  {/* Row 2: description + meta */}
+                  <div style={{ display: "flex", gap: "12px", marginTop: "4px" }}>
+                    <div style={{ flex: "0 0 220px" }}>
+                      <div style={{ fontFamily: "'Source Code Pro', monospace", fontSize: "10px", opacity: 0.3 }}>{pk.key}</div>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: "var(--font-content)", fontSize: "11px", opacity: 0.5, lineHeight: 1.4 }}>
+                        {pk.description}
+                      </div>
+                      <div style={{ display: "flex", gap: "12px", marginTop: "4px" }}>
+                        {pk.dashboardUrl && (
+                          <a href={pk.dashboardUrl} target="_blank" rel="noopener noreferrer"
+                            style={{ fontFamily: "var(--font-content)", fontSize: "11px", color: "var(--steel-blue)", textDecoration: "underline" }}>
+                            Get key →
+                          </a>
                         )}
-                        <button onClick={() => startEditing(pk.key)} className="btn"
-                          style={{ background: "var(--bg-hover)", color: "var(--text-primary)", border: "1px solid var(--border-primary)", borderRadius: "6px", padding: "6px 14px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer" }}>
-                          Edit
-                        </button>
-                        {pk.isSet && !pk.required && (
-                          <button onClick={() => clearKey(pk.key)} className="btn"
-                            style={{ background: "none", color: "var(--ruby-red)", border: "1px solid rgba(130,50,60,0.3)", borderRadius: "6px", padding: "6px 12px", fontFamily: "var(--font-label)", fontSize: "12px", cursor: "pointer" }}>
-                            Remove
-                          </button>
+                        {pk.lastUpdated && (
+                          <span style={{ fontFamily: "var(--font-content)", fontSize: "11px", opacity: 0.4 }}>
+                            Updated {new Date(pk.lastUpdated).toLocaleDateString()}
+                          </span>
                         )}
-                      </>
-                    )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ))}
 
