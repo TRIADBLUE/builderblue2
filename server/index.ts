@@ -23,6 +23,7 @@ import todosRoutes from "./routes/todos.js";
 import sessionsRoutes from "./routes/sessions.js";
 import prototypeRoutes from "./routes/prototypes.js";
 import deployRoutes from "./routes/deploy.js";
+import adminRoutes from "./routes/admin.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -57,6 +58,7 @@ app.use("/api/collaborators", collaboratorRoutes);
 app.use("/api/folders", folderRoutes);
 app.use("/api/prototypes", prototypeRoutes);
 app.use("/api/deploy", deployRoutes);
+app.use("/api/admin", adminRoutes);
 
 // ─── Health Check ────────────────────────────────────────────────────────────
 

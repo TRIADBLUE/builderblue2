@@ -11,6 +11,7 @@ import ProjectSettings from "./src/pages/project-settings/index";
 import About from "./src/pages/about";
 import Terms from "./src/pages/terms";
 import Privacy from "./src/pages/privacy";
+import PlatformKeys from "./src/pages/admin/platform-keys";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/about" component={About} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
+        <Route path="/admin/platform-keys" component={PlatformKeys} />
         <Route>
           <div className="flex items-center justify-center min-h-screen">
             <h1 className="text-2xl font-semibold text-gray-600">404 — Not Found</h1>
